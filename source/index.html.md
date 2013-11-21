@@ -8,6 +8,7 @@ To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is hi
 
 **[Notice]** Still in alpha stage. Architecture and API compatibility won't be kept until 1.0 release (2013 4Q).
 
+<hr/>
 ### Why Skinny?
 
 What does the name of `Skinny` actually mean?
@@ -24,6 +25,7 @@ Even if you need to investigate Skinny's inside, don't worry. Skinny keeps itsel
 
 A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like it"**. This is only half kidding but it also represents Skinny's concept. Skinny framework should provide flexible APIs to empower developers as much as possible and shouldn't bother them.
 
+<hr/>
 ## How to use
 
 Actually, application built with Skinny framework is a Scalatra application. After preparing Scalatra app, just add the following dependency to your `project/Build.scala`.
@@ -46,6 +48,7 @@ libraryDependencies ++= Seq(
 )
 ```
 
+<hr/>
 ## Try Skinny now
 
 Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on your terminal. That's all!
@@ -95,6 +98,7 @@ yo skinny
 ./skinny run
 ```
 
+<hr/>
 ## Components
 
 ### Routing & Controller & Validator
@@ -120,13 +124,14 @@ class MembersController extends SkinnyController {
 
   def newOne = render("/members/new")
 
-  def createForm = validation(
+  def createForm = validation(params,
     paramKey("name") is required & minLength(2), 
     paramKey("countryId") is numeric
   )
 
   def createFormParams = params.permit(
-    "groupId" -> ParamType.Int , "countryId" -> ParamType.Long)
+    "name" -> ParamType.String, 
+    "countryId" -> ParamType.Long)
 
   def create = if (createForm.validate()) {
     Member.createWithPermittedAttributes(createFormParams)
@@ -163,7 +168,7 @@ object alphabetOnly extends ValidationRule {
   def isValid(v: Any) = isEmpty(v) || v.toString.matches("^[a-zA-Z]*$")
 }
 
-def createForm = validation(
+def createForm = validation(createParams,
   paramKey("name") is required & minLength(2) & alphabetOnly, 
   paramKey("countryId") is numeric
 )
@@ -179,18 +184,23 @@ object CompaniesController extends SkinnyResource {
   override def resourcesName = "companies"
   override def resourceName = "company"
 
-  override def createForm = validation(
-    paramKey("name") is required & maxLegnth(64), paramKey("registrationCode" is numeric)
+  override def createForm = validation(createParams,
+    paramKey("name") is required & maxLegnth(64), 
+    paramKey("registrationCode" is numeric)
+
   override def createFormStrongParameters = 
     Seq("name" -> ParamType.String, "registrationCode" -> ParamType.Int)
 
-  override def updateForm = validation(paramKey("name") is required & maxLegnth(64))
+  override def updateForm = validation(updateParams,
+    paramKey("name") is required & maxLegnth(64))
+
   override def updateFormStrongParameters = Seq("name" -> ParamType.String)
 }
 ```
 
 `Company` object should implement `skinny.SkinnyModel` APIs and you should prepare some view templates under `src/main/webapp/WEB-INF/views/members/`.
 
+<hr/>
 ### ORM
 
 Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc).
@@ -304,6 +314,7 @@ object Member extends SkinnyCRUDMapper[Member]
 ```
 
 
+<hr/>
 ### DB Migration
 
 DB migration comes with [Flyway](http://flywaydb.org/). Usage is pretty simple.
@@ -319,6 +330,7 @@ This command expects `src/main/resources/db/migration/V***_***.sql` files.
 Try it with [blank-app](https://github.com/skinny-framework/skinny-framework/releases) right now!
 
 
+<hr/>
 ### View Templates
 
 Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesource.org/)Support, but Skinny has an additional convention.
@@ -377,6 +389,7 @@ class MembersController extends SkinnyServlet {
 
 And then, use scaml instead.
 
+<hr/>
 ### CoffeeScript & LESS support
 
 First, add `skinny-assets` to libraryDependencies.
@@ -454,6 +467,7 @@ You can access the latest compiled CSS file at `http://localhost:8080/assets/css
 In production environment, precompiling coffee/less files to js/css is recommended.
 
 
+<hr/>
 ### Testing support
 
 You can use Scalatra's great test support. Some optional feature is provided by skinny-test library.
@@ -474,6 +488,7 @@ You can see some examples here:
 
 https://github.com/skinny-framework/skinny-framework/tree/develop/example/src/test/scala
 
+<hr/>
 ### FactoryGirl
 
 Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module will be quite useful when testing your apps.
@@ -514,6 +529,7 @@ skill {
 }
 ```
 
+<hr/>
 ## License
 
 (The MIT License)
