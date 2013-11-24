@@ -30,7 +30,7 @@ A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like i
 
 Actually, application built with Skinny framework is a Scalatra application. After preparing Scalatra app, just add the following dependency to your `project/Build.scala`.
 
-```java
+```
 libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-framework" % "[0.9,)",
   "org.skinny-framework" %% "skinny-task"      % "[0.9,)",
@@ -40,7 +40,7 @@ libraryDependencies ++= Seq(
 
 If you need only Skinny-ORM or Skinny-Validator, you can use only what you need. Even if you're a Play2 (or any others) user, these components are available for you as well.
 
-```java
+```
 libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-orm"       % "[0.9,)",
   "org.skinny-framework" %% "skinny-validator" % "[0.9,)",
@@ -112,66 +112,23 @@ Skinny's routing mechanism and controller layer on MVC architecture is a **rich 
 ```java
 // src/main/scala/controller/MembersController.scala
 class MembersController extends SkinnyController {
-  protectFromForgery()
-
-  beforeAction(only = Seq('index, 'new)) { set("countries", Country.findAll()) }
-
   def index = {
-    // set 'members' in the request scope, then you can use it in views
-    set("members" -> Member.findAll())
+    set("members" -> Member.findAll()) // can call this in views
     render("/members/index")
   }
-
-  def newOne = render("/members/new")
-
-  def createForm = validation(params,
-    paramKey("name") is required & minLength(2), 
-    paramKey("countryId") is numeric
-  )
-
-  def createFormParams = params.permit(
-    "name" -> ParamType.String, 
-    "countryId" -> ParamType.Long)
-
-  def create = if (createForm.validate()) {
-    Member.createWithPermittedAttributes(createFormParams)
-    redirect("/members")
-  } else {
-    render("/members/new")
-  }
 }
-
 // src/main/scala/controller/Controllers.scala
 object Controllers {
   val members = new MembersController with Routes {
     get("/members/?")(index).as('index)
-    get("/members/new")(newOne).as('new)
-    post("/members/?")(create).as('create)
   }
 }
-
 // src/main/scala/ScalatraBootstrap.scala
 class ScalatraBootstrap exntends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
-    // register routes
     Controllers.members.mount(ctx)
   }
 }
-```
-
-Skinny-Validator is newly created validator which is based on [seratch/inputvalidator](https://github.com/seratch/inputvalidator) and much improved. Rules are so simple that you can easily add original validation rules. Furthermore, you can use this validator with any other frameworks.
-
-```java
-import skinny.validator._
-object alphabetOnly extends ValidationRule {
-  def name = "alphabetOnly"
-  def isValid(v: Any) = isEmpty(v) || v.toString.matches("^[a-zA-Z]*$")
-}
-
-def createForm = validation(createParams,
-  paramKey("name") is required & minLength(2) & alphabetOnly, 
-  paramKey("countryId") is numeric
-)
 ```
 
 `SkinnyResource` which is similar to Rails ActiveResource is available. That's a pretty DRY way.
@@ -184,21 +141,15 @@ object CompaniesController extends SkinnyResource {
   override def resourcesName = "companies"
   override def resourceName = "company"
 
-  override def createForm = validation(createParams,
-    paramKey("name") is required & maxLegnth(64), 
-    paramKey("registrationCode" is numeric)
-
-  override def createFormStrongParameters = 
-    Seq("name" -> ParamType.String, "registrationCode" -> ParamType.Int)
-
-  override def updateForm = validation(updateParams,
-    paramKey("name") is required & maxLegnth(64))
-
-  override def updateFormStrongParameters = Seq("name" -> ParamType.String)
+  ...
 }
 ```
 
 `Company` object should implement `skinny.SkinnyModel` APIs and you should prepare some view templates under `src/main/webapp/WEB-INF/views/members/`.
+
+See in detail:
+
+[Controller & Routes](documentation/controller-and-routes.html)
 
 <hr/>
 ### ORM
@@ -228,21 +179,14 @@ That's all! Now you can use the following APIs.
 Member.withAlias { m => // or "val m = Member.defaultAlias"
   // find by primary key
   val member: Option[Member] = Member.findById(123)
-  val member: Option[Member] = Member.where('id -> 123).apply().headOption
-  val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
   // find many
   val members: List[Member] = Member.findAll()
   val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).apply()
   // count
-  val allCount: Long = Member.countAll()
   val count = Member.countBy(sqls.isNotNull(m.deletedAt).and.eq(m.countryId, 123))
   val count = Member.where('deletedAt -> None, 'countryId -> 123).count.apply()
 
-  // create with stong parameters
-  val params = Map("name" -> "Bob")
-  val id = Member.createWithPermittedAttributes(
-    params.permit("name" -> ParamType.String))
-  // create with unsafe parameters
+  // create with parameters
   Member.createWithAttributes(
     'id -> 123,
     'name -> "Chris",
@@ -259,59 +203,9 @@ Member.withAlias { m => // or "val m = Member.defaultAlias"
 }
 ```
 
-If you need to join other tables, just add `belongsTo`, `hasOne` or `hasMany` (`hasManyThrough`) to the companion.
+See in detail:
 
-**[Notice]** Unfortunately, Skinny-ORM doesn't retrieve nested associations (e.g. members.head.groups.head.country) automatically though we're still seeking a way to resolve this issue.
-
-```java
-class Member(id: Long, name: String, companyId: Long, 
-  company: Option[Company] = None, skills: Seq[Skill] = Nil)
-
-object Member extends SkinnyCRUDMapper[Member] {
-  // If byDefault is called, this join condition is enabled by default
-  belongsTo[Company](Company, (m, c) => m.copy(company = Some(c))).byDefault
-  val skills = hasManyThrough[Skill](
-    MemberSkill, Skill, (m, skills) => m.copy(skills = skills))
-}
-
-Member.findById(123) // without skills
-Member.joins(Member.skills).findById(123) // with skills
-```
-
-If you need to add methods, just write methods that use ScalikeJDBC' APIs directly.
-
-```java
-object Member extends SkinnyCRUDMapper[Member] {
-  val m = defaultAlias
-  def findByGroupId(groupId: Long)(implicit s: DBSession = autoSession): List[Member] = 
-    withSQL { select.from(Member as m).where.eq(m.groupId, groupId) }
-      .map(apply(m)).list.apply()
-}
-```
-
-`timetamps` from `ActiveRecord` is available as the `TimestampsFeature` trait.
-
-```java
-class Member(id: Long, name: String, createdAt: DateTime, updatedAt: Option[DateTime] = None)
-object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member]
-// created_at timestamp not null, updated_at timestamp
-```
-
-Soft delete support is also available.
-
-```java
-object Member extends SkinnyCRUDMapper[Member] 
-  with SoftDeleteWithTimestamp[Member]
-// deleted_at timestamp
-```
-
-Furthermore, optimistic lock is also available.
-
-```java
-object Member extends SkinnyCRUDMapper[Member] 
-  with OptimisticLockWithVersionFeature[Member]
-// lock_version bigint
-```
+[O/R Mapper](documentation/orm.html)
 
 
 <hr/>
@@ -327,48 +221,21 @@ DB migration comes with [Flyway](http://flywaydb.org/). Usage is pretty simple.
 
 This command expects `src/main/resources/db/migration/V***_***.sql` files. 
 
-Try it with [blank-app](https://github.com/skinny-framework/skinny-framework/releases) right now!
+See in detail:
+
+[DB Migration](documentation/db-migration.html)
 
 
 <hr/>
 ### View Templates
 
-Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesource.org/)Support, but Skinny has an additional convention.
+Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesource.org/) Support, but Skinny has an additional convention.
 
 ![Scalate Logo](images/scalate.png)
 
 Templates' path should be `{path}.{format}.{extension}`. Expected {format} are `html`, `json`, `js` and `xml`.
 
-The following ssp is `src/main/webapp/WEB-INF/views/members/index.html.ssp`.
-
-```java
-<%@val members: Seq[model.Member] %>
-<h3>Members</h3>
-<hr/>
-<table class="table table-bordered">
-<thead>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th></th>
-  </tr>
-</thead>
-<tbody>
-  #for (member <- members)
-  <tr>
-    <td>${member.id}</td>
-    <td>${member.name}</td>
-    <td>
-      <a href="/members/${member.id}/edit" class="btn btn-info">Edit</a>
-      <a data-method="delete" data-confirm="Are you sure?" href="/members/${member.id}" class="btn btn-danger">Delete</a>
-    </td>
-  </tr>
-  #end
-</tbody>
-</table>
-```
-
-Your controller code will be like this:
+For instance, your controller code will be like this:
 
 ```java
 class MembersController extends SkinnyController {
@@ -379,15 +246,29 @@ class MembersController extends SkinnyController {
 }
 ```
 
-If you need to customize view templates, override the settings.
+The render method expects that `src/main/webapp/WEB-INF/views/members/index.html.ssp` exists.
+
+```
+<%@val members: Seq[model.Member] %>
+<hr/>
+#for (member <- members)
+  ${member.name}
+#end
+```
+
+Scalate supports many template engines. If you'd like to use other Scalate templates, just override the settings in controllers.
 
 ```java
-class MembersController extends SkinnyServlet {
-  override val scalateExtension = "scaml"
+class MembersController extends SkinnyController {
+  override val scalateExtension = "jade"
 }
 ```
 
-And then, use scaml instead.
+And then, use `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
+
+See in detail:
+
+[View Templates](documentation/view-templates.html)
 
 <hr/>
 ### CoffeeScript & LESS support
@@ -484,9 +365,9 @@ class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
 }
 ```
 
-You can see some examples here:
+See in detail:
 
-https://github.com/skinny-framework/skinny-framework/tree/develop/example/src/test/scala
+[Testing](documentation/testing.html)
 
 <hr/>
 ### FactoryGirl
@@ -500,34 +381,19 @@ object Company extends SkinnyCRUDMapper[Company] {
 }
 
 val company1 = FactoryGirl(Company).create()
-val company2 = FactoryGirl(Company).create('name -> "FactoryPal, Inc.")
-
-val country = FactoryGirl(Country, 'countryyy).create()
-
-val memberFactory = FactoryGirl(Member).withValues('countryId -> country.id)
-val member = memberFactory.create('companyId -> company1.id, 'createdAt -> DateTime.now)
 ```
 
 Settings is not in yaml files but typesafe-config conf file. In this example, `src/test/resources/factories.conf` is like this:
 
 ```
-countryyy {
-  name="Japan"
-}
-member {
-  countryId="#{countryId}"
-}
 company {
   name="FactoryGirl, Inc."
 }
-name {
-  first="Kazuhiro"
-  last="Sera"
-}
-skill {
-  name="Scala Programming"
-}
 ```
+
+See in detail:
+
+[FactoryGirl](documentation/factory-girl.html)
 
 <hr/>
 ## License

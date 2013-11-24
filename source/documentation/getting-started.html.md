@@ -1,3 +1,7 @@
+---
+title: Getting Started - Skinny Framework
+---
+
 ## Getting Started
 
 <hr/>
@@ -69,7 +73,7 @@ yo skinny
 ```
 
 <hr/>
-### Directories and files
+### Project Structure
 
 The following tree is directories and files in skinny-blank-app project. Basically using this style is preferred.
 
