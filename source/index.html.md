@@ -55,7 +55,7 @@ Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on 
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.16/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.17/skinny-blank-app.zip)
 
 Let's create your first Skinny app by using scaffold generator.
 
@@ -271,11 +271,15 @@ See in detail:
 [View Templates](documentation/view-templates.html)
 
 <hr/>
-### CoffeeScript & LESS support
+### Assets Support (CoffeeScript, LESS and Sass)
+
+![CoffeeScript Logo](images/coffeescript.png)
+![LESS Logo](images/less.png)
+![Sass Logo](images/sass.png)
 
 First, add `skinny-assets` to libraryDependencies.
 
-```java
+```
 libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-framework" % "[0.9,)",
   "org.skinny-framework" %% "skinny-assets"    % "[0.9,)",
@@ -294,9 +298,11 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 }
 ```
 
-#### CoffeeScript 
+AssetsController supports Last-Modified header and returns status 304 correctly if the requested file isn't changed. 
 
-![CoffeeScript Logo](images/coffeescript.png)
+However, precompiling them is highly recommended in production (./skinny package does that).
+
+#### CoffeeScript 
 
 If you use CoffeeScript, just put *.coffee files under `WEB-INF/assets/coffee`:
 
@@ -308,44 +314,24 @@ echo "foo"
 
 You can access the latest compiled JavaScript code at `http://localhost:8080/assets/js/echo.js`.
 
-```javascript
-(function() {
-  var echo;
-
-  echo = function(v) {
-    return console.log(v);
-  };
-
-  echo("foo");
-
-}).call(this);
-```
-
-#### LESS 
-
-![LESS Logo](images/less.png)
+#### LESS
 
 If you use LESS, just put *.less files under `WEB-INF/assets/less`:
 
 ```less
 // src/main/webapp/WEB-INF/assets/less/box.less
 @base: #f938ab;
-.box { 
+.box {
   color: saturate(@base, 5%);
   border-color: lighten(@base, 30%);
 }
 ```
 
-You can access the latest compiled CSS file at `http://localhost:8080/assets/css/box.css`.
+You can access the latest compiled CSS file at `http://localhost:8080/assets/css/box.css`
 
-```css
-.box {
-  color: #fe33ac;
-  border-color: #fdcdea;
-}
-```
+#### Sass
 
-In production environment, precompiling coffee/less files to js/css is recommended.
+If you use Sassy CSS, put *.scss files under `WEB-INF/assets/scss` or `WEB-INF/assets/sass`. If you use Sass Indented Syntax, put *.sass files under `WEB-INF/assets/sass`.
 
 
 <hr/>
