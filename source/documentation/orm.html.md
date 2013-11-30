@@ -32,38 +32,56 @@ object Member extends SkinnyCRUDMapper[Member] {
 That's all! Now you can use the following APIs.
 
 ```java
-Member.withAlias { m => // or "val m = Member.defaultAlias"
-  // find by primary key
-  val member: Option[Member] = Member.findById(123)
-  val member: Option[Member] = Member.where('id -> 123).apply().headOption
-  val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
-  // find many
-  val members: List[Member] = Member.findAll()
-  val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).apply()
-  // count
-  val allCount: Long = Member.countAll()
-  val count = Member.countBy(sqls.isNotNull(m.deletedAt).and.eq(m.countryId, 123))
-  val count = Member.where('deletedAt -> None, 'countryId -> 123).count.apply()
+// find by primary key
+val member: Option[Member] = Member.findById(123)
+val member: Option[Member] = Member.where('id -> 123).apply().headOption
+val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
 
-  // create with stong parameters
-  val params = Map("name" -> "Bob")
-  val id = Member.createWithPermittedAttributes(
-    params.permit("name" -> ParamType.String))
-  // create with unsafe parameters
-  Member.createWithAttributes(
-    'id -> 123,
-    'name -> "Chris",
-    'createdAt -> DateTime.now
-  )
+// find many
+val members: List[Member] = Member.findAll()
+val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).apply()
 
-  // update with strong parameters
-  Member.updateById(123).withAttributes(params.permit("name" -> ParamType.String))
-  // update with unsafe parameters
-  Member.updateById(123).withAttributes('name -> "Alice")
+// count
+val allCount: Long = Member.countAll()
+val m = Member.defaultAlias
+val count = Member.countBy(sqls.isNotNull(m.deletedAt).and.eq(m.countryId, 123))
+val count = Member.where('deletedAt -> None, 'countryId -> 123).count.apply()
 
-  // delete
-  Member.deleteById(234)
+// create with stong parameters
+val params = Map("name" -> "Bob")
+val id = Member.createWithPermittedAttributes(
+  params.permit("name" -> ParamType.String))
+// create with unsafe parameters
+Member.createWithAttributes(
+  'id -> 123,
+  'name -> "Chris",
+  'createdAt -> DateTime.now
+)
+
+// update with strong parameters
+Member.updateById(123).withAttributes(params.permit("name" -> ParamType.String))
+// update with unsafe parameters
+Member.updateById(123).withAttributes('name -> "Alice")
+
+// delete
+Member.deleteById(234)
+```
+
+<hr/>
+#### Dynamic Table Name
+
+`#withTableName` enables using another table name only for current query.
+
+```java
+object Order extends SkinnyCRUDMapper[Order] {
+  override def tableName = "orders"
 }
+
+// default: orders
+Order.countAll()
+
+// other table: orders_2012
+Order.withTableName("orders_2012").countAll()
 ```
 
 <hr/>
