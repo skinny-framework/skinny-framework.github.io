@@ -11,6 +11,12 @@ Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [S
 
 ![Logo](images/scalikejdbc.png)
 
+Examples:
+
+[orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala)
+
+[orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
+
 <hr/>
 #### Simple Mapper
 
@@ -67,6 +73,8 @@ Member.updateById(123).withAttributes('name -> "Alice")
 Member.deleteById(234)
 ```
 
+Source code: [orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+
 <hr/>
 #### Dynamic Table Name
 
@@ -83,6 +91,8 @@ Order.countAll()
 // other table: orders_2012
 Order.withTableName("orders_2012").countAll()
 ```
+
+Source code: [orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala)
 
 <hr/>
 #### Relationships
@@ -106,6 +116,8 @@ Member.findById(123) // without skills
 Member.joins(Member.skills).findById(123) // with skills
 ```
 
+Source code: [orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
+
 <hr/>
 #### Eager Loading
 
@@ -123,6 +135,8 @@ object Member extends SkinnyCRUDMapper[Member] {
 
 Member.includes(Member.skills).findById(123) // with skills
 ```
+
+Source code: [orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala)
 
 <hr/>
 #### Adding Methods
@@ -173,6 +187,8 @@ object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member]
 // created_at timestamp not null, updated_at timestamp
 ```
 
+Source code: [orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
+
 <hr/>
 #### Soft Deletion
 
@@ -183,6 +199,10 @@ object Member extends SkinnyCRUDMapper[Member]
   with SoftDeleteWithTimestamp[Member]
 // deleted_at timestamp
 ```
+
+Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala)
+
+Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala)
 
 <hr/>
 #### Optimistic Lock
@@ -195,12 +215,5 @@ object Member extends SkinnyCRUDMapper[Member]
 // lock_version bigint
 ```
 
-<hr/>
-#### More Examples
-
-You can see more examples here:
-
-[orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala)
-
-[orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
+Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
 
