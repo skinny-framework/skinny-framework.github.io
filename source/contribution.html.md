@@ -7,9 +7,9 @@ title: Contribution - Skinny Framework
 <hr/>
 ### How to contribute skinny-framework.org?
 
-#### fork skinny-framework project
+#### fork skinny-framework.github.io project
 
-Fork [https://github.com/skinny-framework/skinny-framework](https://github.com/skinny-framework/skinny-framework).
+Fork [https://github.com/skinny-framework/skinny-framework.github.io](https://github.com/skinny-framework/skinny-framework.github.io).
 
 #### change under the website directory
 
@@ -17,11 +17,13 @@ How to debug:
 
 ```
 git clone [your forked repository].
-cd website
+cd skinny-framework.github.io
 gem install bundler
 bundle install
-middleman server
+bundle exec middleman server
 ```
+
+Access `http://localhost:4567` from your browser.
 
 #### make a pull request
 
@@ -35,7 +37,9 @@ Create a branch to request, and send your pull request to `develop` branch (not 
 
 Fork [https://github.com/skinny-framework/skinny-framework](https://github.com/skinny-framework/skinny-framework).
 
+```
 git clone [your forked repository].
+```
 
 #### modify and write tests
 
