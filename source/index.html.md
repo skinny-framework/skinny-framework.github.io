@@ -55,7 +55,7 @@ Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on 
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.18/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.19/skinny-blank-app.zip)
 
 Let's create your first Skinny app by using scaffold generator.
 
