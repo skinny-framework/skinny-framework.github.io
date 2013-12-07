@@ -89,7 +89,7 @@ If you're familiar with [Yeoman](http://yeoman.io), a generator for [Skinny fram
 [![NPM](https://nodei.co/npm/generator-skinny.png?downloads=true)](https://npmjs.org/package/generator-skinny)
 
 ```sh
-# brew instsall node
+# brew install node
 npm install -g yo
 npm install -g generator-skinny
 mkdir skinny-app
