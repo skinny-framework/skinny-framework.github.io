@@ -15,7 +15,7 @@ Skinny ORM is characterized by avoding N+1 queries by default.
 
 Basically `belongTo`, `hasOne` and `hasMany` reolationships are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries.
 
-On the other hand, nested attributes' replationships won't be resolved by default (if we implement it, you will often suffer stackoverflow errors). If you need nested replationships, you can retrieve them with `include` API (eager loading).
+On the other hand, nested attributes' replationships won't be resolved by default. If you need nested replationships, you can retrieve them with `include` API (eager loading).
 
 Examples:
 
