@@ -202,7 +202,7 @@ Soft delete support is also available.
 
 ```java
 object Member extends SkinnyCRUDMapper[Member]
-  with SoftDeleteWithTimestamp[Member]
+  with SoftDeleteWithTimestampFeature[Member]
 // deleted_at timestamp
 ```
 
