@@ -43,14 +43,23 @@ class MembersController extends SkinnyController {
   } else {
     render("/members/new")
   }
+
+  // whether query param or path param
+  def show = params.getAs[Long]("id").map { id =>
+    Member.findById(id).map { member =>
+      set("member" -> member)
+    }.getOrElse haltWithBody(404)
+  }.getOrElse haltWithBody(404)
+
 }
 
 // src/main/scala/controller/Controllers.scala
 object Controllers {
-  val members = new MembersController with Routes {
-    get("/members/?")(index).as('index)
-    get("/members/new")(newOne).as('new)
-    post("/members/?")(create).as('create)
+  object members extends MembersController with Routes {
+    val indexUrl = get("/members/?")(index).as('index)
+    val newUrl = get("/members/new")(newOne).as('new)
+    val createUrl = post("/members/?")(create).as('create)
+    val showUrl = get("/members/:id")(show).as('show)
   }
 }
 
@@ -78,6 +87,37 @@ render("/members/index")
 #end
 <ul>
 ```
+
+<hr/>
+#### Reverse Routes
+
+You can use Scalatra's reverse routes.
+
+http://www.scalatra.org/2.2/guides/http/reverse-routes.html
+
+In controllers:
+
+```java
+class MembersController extends SkinnyController {
+  def oldPage = redirect(url(Controllers.members.indexUrl))
+}
+
+object Controllers {
+  object members extends MembersController with Routes {
+    val indexUrl = get("/members/?")(index).as('index)
+    val showUrl = get("/members/:id")(show).as('show)
+  }
+}
+```
+
+In views:
+
+```
+// Jade example
+a(href={url(MembersController.showUrl, "id" -> member.id.toString)}) Show detail
+
+```
+
 
 <hr/>
 #### SkinnyController & SkinnyServlet

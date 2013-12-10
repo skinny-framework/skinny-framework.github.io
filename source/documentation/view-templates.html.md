@@ -26,7 +26,7 @@ class MembersController extends SkinnyController {
 
 The render method expects that `src/main/webapp/WEB-INF/views/members/index.html.ssp` exists.
 
-```xml
+```
 <%@val members: Seq[model.Member] %>
 <h3>Members</h3>
 <hr/>
@@ -44,8 +44,17 @@ The render method expects that `src/main/webapp/WEB-INF/views/members/index.html
     <td>${member.id}</td>
     <td>${member.name}</td>
     <td>
+      <!-- Using Scalatra reverse routes is recommended -->
+      <a href="${url(MembersController.editUrl, "id" -> member.id.toString)}" 
+         class="btn btn-info">Edit</a>
+      <a data-method="delete" data-confirm="Are you sure?" 
+         href="${url(MembersControlller.deleteUrl, "id" -> member.id.toString)}" 
+         class="btn btn-danger">Delete</a>
+
+      <!-- Primitive HTML coding is also possible -->
       <a href="/members/${member.id}/edit" class="btn btn-info">Edit</a>
-      <a data-method="delete" data-confirm="Are you sure?" href="/members/${member.id}" class="btn btn-danger">Delete</a>
+      <a data-method="delete" data-confirm="Are you sure?"
+         href="/members/${member.id}" class="btn btn-danger">Delete</a>
     </td>
   </tr>
   #end
@@ -73,6 +82,18 @@ class MembersController extends SkinnyController {
 ```
 
 And then, use `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
+
+Scaffoding will be the easiest way to understand. Try it now!
+
+```sh
+./skinny g scaffold members member name:String activated:Boolean birthday:Option[LocalDate]
+./skinny g scaffold:scaml companies company name:String 
+./skinny g scaffold:jade  countries country name:String code:Int
+
+./skinny db:migrate
+./skinny run
+```
+
 
 
 <hr/>

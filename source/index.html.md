@@ -55,7 +55,7 @@ Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on 
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.19/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.20/skinny-blank-app.zip)
 
 Let's create your first Skinny app by using scaffold generator.
 
@@ -119,8 +119,8 @@ class MembersController extends SkinnyController {
 }
 // src/main/scala/controller/Controllers.scala
 object Controllers {
-  val members = new MembersController with Routes {
-    get("/members/?")(index).as('index)
+  object members extends MembersController with Routes {
+    val indexUrl = get("/members/?")(index).as('index)
   }
 }
 // src/main/scala/ScalatraBootstrap.scala
