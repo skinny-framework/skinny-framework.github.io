@@ -114,9 +114,11 @@ In views:
 
 ```
 // Jade example
-a(href={url(MembersController.showUrl, "id" -> member.id.toString)}) Show detail
+a(href={url(Controllers.members.showUrl, "id" -> member.id.toString)}) Show detail
 
 ```
+
+FYI: You can see more examples for SkinnyResource by generating scaffold views.
 
 
 <hr/>
