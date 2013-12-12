@@ -253,7 +253,7 @@ skinny.Skinny provides getters for basic elements in view templates.
 - i18n: I18n
 
 <hr/>
-### How to Do It
+## How to Do It
 
 Basically, you will use Scalatra's DSL.
 
@@ -261,65 +261,187 @@ Basically, you will use Scalatra's DSL.
 
 [http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
 
-#### (Query/Form/Path) Parameters
+<hr/>
+### (Query/Form/Path) Parameters
 
-[http://www.scalatra.org/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
+#### params
 
-- params
-- params.get(name)
-- multiParams("splat")
-- multiParams("captures")
+```java
+val name: Option[String] = params.get("id")
+val id: Option[Int] = params.getAs[Int]("id")
+val id: Long = params.getAsOrElse[Long]("id", -1L)
 
-#### Cookies
+val ids: Option[Seq[Int]] = multiParams.getAs[Int]("ids")
+```
 
-[http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[/api/index.html#org.scalatra.ScalatraParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParams)
 
-- cookies
+[/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedParams)
 
-#### Request/Response Headers
+[/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams)
 
-[http://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletRequest.html](http://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletRequest.html)
+#### multiParams("splat")
 
-[http://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletResponse.html](http://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServletResponse.html)
+```java
+get("/say/*/to/*") {
+  // Matches "GET /say/hello/to/world"
+  multiParams("splat") // == Seq("hello", "world")
+}
 
-- request.getHeader(name)
-- response.setHeader(name, value)
+get("/download/*.*") {
+  // Matches "GET /download/path/to/file.xml"
+  multiParams("splat") // == Seq("path/to/file", "xml")
+}
+```
 
-#### Session
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
 
-[http://www.scalatra.org/2.2/api/index.html#org.scalatra.SessionSupport](http://www.scalatra.org/2.2/api/index.html#org.scalatra.SessionSupport)
+[/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
 
-- session
-- session(key)
+#### multiParams("captures")
 
-#### Flash
+```java
+get("""^\/f(.*)/b(.*)""".r) {
+  // Matches "GET /foo/bar"
+  multiParams("captures") // == Seq("oo", "ar")
+}
+```
 
-[http://www.scalatra.org/guides/http/flash.html](http://www.scalatra.org/guides/http/flash.html)
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
 
-- flash(name) = value
-- flash += (name -> value)
-- flash.now += (name -> value)
+[/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
 
-#### Response handling
+<hr/>
+### Cookies
 
-[http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+```java
+def hello = {
+  cookies += "name" -> "value"
+  cookies -= "name"
+}
 
-- halt(status, body, headers, reason)
+def helloWithOptions = {
+  implicit val options = CookieOptions(secure = true)
+  cookies.set("name" -> "value")
+  cookies.set("name" -> "value")(options)
+}
+```
 
-#### Before/After Filters
+[/api/index.html#org.scalatra.SweetCookies](http://www.scalatra.org/2.2/api/index.html#org.scalatra.SweetCookies)
+
+[/api/org/scalatra/CookieOptions.html](http://www.scalatra.org/2.2/api/org/scalatra/CookieOptions.html)
+
+<hr/>
+### Request/Response Headers
+
+```java
+val v: Option[String] = request.header(name)
+```
+
+[/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichRequest)
+
+```java
+response.headers += "name" -> "value"
+response.headers -= "name"
+```
+
+[/api/index.html#org.scalatra.servlet.RichResponse](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichResponse)
+
+<hr/>
+### Session
+
+```java
+val v: Any = session("name") // or session('name)
+session += "name" -> "value"
+session -= "name"
+```
+
+[/api/index.html#org.scalatra.RichSession](http://www.scalatra.org/2.2/api/index.html#org.scalatra.RichSession)
+
+<hr/>
+### Flash
+
+```java
+flash(name) = value
+flash += (name -> value)
+flash.now += (name -> value)
+```
+
+[/guides/http/flash.html](http://www.scalatra.org/guides/http/flash.html)
+
+[/api/index.html#org.scalatra.FlashMap](http://www.scalatra.org/2.2/api/index.html#org.scalatra.FlashMap)
+
+<hr/>
+### Request Body
+
+```java
+val body: String = request.body
+val stream: InputStream = request.inputStream // raw HTTP POST data
+```
+
+[/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichRequest)
+
+<hr/>
+### File Upload
+
+```java
+class FilesController extends SkinnyController with FileUploadSupport {
+
+  def upload = fileParams.get("file") match {
+    case Some(file) =>
+      Ok(file.get(), Map(
+        "Content-Type"        -> (file.contentType.getOrElse("application/octet-stream")),
+        "Content-Disposition" -> ("attachment; filename=\"" + file.name + "\"")
+      ))
+    case None =>
+      BadRequest(displayPage(
+        <p>
+          Hey! You forgot to select a file.
+        </p>))
+  }
+}
+```
+
+[/guides/formats/upload.html](http://www.scalatra.org/guides/formats/upload.html)
+
+[/api/index.html#org.scalatra.fileupload.FileUploadSupport](http://www.scalatra.org/2.2/api/index.html#org.scalatra.fileupload.FileUploadSupport)
+
+
+<hr/>
+### Response handling
+
+```java
+halt(404)
+halt(status = 400, headers = Map("foo" -> "bar"), reason = "why")
+
+redirect("/top") // 302
+redirect301("/new_url") // 301
+redirect302("/somewhere") // 302
+redirect303("/complete") // 303
+```
+
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+
+[/index.html#org.scalatra.ActionResult](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ActionResult)
+
+[/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala)
+
+[/core/src/main/scala/org/scalatra/ActionResult.scala](https://github.com/scalatra/scalatra/blob/2.2.x_2.10/core/src/main/scala/org/scalatra/ActionResult.scala)
+
+### Before/After Filters
 
 Scalatra has filters by default. However, we highly recommend Skinny users to use Skinny's filters.
 
 ##### Scalatra filters
 
-[http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
 
 - before(transformers)(action)
 - after(transformers)(action)
 
 ##### Skinny filters
 
-[framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
+[/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
 
 ```java
 class MembersController extends SkinnyController with Routes {

@@ -19,7 +19,7 @@ skinny-blank-app prepares easy-to-use TaksRunner.
 
 
 ```java
-object TaskLancher extends skinny.task.TaskLauncher {
+object TaskRunner extends skinny.task.TaskLauncher {
 
   // def register(name: String, runner: (List[String]) => Unit)
   register("assets:precompile", (params) => {
