@@ -6,7 +6,7 @@ To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is hi
 
 ![Logo](images/logo.png)
 
-**[Notice]** Still in alpha stage. Architecture and API compatibility won't be kept until 1.0 release (2013 4Q).
+**[Notice]** Still in alpha stage. Architecture and API compatibility won't be kept until 1.0 release (2014/03).
 
 <hr/>
 ### Why Skinny?
@@ -194,7 +194,7 @@ Member.withAlias { m => // or "val m = Member.defaultAlias"
   )
 
   // update with strong parameters
-  Member.updateById(123).withAttributes(params.permit("name" -> ParamType.String))
+  Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType.String))
   // update with unsafe parameters
   Member.updateById(123).withAttributes('name -> "Alice")
 

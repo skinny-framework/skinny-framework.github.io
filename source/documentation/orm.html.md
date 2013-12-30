@@ -71,7 +71,7 @@ Member.createWithAttributes(
 )
 
 // update with strong parameters
-Member.updateById(123).withAttributes(params.permit("name" -> ParamType.String))
+Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType.String))
 // update with unsafe parameters
 Member.updateById(123).withAttributes('name -> "Alice")
 
