@@ -54,6 +54,7 @@ set :images_dir, 'images'
 activate :syntax
 set :markdown_engine, :redcarpet
 set :markdown, fenced_code_blocks: true, smartypants: true, autolink: true, with_toc_data: true
+I18n.enforce_available_locales = false
 
 # Build-specific configuration
 configure :build do
