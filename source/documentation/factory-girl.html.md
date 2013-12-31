@@ -11,8 +11,6 @@ Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](
 
 FactoryGirl is a part of Skinny ORM, so you can use FactoryGirl even in your Play2 apps!
 
-![Logo](images/scalikejdbc.png)
-
 Just add skinny-orm to your apps.
 
 ```

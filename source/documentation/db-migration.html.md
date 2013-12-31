@@ -20,7 +20,9 @@ Just run the following command.
 ./skinny db:migrate [env] [dbname]
 ````
 
-This command expects `src/main/resources/db/migration/V***_***.sql` files.
+This command expects `src/main/resources/db/migration/V***__***.sql` files. 
+
+Be aware of required two underscores at filename.
 
 ### Customizing Migration
 

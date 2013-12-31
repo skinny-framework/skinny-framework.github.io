@@ -125,6 +125,27 @@ Member.joins(Member.skills).findById(123) // with skills
 Source code: [orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
 
 <hr/>
+##### Entity Equality
+
+Basically using case classes for entities is recommended. As you know, Scala (until 2.11) has 22 limitation, so you may need to use normal classes for entities to treat tables that have more than 22 columns.
+
+In this case, entity should be defined like this (Skinny 0.9.21 or ScalikeJDBC 1.7.3 is required):
+
+```java
+class LegacyData(val id: Long, val c2: String, val c3: Int, ..., val c23: Int)
+  extends scalikejdbc.EntityEquality {
+  // override val entityIdentity = id
+  override val entityIdentity = s"$id $c2 $c3 ... $c23"
+}
+
+object LegacyData extends SkinnyCRUDMapper[LegacyData] {
+  ...
+}
+```
+
+If you missed above implementation, one-to-many relationships doesn't work as you expect.
+
+<hr/>
 #### Eager Loading
 
 You can call `includes` for eager loading. But nested entities's eager loading is not supported yet.

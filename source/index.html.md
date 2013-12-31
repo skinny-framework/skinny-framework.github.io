@@ -176,31 +176,25 @@ object Member extends SkinnyCRUDMapper[Member] {
 That's all! Now you can use the following APIs.
 
 ```java
-Member.withAlias { m => // or "val m = Member.defaultAlias"
-  // find by primary key
-  val member: Option[Member] = Member.findById(123)
-  // find many
-  val members: List[Member] = Member.findAll()
-  val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).apply()
-  // count
-  val count = Member.countBy(sqls.isNotNull(m.deletedAt).and.eq(m.countryId, 123))
-  val count = Member.where('deletedAt -> None, 'countryId -> 123).count.apply()
+// find by primary key
+val member: Option[Member] = Member.findById(123)
+val member: Option[Member] = Member.where('id -> 123).apply().headOption
+val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
 
-  // create with parameters
-  Member.createWithAttributes(
-    'id -> 123,
-    'name -> "Chris",
-    'createdAt -> DateTime.now
-  )
+// find many
+val members: List[Member] = Member.findAll()
+val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).apply()
 
-  // update with strong parameters
-  Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType.String))
-  // update with unsafe parameters
-  Member.updateById(123).withAttributes('name -> "Alice")
-
-  // delete
-  Member.deleteById(234)
-}
+// create with unsafe parameters
+Member.createWithAttributes(
+  'id -> 123,
+  'name -> "Chris",
+  'createdAt -> DateTime.now
+)
+// update with unsafe parameters
+Member.updateById(123).withAttributes('name -> "Alice")
+// delete
+Member.deleteById(234)
 ```
 
 See in detail:
@@ -219,7 +213,7 @@ DB migration comes with [Flyway](http://flywaydb.org/). Usage is pretty simple.
 ./skinny db:migrate [env]
 ````
 
-This command expects `src/main/resources/db/migration/V***_***.sql` files. 
+This command expects `src/main/resources/db/migration/V***__***.sql` files. 
 
 See in detail:
 
