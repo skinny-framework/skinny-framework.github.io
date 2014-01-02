@@ -14,7 +14,7 @@ You can see simple usage of skinny-validator here:
 [validator/src/test/scala/UsageSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/validator/src/test/scala/UsageSpec.scala)
 
 <hr/>
-### Creating Custom Validators
+### Creating New Validation Rule
 
 The way to create new validation rule is pretty simple:
 
@@ -42,15 +42,34 @@ Then you can use it like this:
 
 ```java
 val validator = Validator(
-  param("name" -> "Alice") is required,
-  param("description" -> "   ") is required(false)
+  param("name" -> null) is required
 )
 validator.hasErrors // false
+
+val error = validator.errors.head
+error.name // -> required
+error.messageParmas // -> List("name")
 ```
 
-You can see more examples here:
+Validation rule which accepts value when using such as `minLength(6)` is like this:
 
-[validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/master/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
+```java
+case class minLength(min: Int) extends ValidationRule {
+  def name = "minLength"
+  override def messageParams = Seq(min.toString)
+
+  def isValid(v: Any) = isEmpty(v) || {
+    toHasSize(v).map(_.size >= min).getOrElse(v.toString.length >= min)
+  }
+}
+
+val validator = Validator(
+  param("name" -> "xxxx") is checkAll(required, minLength(6)),
+  param("password" -> "xxxx") is required & minLength(6)
+)
+```
+
+Basic usage is combining validation rules with `&`. If a failure is found, rest of them will be skipped. `checkAll` executes all the validations even if some of them already failed.
 
 <hr/>
 ### Built-in Validation Rules
@@ -59,13 +78,68 @@ In most of cases, built-in validators are useful.
 
 [validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/master/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
 
-Usage:
-
 [validator/src/test/scala/skinny/validator](https://github.com/skinny-framework/skinny-framework/tree/master/validator/src/test/scala/skinny/validator)
 
-Basic usage is combining validation rules with `&`. If a failure is found, rest of them will be skipped.
 
-`checkAll` executes all the validations even if some of them already failed.
+<hr/>
+### Validator & MapValidator
+
+skinny-validator provides `Validator` and `MapValidator`. You already see `Validator` in above code. This one accepts parameters when defining validation rules.
+
+`MapValidator` is another one which accepts `Map[String, Any]` object as parameters. Usually `MapValidator` is more useful in web applications.
+
+```java
+val params = Map("name" -> "Alice", "age" -> 20)
+
+val validator = MapValidator(params)(
+  paramKey("name") is required,
+  paramKey("age") is required & numeric
+)
+```
+
+<hr/>
+### Error Messages
+
+skinny-validator's `Error` looks like this:
+
+```java
+val error = validator.errors.head
+error.name // -> required
+error.messageParmas // -> List("name")
+```
+
+`skinny.validator.Messages` loads error messages from *.conf or *.properties.
+
+This is `src/main/resources/messages.conf` example:
+
+```
+error {
+  required="{0} is required"
+  minLength="{0} length must be greater than or equal to {1}"
+}
+```
+
+Now `Messages` can load error messages for validation errors named "required" or "minLength". Name comes from `ValidationRule#name`.
+
+```java
+val messages = Messages.loadFromConfig()
+// val messages = Messages.loadFromConfig("messages2") // loads messages2.conf
+// val messages = Messages.loadFromProperties() // loads messages.properties
+// val messages_ja = Messages.loadFromConfig(locale = Option(locale)) // loads messages_ja.conf
+
+messages.get("required", Seq("name")) 
+// -> Some("name is required")
+
+messages.get("minLength", Seq("password", 6)) 
+// -> Some("password length must be greater than or equal to 6")
+```
+
+<hr/>
+### How It Works in Skinny apps
+
+You can easily understand how skinny-valdiator works in Skinny apps.
+
+[framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala)
 
 The following is an example with Skinny Framework:
 
@@ -90,6 +164,7 @@ def create = {
     val id = Member.createNewModel(createParams.permit(createStrongParameters))
     redirect(s"/members/${id}")
   } else {
+    // error messages is set as "errorMessages" and "keyAndErrorMessages"
     render("/members/new")
   }
   // or using #fold
@@ -98,12 +173,8 @@ def create = {
 
 See also:
 
-[/common/src/main/scala/skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
+[common/src/main/scala/skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
 
-[/common/src/main/scala/skinny/StrongParameters.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/StrongParameters.scala)
-
-[/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala)
-
-[/validator/src/main/scala/skinny/validator/ValidatorLike.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/validator/src/main/scala/skinny/validator/ValidatorLike.scala)
+[common/src/main/scala/skinny/StrongParameters.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/StrongParameters.scala)
 
 
