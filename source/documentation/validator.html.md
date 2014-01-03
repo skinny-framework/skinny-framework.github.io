@@ -44,10 +44,11 @@ Then you can use it like this:
 val validator = Validator(
   param("name" -> null) is required
 )
-validator.hasErrors // false
+validator.hasErrors // true
 
-val error = validator.errors.head
-error.name // -> required
+val errorsForName: Seq[Error] = validator.errors.get("name")
+val error: Error = errorsForName.head
+error.name // -> "required"
 error.messageParmas // -> List("name")
 ```
 
