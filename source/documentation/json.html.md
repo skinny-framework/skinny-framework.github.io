@@ -12,7 +12,7 @@ title: Working with JSON - Skinny Framework
 - def toJSON(v: Any): JValue
 - def toJSONString(v: Any, underscoreKeys: Boolean = true): String 
 - def toPrettyJSONString(v: Any, underscoreKeys: Boolean = true): String
-- def fromJSONString[A](json: String)(implicit mf: Manifest[A]): Option[A] 
+- def fromJSONString\[A\](json: String)(implicit mf: Manifest\[A\]): Option\[A\] 
 
 [framework/src/main/scala/skinny/util/JSONStringOps.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/util/JSONStringOps.scala)
 
@@ -50,6 +50,8 @@ val userResponse: Option[UserResponse] = fromJSONString[UserResponse](jsonString
 
 val jsonString2 = userResponse.map(r => toJSONString(r))
 ```
+
+See also: [framework/src/test/scala/skinny/util/JSONStringOpsSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/test/scala/skinny/util/JSONStringOpsSpec.scala)
 
 If you need more complex operations, use [json4s](https://github.com/json4s/json4s) directly.
 
