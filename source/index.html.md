@@ -281,7 +281,7 @@ libraryDependencies ++= Seq(
 )
 ```
 
-And then, add `AssetsController` to routes. Now you can easily use CoffeeScript, TypeScript and LESS.
+And then, add `AssetsController` to routes. Now you can easily use CoffeeScript, LESS and Sass.
 
 ```java
 // src/main/scala/ScalatraBootstrap.scala
@@ -298,35 +298,19 @@ However, precompiling them is highly recommended in production (./skinny package
 
 #### CoffeeScript 
 
-If you use CoffeeScript, just put *.coffee files under `WEB-INF/assets/coffee`:
-
-```coffeescript
-# src/main/webapp/WEB-INF/assets/coffee/echo.coffee
-echo = (v) -> console.log v
-echo "foo"
-```
-
-You can access the latest compiled JavaScript code at `http://localhost:8080/assets/js/echo.js`.
+Just put *.coffee files under `WEB-INF/assets/coffee`:
 
 #### LESS
 
-If you use LESS, just put *.less files under `WEB-INF/assets/less`:
-
-```less
-// src/main/webapp/WEB-INF/assets/less/box.less
-@base: #f938ab;
-.box {
-  color: saturate(@base, 5%);
-  border-color: lighten(@base, 30%);
-}
-```
-
-You can access the latest compiled CSS file at `http://localhost:8080/assets/css/box.css`
+Just put *.less files under `WEB-INF/assets/less`:
 
 #### Sass
 
 If you use Sassy CSS, put *.scss files under `WEB-INF/assets/scss` or `WEB-INF/assets/sass`. If you use Sass Indented Syntax, put *.sass files under `WEB-INF/assets/sass`.
 
+See in detail:
+
+[Assets Support](documentation/assets.html)
 
 <hr/>
 ### Testing support
@@ -339,7 +323,7 @@ class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
 
   it should "show index page" in {
     withSession("userId" -> "Alice") {
-      get("/members") { status should equal(200) }
+    i  get("/members") { status should equal(200) }
     }
   }
 }
