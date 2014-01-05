@@ -94,6 +94,29 @@ Scaffoding will be the easiest way to understand. Try it now!
 ./skinny run
 ```
 
+For instance, if you use jade instead, above code will be simpler like this. Scaml is very similar.
+
+```
+-@val members: Seq[model.Member] 
+h3 Members
+hr
+table(class="table table-bordered")
+  thead
+    tr
+      th ID
+      th Name
+      th
+  tbody
+  -for (member <- members)
+    tr
+      td #{member.id}
+      td #{member.name}
+      td
+        a(href={url(MembersController.editUrl, "id" -> member.id.toString)} class="btn btn-info") Edit
+        a(data-method="delete" data-confirm="Are you sure?" href={url(MembersControlller.deleteUrl, "id" -> member.id.toString)} class="btn btn-danger") Delete
+        a(href={s"/members/${member.id}/edit"} class="btn btn-info") Edit
+        a(data-method="delete" data-confirm="Are you sure?" href={s"/members/${member.id}"} class="btn btn-danger") Delete
+```
 
 
 <hr/>
