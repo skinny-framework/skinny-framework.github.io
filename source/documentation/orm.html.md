@@ -32,7 +32,8 @@ Skinny-ORM is much powerful, so you don't need to write much code. Your first mo
 case class Member(id: Long, name: String, createdAt: DateTime)
 
 object Member extends SkinnyCRUDMapper[Member] {
-  // only define ResultSet extractor at minimum
+  override def defaultAlias = createAlias("m")
+
   override def extract(rs: WrappedResultSet, n: ResultName[Member]) = new Member(
     id = rs.long(n.id),
     name = rs.string(n.name),
@@ -56,7 +57,7 @@ val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).
 // count
 val allCount: Long = Member.countAll()
 val m = Member.defaultAlias
-val count = Member.countBy(sqls.isNotNull(m.deletedAt).and.eq(m.countryId, 123))
+val count = Member.countBy(sqls.isNull(m.deletedAt).and.eq(m.countryId, 123))
 val count = Member.where('deletedAt -> None, 'countryId -> 123).count.apply()
 
 // create with stong parameters
@@ -82,12 +83,76 @@ Member.deleteById(234)
 Source code: [orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
 
 <hr/>
+#### Other Settings
+
+Skinny ORM provides the folllowing settings to overwrite.
+
+```java
+object GroupMember extends SkinnyCRUDMapper[Member] {
+
+  // default: 'default
+  override def connectionPoolName = 'legacydb
+ 
+  // default: None 
+  override def schemaName = Some("public")
+
+  // Basically tableName is loaded from jdbc metadata and cached on the JVM
+  // However, if the name of object/class which extends SkinnyMapper is not the camelCase of table name,
+  // you need to override tableName by yourself.
+  override def tableName = "group_members" // default: group_member 
+
+  // Basically columnNames are loaded from jdbc metadata and cached on the JVM
+  override def columnNames = Seq("id", "name", "birthday", "created_at")
+
+  // field name which represents the (single) primary key column
+  // default: "id"
+  override def primaryKeyFieldName = "uid" 
+
+  // with SkinnyCRUDMapper[GroupMember]
+  // createWithAttributes will try returing generated id if true
+  // default: true
+  override def useAutoIncrementPrimaryKey = false
+
+  // with SkinnyCRUDMapper[GroupMember]
+  // default scope for update operations
+  // default: None
+  override def defaultScopeForUpdateOperations = Some(sqls.isNull(column.deletedAt))
+
+  // with TimestampsFeature[GroupMember]
+  // default: "createdAt"
+  override def createdAtFieldName = "createdTimestamp"
+
+  // with TimestampsFeature[GroupMember]
+  // default: "updatedAt"
+  override def updatedAtFieldName = "updatedTimestamp"
+
+  // with OptimisticLockWithTimestampFeature[GroupMember] 
+  // default: "lockTimestamp"
+  override val lockTimestampFieldName = "locked_at"
+
+  // with OptimisticLockWithVersionFeature[GroupMember]
+  // default: "lockVersion"
+  override val lockVersionFieldName = "ver"
+
+  // with SoftDeleteWithBooleanFeature[GroupMember]
+  // default: "isDeleted"
+  override val isDeletedFieldName = "deleted"
+
+  // with SoftDeleteWithTimestampFeature[GroupMember]
+  // default: "deletedAt"
+  override val deletedAtFieldName = "deletedTimestamp"
+
+}
+```
+
+<hr/>
 #### Dynamic Table Name
 
 `#withTableName` enables using another table name only for current query.
 
 ```java
 object Order extends SkinnyCRUDMapper[Order] {
+  override def defaultAlias = createAlias("o")
   override def tableName = "orders"
 }
 
@@ -110,6 +175,7 @@ class Member(id: Long, name: String, companyId: Long,
   company: Option[Company] = None, skills: Seq[Skill] = Nil)
 
 object Member extends SkinnyCRUDMapper[Member] {
+  override def defaultAlias = createAlias("m")
 
   // If byDefault is called, this join condition is enabled by default
   belongsTo[Company](Company, (m, c) => m.copy(company = Some(c))).byDefault
