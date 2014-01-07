@@ -5,17 +5,17 @@ title: ORM - Skinny Framework
 ## ORM
 
 <hr/>
-### Skinny ORM
+### Skinny-ORM
 
-Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc).
+Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). 
 
 ![Logo](images/scalikejdbc.png)
 
-Skinny ORM is characterized by avoding N+1 queries by default. 
+Skinny-ORM is characterized by avoding N+1 queries by default because relations are resolved by join queries. `belongTo`, `hasOne` and `hasMany` relationships are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries. 
 
-Basically `belongTo`, `hasOne` and `hasMany` relationships are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries.
+On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with `include` API (eager loading).
 
-On the other hand, nested attributes' relationships won't be resolved by default. If you need nested relationships, you can retrieve them with `include` API (eager loading).
+What's more, Skinny-ORM is a portable library. So you can use it with Play2, pure Scalatra, Lift and any other frameworks.
 
 Examples:
 
@@ -309,4 +309,12 @@ object Member extends SkinnyCRUDMapper[Member]
 ```
 
 Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
+
+<hr/>
+#### FactoryGirl
+
+Easy-to-use fixture tool named FactoryGirl makes your testing more comfortable.
+
+[FactoryGirl](factory-girl.html)
+
 
