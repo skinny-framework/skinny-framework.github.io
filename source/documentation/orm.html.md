@@ -13,9 +13,9 @@ Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [S
 
 Skinny ORM is characterized by avoding N+1 queries by default. 
 
-Basically `belongTo`, `hasOne` and `hasMany` reolationships are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries.
+Basically `belongTo`, `hasOne` and `hasMany` relationships are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries.
 
-On the other hand, nested attributes' replationships won't be resolved by default. If you need nested replationships, you can retrieve them with `include` API (eager loading).
+On the other hand, nested attributes' relationships won't be resolved by default. If you need nested relationships, you can retrieve them with `include` API (eager loading).
 
 Examples:
 
