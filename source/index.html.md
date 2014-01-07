@@ -164,7 +164,7 @@ Skinny-ORM is much powerful, so you don't need to write much code. Your first mo
 case class Member(id: Long, name: String, createdAt: DateTime)
 
 object Member extends SkinnyCRUDMapper[Member] {
-  // only define ResultSet extractor at minimum
+  override def defaultAlias = createAlias("m")
   override def extract(rs: WrappedResultSet, n: ResultName[Member]) = new Member(
     id = rs.long(n.id),
     name = rs.string(n.name),
