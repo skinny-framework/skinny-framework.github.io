@@ -7,15 +7,17 @@ title: ORM - Skinny Framework
 <hr/>
 ### Skinny-ORM
 
-Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). 
+Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). This is a portable library. So you can use it with Play2, pure Scalatra, Lift and any other frameworks.
 
 ![Logo](images/scalikejdbc.png)
 
-Skinny-ORM is characterized by avoding N+1 queries by default because relations are resolved by join queries. `belongTo`, `hasOne` and `hasMany` relationships are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries. 
+Skinny-ORM is natually characterized by avoding N+1 queries because associations are resolved by join queries. 
 
-On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with `include` API (eager loading).
+`#belongTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries any more. 
 
-What's more, Skinny-ORM is a portable library. So you can use it with Play2, pure Scalatra, Lift and any other frameworks.
+Furthermore, the `#byDefault` option allows you resolving assocations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
+
+On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with eagar loading by using `#includes` method.
 
 Examples:
 
@@ -24,7 +26,10 @@ Examples:
 [orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
 
 <hr/>
-#### Simple Mapper
+### Your First Mapper
+
+<hr/>
+#### Easy to use and powerful
 
 Skinny-ORM is much powerful, so you don't need to write much code. Your first model class and companion are here.
 
@@ -45,25 +50,46 @@ object Member extends SkinnyCRUDMapper[Member] {
 That's all! Now you can use the following APIs.
 
 ```java
+val m = Member.defaultAlias
+
+// ------------
 // find by primary key
 val member: Option[Member] = Member.findById(123)
-val member: Option[Member] = Member.where('id -> 123).apply().headOption
-val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
 
+val member: Option[Member] = Member.where('id -> 123).apply().headOption
+
+// ------------
 // find many
 val members: List[Member] = Member.findAll()
-val groupMembers = Member.where('groupName -> "Scala Users", 'deleted -> false).apply()
 
+// ------------
+// in clause
+val members: List[Member] = Member.findAllBy(sqls.in(m.id, Seq(123, 234, 345)))
+
+val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
+
+// ------------
+// find by condition
+val members: List[Member] = Member.findAllBy(
+  sqls.eq(m.groupName, "scalajp").and.eq(m.delete, false))
+
+val members: List[Member] = Member.where(
+  'groupName -> "scalajp", 'deleted -> false).apply()
+
+// ------------
 // count
 val allCount: Long = Member.countAll()
-val m = Member.defaultAlias
-val count = Member.countBy(sqls.isNull(m.deletedAt).and.eq(m.countryId, 123))
+
 val count = Member.where('deletedAt -> None, 'countryId -> 123).count.apply()
 
-// create with stong parameters
+val count = Member.countBy(sqls.isNull(m.deletedAt).and.eq(m.countryId, 123))
+
+// ------------
+// create with strong parameters
 val params = Map("name" -> "Bob")
-val id = Member.createWithPermittedAttributes(
-  params.permit("name" -> ParamType.String))
+val id = Member.createWithPermittedAttributes(params.permit("name" -> ParamType.String))
+
+// ------------
 // create with unsafe parameters
 Member.createWithAttributes(
   'id -> 123,
@@ -71,16 +97,92 @@ Member.createWithAttributes(
   'createdAt -> DateTime.now
 )
 
+// ------------
 // update with strong parameters
 Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType.String))
+
+// ------------
 // update with unsafe parameters
 Member.updateById(123).withAttributes('name -> "Alice")
+// update by condition
+Member.updateBy(sqls.eq(m.groupId, 123)).withAttribtues('groupId -> 234)
 
+// ------------
 // delete
 Member.deleteById(234)
+// delete by condition
+Member.deleteBy(sqls.eq(m.groupId, 123))
 ```
 
-Source code: [orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+Source code: [skinny.orm.feature.CRUDFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+
+<hr/>
+#### Associations
+
+If you need to join other tables, just add `belongsTo`, `hasOne` or `hasMany(Through)` to the companion.
+
+```java
+class Member(id: Long, name: String, companyId: Long,
+  company: Option[Company] = None, skills: Seq[Skill] = Nil)
+
+object Member extends SkinnyCRUDMapper[Member] {
+  override def defaultAlias = createAlias("m")
+
+  // If byDefault is called, this join condition is enabled by default
+  belongsTo[Company](Company, (m, c) => m.copy(company = Some(c))).byDefault
+
+  val skills = hasManyThrough[Skill](
+    MemberSkill, Skill, (m, skills) => m.copy(skills = skills))
+}
+
+Member.findById(123) // without skills
+
+Member.joins(Member.skills).findById(123) // with skills
+```
+
+Source code: [skinny.orm.feature.AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
+
+<hr/>
+##### Entity Equality
+
+Basically using case classes for entities is recommended. As you know, Scala (until 2.11) has 22 limitation, so you may need to use normal classes for entities to treat tables that have more than 22 columns.
+
+In this case, entity should be defined like this (Skinny 0.9.21 or ScalikeJDBC 1.7.3 is required):
+
+```java
+class LegacyData(val id: Long, val c2: String, val c3: Int, ..., val c23: Int)
+  extends scalikejdbc.EntityEquality {
+  // override val entityIdentity = id
+  override val entityIdentity = s"$id $c2 $c3 ... $c23"
+}
+
+object LegacyData extends SkinnyCRUDMapper[LegacyData] {
+  ...
+}
+```
+
+If you missed above implementation, one-to-many relationships doesn't work as you expect.
+
+<hr/>
+#### Eager Loading
+
+You can call `includes` for eager loading. But nested entities's eager loading is not supported yet.
+
+```java
+object Member extends SkinnyCRUDMapper[Member] {
+  val skills =
+    hasManyThrough[Skill](
+      MemberSkill, Skill, (m, skills) => m.copy(skills = skills)
+    ).includes[Skill]((ms, skills) => ms.map { m =>
+      m.copy(kills = skills.filter(_.memberId.exists(_ == m.id)))
+    })
+}
+
+Member.includes(Member.skills).findById(123) // with skills
+```
+
+Source code: [skinny.orm.feature.IncludesFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala)
+
 
 <hr/>
 #### Other Settings
@@ -163,90 +265,25 @@ Order.countAll()
 Order.withTableName("orders_2012").countAll()
 ```
 
-Source code: [orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala)
-
-<hr/>
-#### Relationships
-
-If you need to join other tables, just add `belongsTo`, `hasOne` or `hasMany` (`hasManyThrough`) to the companion.
-
-```java
-class Member(id: Long, name: String, companyId: Long,
-  company: Option[Company] = None, skills: Seq[Skill] = Nil)
-
-object Member extends SkinnyCRUDMapper[Member] {
-  override def defaultAlias = createAlias("m")
-
-  // If byDefault is called, this join condition is enabled by default
-  belongsTo[Company](Company, (m, c) => m.copy(company = Some(c))).byDefault
-
-  val skills = hasManyThrough[Skill](
-    MemberSkill, Skill, (m, skills) => m.copy(skills = skills))
-}
-
-Member.findById(123) // without skills
-Member.joins(Member.skills).findById(123) // with skills
-```
-
-Source code: [orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
-
-<hr/>
-##### Entity Equality
-
-Basically using case classes for entities is recommended. As you know, Scala (until 2.11) has 22 limitation, so you may need to use normal classes for entities to treat tables that have more than 22 columns.
-
-In this case, entity should be defined like this (Skinny 0.9.21 or ScalikeJDBC 1.7.3 is required):
-
-```java
-class LegacyData(val id: Long, val c2: String, val c3: Int, ..., val c23: Int)
-  extends scalikejdbc.EntityEquality {
-  // override val entityIdentity = id
-  override val entityIdentity = s"$id $c2 $c3 ... $c23"
-}
-
-object LegacyData extends SkinnyCRUDMapper[LegacyData] {
-  ...
-}
-```
-
-If you missed above implementation, one-to-many relationships doesn't work as you expect.
-
-<hr/>
-#### Eager Loading
-
-You can call `includes` for eager loading. But nested entities's eager loading is not supported yet.
-
-```java
-object Member extends SkinnyCRUDMapper[Member] {
-  val skills =
-    hasManyThrough[Skill](
-      MemberSkill, Skill, (m, skills) => m.copy(skills = skills)
-    ).includes[Skill]((ms, skills) => ms.map { m =>
-      m.copy(kills = skills.filter(_.memberId.exists(_ == m.id)))
-    })
-}
-
-Member.includes(Member.skills).findById(123) // with skills
-```
-
-Source code: [orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala)
+Source code: [skinny.orm.feature.DynamicTableNameFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala)
 
 <hr/>
 #### Adding Methods
 
-If you need to add methods, just write methods that use ScalikeJDBC' APIs directly.
+If you need to add methods, just write methods that use `#findBy`, `#countBy` or ScalikeJDBC' APIs directly.
 
 ```java
 object Member extends SkinnyCRUDMapper[Member] {
-  val m = defaultAlias
-  def findByGroupId(groupId: Long)(implicit s: DBSession = autoSession): List[Member] =
-    withSQL { select.from(Member as m).where.eq(m.groupId, groupId) }
-      .map(apply(m)).list.apply()
+  private[this] val m = defaultAlias
+
+  def findAllByGroupId(groupId: Long)(implicit s: DBSession = autoSession): Seq[Member] = {
+    findAllBy(sqls.eq(m.groupId, groupId))
+  }
 }
 ```
 
 If you're using ORM with Skinny Framework,
-[TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/servlet/TxPerRequestFilter.scala) can simplify your applciations.
+[skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applciations.
 
 ```java
 // src/main/scala/ScalatraBootstrap.scala
@@ -257,50 +294,115 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 }
 ```
 
-And then your ORM models can retrieve current DB session (per request), so you don't need to pass `DBSession` value as an implicit parameter in each method.
+And then your ORM models can retrieve current DB session as thread-local value per request, so you don't need to pass `DBSession` value as an implicit parameter in each method. 
 
 ```java
-  def findByGroupId(groupId: Long): List[Member] =
-    withSQL { select.from(Member as m).where.eq(m.groupId, groupId) }
-      .map(apply(m)).list.apply()
+def findAllByGroupId(groupId: Long): List[Member] = findAllBy(sqls.eq(m.groupId, groupId)
 ```
 
+On the other hand, if you work with multiple threads for single HTTP request, you should be aware that the thread-local db session won't be shared.
+
+
+<hr/>
+#### Using Non-numerical Primary Key
+
+SkinnyMapper expects Long (bigint) value named `id` for primary key column.
+
+If your application uses non-numerical primary key for some reasons, use `****WithId` traits instead. In this case, you must implement `idToRawValue`, `rawValueToId` and `generateId` methods.
+
+```java
+case class Member(uuid: UUID, name: String)
+
+object Member extends SkinnyCRUDMapperWithId[UUID, Member] 
+  with SoftDeleteWithBooleanFeatureWithId[UUID, Member] {
+  override def defaultAlias = createAlias("m")
+
+  override def primaryKeyFieldName = "uuid"
+
+  override def generateId = UUID.randomUUID
+  override def idToRawValue(id: UUID) = id.toString
+  override def rawValueToId(value: Any) = UUID.fromString(value.toString)
+
+  def extract(rs: WrappedResultSet, m: ResultName[Member]) = new Member(
+    uuid = rawValueToId(rs.string(m.uuid)),
+    name = rs.string(m.name)
+  )
+}
+
+val m: Option[Member] = Memmber.findById(UUID.fromString("....."))
+```
+
+If you need `MemberId` class for primary key, it's also easy to implement.
+
+```java
+case class MemberId(value: Long)
+case class Member(id: MemberId, name: String)
+
+object Member extends SkinnyCRUDMapperWithId[MemberId, Member] {
+  override def defaultAlias = createAlias("m")
+
+  override def generateId = getNewIdFromExternalSystem()
+  override def idToRawValue(id: MemberId) = id.value
+  override def rawValueToId(v: Any) = MemberId(v.toString.toLong)
+
+  def extract(rs: WrappedResultSet, m: ResultName[Member]) = new Member(
+    id = rawValueToId(rs.string(m.id)),
+    name = rs.string(m.name)
+  )
+}
+```
+
+Don't worry. Skinny-ORM does well at resolving associations even if you use custom primary keys.
 
 <hr/>
 #### Timestamps
 
-`timetamps` from ActiveRecord is available as the `TimestampsFeature` trait.
+`timetamps` from ActiveRecord is available as the `TimestampsFeature` trait. 
+
+By default, this trait expects two columns on the table - `created_at timestamp not null` and `updated_at timestamp`. If you need customizing, override *FieldName methods as follows.
 
 ```java
 class Member(id: Long, name: String,
   createdAt: DateTime,
   updatedAt: Option[DateTime] = None)
 
-object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member]
-// created_at timestamp not null, updated_at timestamp
+object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
+
+  // created_timestamp
+  override def createdAtFieldName = "createdTimestamp"
+  // updated_timestamp
+  override def updatedAtFieldName = "updatedTimestamp"
+}
 ```
 
-Source code: [orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
+Source code: [skinny.orm.feature.TimestampsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
 
 <hr/>
 #### Soft Deletion
 
-Soft delete support is also available.
+Soft delete support is also available. 
+
+By default, `deleted_at timestamp` column or `is_deleted boolean not null` is expected.
 
 ```java
 object Member extends SkinnyCRUDMapper[Member]
-  with SoftDeleteWithTimestampFeature[Member]
-// deleted_at timestamp
+  with SoftDeleteWithTimestampFeature[Member] {
+
+  // deleted_timestamp timestamp
+  override val deletedAtFieldName = "deletedTimestamp"
+}
 ```
 
-Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala)
+Source code: [skinny.orm.feature.SoftDeleteWithBooleanFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala)
 
-Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala)
+Source code: [skinny.orm.feature.SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala)
 
 <hr/>
 #### Optimistic Lock
 
-Furthermore, optimistic lock is also available.
+Furthermore, optimistic lock is also available. 
+
+By default, `lock_version bigint not null` or `lock_timestamp timestamp` is expected
 
 ```java
 object Member extends SkinnyCRUDMapper[Member]
@@ -308,13 +410,14 @@ object Member extends SkinnyCRUDMapper[Member]
 // lock_version bigint
 ```
 
-Source code: [orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
+Source code: [skinny.orm.feature.OptimisticLockWithVersionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala)
+
+Source code: [skinny.orm.feature.OptimisticLockWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala)
 
 <hr/>
 #### FactoryGirl
 
 Easy-to-use fixture tool named FactoryGirl makes your testing more comfortable.
 
-[FactoryGirl](factory-girl.html)
-
+See in detail here: [FactoryGirl](factory-girl.html)
 

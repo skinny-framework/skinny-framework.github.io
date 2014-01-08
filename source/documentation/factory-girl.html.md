@@ -43,7 +43,7 @@ val company2 = FactoryGirl(Company).create('name -> "FactoryPal, Inc.")
 
 val country = FactoryGirl(Country, 'countryyy).create()
 
-val memberFactory = FactoryGirl(Member).withValues('countryId -> country.id)
+val memberFactory = FactoryGirl(Member).withVariables('countryId -> country.id)
 val member = memberFactory.create('companyId -> company1.id, 'createdAt -> DateTime.now)
 ```
 
@@ -66,6 +66,48 @@ name {
 skill {
   name="Scala Programming"
 }
+```
+
+<hr/>
+### Methods
+
+You should be aware that FactoryGirl has following two methods.
+
+<hr/>
+### withVariables
+
+Attributes passed by this method will be used for replacing variables such as "#{userId}" in factories.conf.
+
+```java
+/* factories.conf
+member {
+  name="Alice"
+  countryId="#{cntId}"
+}
+ */
+FactoryGirl(Member).withVariables(
+  'cntId -> FactoryGirl(Country).create().id).create()
+
+// will use name: Alice, countryId: 234
+```
+
+<hr/>
+### withAttributes
+
+Thesse attributes will overwrite the values in factories.conf. 
+
+```java
+/* factories.conf
+member {
+  name="Alice"
+  country="USA"
+}
+ */
+FactoryGirl(Member).withAttributes('country -> "Japan").create()
+// will use name: Alice, country: Japan
+
+FactoryGirl(Member).create('country -> "Japan")
+// do the same thing!
 ```
 
 <hr/>
