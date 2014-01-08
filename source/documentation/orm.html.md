@@ -11,7 +11,7 @@ Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [S
 
 ![Logo](images/scalikejdbc.png)
 
-Skinny-ORM is natually characterized by avoding N+1 queries because associations are resolved by join queries. 
+Skinny-ORM is naturally characterized by avoding N+1 queries because associations are resolved by join queries. 
 
 `#belongTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries any more. 
 
