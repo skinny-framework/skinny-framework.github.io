@@ -304,33 +304,11 @@ On the other hand, if you work with multiple threads for single HTTP request, yo
 
 
 <hr/>
-#### Using Non-numerical Primary Key
+#### Using Non-Numerical or Typed Primary Key
 
 SkinnyMapper expects Long (bigint) value named `id` for primary key column.
 
-If your application uses non-numerical primary key for some reasons, use `****WithId` traits instead. In this case, you must implement `idToRawValue`, `rawValueToId` and `generateId` methods.
-
-```java
-case class Member(uuid: UUID, name: String)
-
-object Member extends SkinnyCRUDMapperWithId[UUID, Member] 
-  with SoftDeleteWithBooleanFeatureWithId[UUID, Member] {
-  override def defaultAlias = createAlias("m")
-
-  override def primaryKeyFieldName = "uuid"
-
-  override def generateId = UUID.randomUUID
-  override def idToRawValue(id: UUID) = id.toString
-  override def rawValueToId(value: Any) = UUID.fromString(value.toString)
-
-  def extract(rs: WrappedResultSet, m: ResultName[Member]) = new Member(
-    uuid = rawValueToId(rs.string(m.uuid)),
-    name = rs.string(m.name)
-  )
-}
-
-val m: Option[Member] = Memmber.findById(UUID.fromString("....."))
-```
+If your application uses non-numerical primary key for some reasons, use `****WithId` traits instead. In this case, you must implement `idToRawValue` and `rawValueToId` methods.
 
 If you need `MemberId` class for primary key, it's also easy to implement.
 
@@ -341,7 +319,6 @@ case class Member(id: MemberId, name: String)
 object Member extends SkinnyCRUDMapperWithId[MemberId, Member] {
   override def defaultAlias = createAlias("m")
 
-  override def generateId = getNewIdFromExternalSystem()
   override def idToRawValue(id: MemberId) = id.value
   override def rawValueToId(v: Any) = MemberId(v.toString.toLong)
 
@@ -350,6 +327,70 @@ object Member extends SkinnyCRUDMapperWithId[MemberId, Member] {
     name = rs.string(m.name)
   )
 }
+```
+
+And your SkinnyResource will be like this:
+
+```java
+package controller
+import skinny._
+import skinny.validator._
+import model._
+
+object CompaniesController extends SkinnyResourceWithId[CompanyId] with ApplicationController {
+  protectFromForgery()
+
+  implicit override val scalatraParamsIdTypeConverter = new TypeConverter[String, CompanyId] {
+    def apply(s: String): Option[CompanyId] = Option(s).map(model.rawValueToId)
+  }
+
+  override def model = Company
+  override def resourcesName = "companies"
+  override def resourceName = "company"
+
+  override def createParams = Params(params).withDateTime("updatedAt")
+  override def createForm = validation(createParams,
+    paramKey("name") is required & maxLength(64),
+    paramKey("url") is maxLength(128)
+  )
+  override def createFormStrongParameters = Seq(
+    "name" -> ParamType.String, "url" -> ParamType.String)
+
+  override def updateParams = Params(params).withDateTime("updatedAt")
+  override def updateForm = validation(updateParams,
+    paramKey("name") is required & maxLength(64),
+    paramKey("url") is maxLength(128)
+  )
+  override def updateFormStrongParameters = Seq(
+    "name" -> ParamType.String, "url" -> ParamType.String)
+}
+```
+
+If you use alternative Id generator instead of RDB's auto-incremental value, set `useExternalIdGenerator` as true and implement `generateId` method.
+
+```java
+case class Member(uuid: UUID, name: String)
+
+object Member extends SkinnyCRUDMapperWithId[UUID, Member] 
+  with SoftDeleteWithBooleanFeatureWithId[UUID, Member] {
+  override def defaultAlias = createAlias("m")
+
+  override def primaryKeyFieldName = "uuid"
+
+  // use alternative id generator instead of DB's auto-increment
+  override def useExternalIdGenerator = true
+  override def generateId = UUID.randomUUID
+
+  override def idToRawValue(id: UUID) = id.toString
+  override def rawValueToId(value: Any) = UUID.fromString(value.toString)
+
+  def extract(rs: WrappedResultSet, m: ResultName[Member]) = new Member(
+    uuid = rawValueToId(rs.string(m.uuid)),
+    name = rs.string(m.name)
+  )
+}
+
+val m: Option[Member] = Memmber.findById(UUID.fromString("....."))
 ```
 
 Don't worry. Skinny-ORM does well at resolving associations even if you use custom primary keys.
