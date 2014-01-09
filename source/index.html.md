@@ -55,7 +55,7 @@ Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on 
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.23/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.24/skinny-blank-app.zip)
 
 Let's create your first Skinny app by using scaffold generator.
 
@@ -265,11 +265,12 @@ See in detail:
 [View Templates](documentation/view-templates.html)
 
 <hr/>
-### Assets Support (CoffeeScript, LESS and Sass)
+### Assets Support (CoffeeScript, LESS, Sass and JXS for React)
 
 ![CoffeeScript Logo](images/coffeescript.png)
 ![LESS Logo](images/less.png)
 ![Sass Logo](images/sass.png)
+![React Logo](images/react.png)
 
 First, add `skinny-assets` to libraryDependencies.
 
@@ -298,17 +299,29 @@ However, precompiling them is highly recommended in production (./skinny package
 
 #### CoffeeScript 
 
-Just put *.coffee files under `WEB-INF/assets/coffee`:
+http://coffeescript.org/
+
+Just put *.coffee files under `WEB-INF/assets/coffee`.
 
 #### LESS
 
-Just put *.less files under `WEB-INF/assets/less`:
+http://lesscss.org/
+
+Just put *.less files under `WEB-INF/assets/less`.
 
 #### Sass
 
+http://sass-lang.com/
+
 If you use Sassy CSS, put *.scss files under `WEB-INF/assets/scss` or `WEB-INF/assets/sass`. If you use Sass Indented Syntax, put *.sass files under `WEB-INF/assets/sass`.
 
-See in detail:
+#### JSX for React
+
+http://facebook.github.io/react/
+
+If you use JSX templates for React, put *.jsx files under `WEB-INF/assets/jsx`.
+
+See in detail: 
 
 [Assets Support](documentation/assets.html)
 
