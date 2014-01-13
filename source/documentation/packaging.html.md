@@ -33,13 +33,13 @@ What's more, you can easily create stand alone jar file by just run the followin
 ./skinny package:standalone
 ```
 
-After a while, you will get standalone jar file.
+After a while, you will get standalone jar file. 
 
 ```
 java -jar standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
 ```
 
-You can pass configuration via system properties. Otherwise, it's possible to use environment variables, too.
+You can pass configuration via system properties. Otherwise, it's also possible to use environment variables.
 
 ```
 java -jar -Dskinny.port=9000 -Dskinny.env=production \
@@ -62,7 +62,7 @@ You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-fram
 - skinny.port: for stand alone apps
 
 <hr/>
-#### skinny.port (for only stand alone apps)
+#### skinny.port (only for stand alone apps)
 
 Default value is 8080. You can customize the port number stand alone app server listens.
 
