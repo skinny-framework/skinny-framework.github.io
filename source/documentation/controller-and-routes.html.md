@@ -253,7 +253,120 @@ skinny.Skinny provides getters for basic elements in view templates.
 - i18n: I18n
 
 <hr/>
-## How to Do It
+### beforeAction/afterAction Filters
+
+Thoguh Scalatra has before/after filters by default. But we recommend Skinny users to use Skinny's beforeAction/afterAction filters.
+
+The reason is that Scalatra's filters might effect other controllers that are defined below in ScalatraBootstrap.scala and it's not easy to figure out where each controller's before/after affects completely.
+
+So if you need filters that are similar to Rails filters, just use Skinny filters.
+
+##### Scalatra's before/after filters
+
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+
+- before(transformers)(action)
+- after(transformers)(action)
+
+##### Skinny's beforeAction/afterAction filters
+
+[/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
+
+```java
+class MembersController extends SkinnyController with Routes {
+
+  // Scalatra filters
+  before() { ... } // might affect in other controllers
+  after() { ... }
+
+  // Skinny filters
+  beforeAction(only = Seq('index, 'new)) {
+    println("before")
+  }
+  afterAction(except = Seq('new)) {
+    println("after")
+  }
+
+  //actions
+  def index = ...
+  def newInput = ...
+  def edit = ...
+
+  // routes
+  get("/members/?")(index).as('index)      // before, after
+  get("/members/new")(newInput).as('new)   // before
+  get("/members/:id/edit")(edit).as('edit) // after
+
+}
+```
+
+<hr/>
+## SkinnyFilter
+
+SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing SkinnyFilter based traits.
+
+Contrary to your expectations, Scalatra doesn't run all the handlers for after and error. Only the first one would be applied and the others are just ignored. We think it's difficult to be aware of this specification (it's not a bug but by design). So SkinnyFilter's before/after/error handlers would be always applied. 
+
+For instance, in skinny-blank-app, ErrrorPageFilter is applied to ApplicationController. 
+
+```java
+trait ApplicationController extends SkinnyController
+  with ErrorPageFilter {
+
+}
+```
+
+ErrorPageFilter is as follows. It's pretty easy to customized such a filter (e.g. adding error notification). Isn't it?
+
+```java
+trait ErrorPageFilter extends SkinnyRenderingFilter {
+  // appends error filter in order
+  addRenderingErrorFilter {
+    case e: Throwable =>
+      logger.error(e.getMessage, e)
+      try {
+        status = 500
+        render("/error/500")
+      } catch {
+        case e: Exception => throw e
+      }
+  }
+}
+```
+
+It just outputs error logging, set status as 500 and renders "/error/500.html.ssp" or similar templates. `SkinnyRenderingFilter` is a sub trait of `SkinnyFilter`. `SkinnyFilter`'s response value is always ignored. But `SkinnyRenderingFilter` can return response body like above.
+
+Second example is `TxPerRequestFilter` which enables to apply open-session-in-view pattern to your apps.
+
+```java
+trait TxPerRequestFilter extends SkinnyFilter with Logging {
+  def cp: ConnectionPool = ConnectionPool.get()
+
+  def begin = {
+    val db = ThreadLocalDB.create(cp.borrow())
+    db.begin()
+  }
+
+  addErrorFilter { case e: Throwable =>
+    Option(ThreadLocalDB.load()).foreach { db =>
+      if (db != null && !db.isTxNotActive) using(db)(_.rollbackIfActive())
+    }
+  }
+
+  def commit = {
+    val db = ThreadLocalDB.load()
+    if (db != null && !db.isTxNotActive) {
+      using(db)(_.commit())
+    }
+  }
+
+  beforeAction()(begin)
+  afterAction()(commit)
+}
+```
+
+<hr/>
+## Examples to do that
 
 Basically, you will use Scalatra's DSL.
 
@@ -428,49 +541,4 @@ redirect303("/complete") // 303
 
 [/core/src/main/scala/org/scalatra/ActionResult.scala](https://github.com/scalatra/scalatra/blob/2.2.x_2.10/core/src/main/scala/org/scalatra/ActionResult.scala)
 
-### Before/After Filters
 
-Scalatra has filters by default. However, we highly recommend Skinny users to use Skinny's filters.
-
-##### Scalatra filters
-
-[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
-
-- before(transformers)(action)
-- after(transformers)(action)
-
-##### Skinny filters
-
-[/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
-
-```java
-class MembersController extends SkinnyController with Routes {
-
-  // Scalatra filters
-  before() { ... } // might affect in other controllers
-  after() { ... }
-
-  // Skinny filters
-  beforeAction(only = Seq('index, 'new)) {
-    println("before")
-  }
-  afterAction(except = Seq('new)) {
-    println("after")
-  }
-
-  //actions
-  def index = ...
-  def newInput = ...
-  def edit = ...
-
-  // routes
-  get("/members/?")(index).as('index)      // before, after
-  get("/members/new")(newInput).as('new)   // before
-  get("/members/:id/edit")(edit).as('edit) // after
-
-}
-```
-
-Scalatra's filters might effect other controllers.
-
-If you need filters that are similar to Rails filters, just use Skinny filters.
