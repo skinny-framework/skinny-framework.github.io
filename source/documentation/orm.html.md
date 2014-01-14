@@ -13,7 +13,7 @@ Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [S
 
 Skinny-ORM is naturally characterized by avoding N+1 queries because associations are resolved by join queries. 
 
-`#belongTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries any more. 
+`#belongsTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries any more. 
 
 Furthermore, the `#byDefault` option allows you resolving assocations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
 
@@ -129,7 +129,7 @@ object Member extends SkinnyCRUDMapper[Member] {
   override def defaultAlias = createAlias("m")
 
   // If byDefault is called, this join condition is enabled by default
-  belongsTo[Company](Company, (m, c) => m.copy(company = Some(c))).byDefault
+  belongsTo[Company](Company, (m, c) => m.copy(company = c)).byDefault
 
   val skills = hasManyThrough[Skill](
     MemberSkill, Skill, (m, skills) => m.copy(skills = skills))
@@ -139,6 +139,8 @@ Member.findById(123) // without skills
 
 Member.joins(Member.skills).findById(123) // with skills
 ```
+
+You can find more examples here: [orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala)
 
 Source code: [skinny.orm.feature.AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
 
