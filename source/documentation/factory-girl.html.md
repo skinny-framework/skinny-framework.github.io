@@ -5,7 +5,8 @@ title: FactoryGirl - Skinny Framework
 ## FactoryGirl
 
 <hr/>
-### Easy-to-use Fixture
+### Easy-to-use Fixture Tool
+<hr/>
 
 Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module will be quite useful when testing your apps.
 
@@ -19,6 +20,7 @@ libraryDependencies += "org.skinny-framewrok" %% "skinny-orm" % "[0.9,)"
 
 <hr/>
 ### Usage
+<hr/>
 
 FactoryGirl' usage is very simple.
 

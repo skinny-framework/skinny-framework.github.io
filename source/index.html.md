@@ -1,17 +1,17 @@
-# Skinny Framework 
-
-Skinny is a full-stack web app framework, which is built on [Scalatra](http://scalatra.org) and additional components are integrated. 
-
-To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is highly inspired by [Ruby on Rails](http://rubyonrails.org/) and it is optimized for sustainable productivity for ordinary Servlet-based app development. 
-
 ![Logo](images/logo.png)
 
-**[Notice]** Still in alpha stage. Architecture and API compatibility won't be kept until 1.0 release (2014/03).
+# Skinny Framework
+<hr/>
+
+Skinny is a full-stack web app framework, which is built on [Scalatra](http://scalatra.org) and additional components are integrated.
+
+To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is highly inspired by [Ruby on Rails](http://rubyonrails.org/) and it is optimized for sustainable productivity for ordinary Servlet-based app development.
 
 <hr/>
 ### Why Skinny?
+<hr/>
 
-What does the name of `Skinny` actually mean?
+What does the name of `Skinny` actually mean? We have three reasons as follows.
 
 #### Application should be skinny
 
@@ -26,36 +26,14 @@ Even if you need to investigate Skinny's inside, don't worry. Skinny keeps itsel
 A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like it"**. This is only half kidding but it also represents Skinny's concept. Skinny framework should provide flexible APIs to empower developers as much as possible and shouldn't bother them.
 
 <hr/>
-## How to use
-
-Actually, application built with Skinny framework is a Scalatra application. After preparing Scalatra app, just add the following dependency to your `project/Build.scala`.
-
-```
-libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-framework" % "[0.9,)",
-  "org.skinny-framework" %% "skinny-task"      % "[0.9,)",
-  "org.skinny-framework" %% "skinny-test"      % "[0.9,)" % "test"
-)
-```
-
-If you need only Skinny-ORM or Skinny-Validator, you can use only what you need. Even if you're a Play2 (or any others) user, these components are available for you as well.
-
-```
-libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-orm"       % "[0.9,)",
-  "org.skinny-framework" %% "skinny-validator" % "[0.9,)",
-  "org.skinny-framework" %% "skinny-test"      % "[0.9,)" % "test"
-)
-```
-
+## Try Skinny Framework now!
 <hr/>
-## Try Skinny now
 
 Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on your terminal. That's all!
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.25-1/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.26/skinny-blank-app.zip)
 
 Let's create your first Skinny app by using scaffold generator.
 
@@ -80,7 +58,15 @@ Let's create war file to deploy.
 ./skinny package
 ```
 
-### Yeoman generator
+or it's possible to portable runnable jar file (with embedded Jetty server).
+
+```sh
+./skinny package:standalone
+```
+
+<hr/>
+### Try by using Yeoman generator
+<hr/>
 
 ![Yeoman](images/yeoman.png)
 
@@ -99,9 +85,39 @@ yo skinny
 ```
 
 <hr/>
-## Components
+### Integrating with existing Scalatra apps
+<hr/>
+
+Actually, application built with Skinny framework is a Scalatra application.
+
+After preparing Scalatra app, just add the following dependency to your `project/Build.scala`.
+
+```
+libraryDependencies ++= Seq(
+  "org.skinny-framework" %% "skinny-assets"    % "[0.9,)",
+  "org.skinny-framework" %% "skinny-framework" % "[0.9,)",
+  "org.skinny-framework" %% "skinny-task"      % "[0.9,)",
+  "org.skinny-framework" %% "skinny-test"      % "[0.9,)" % "test"
+)
+```
+
+If you need only Skinny-ORM or Skinny-Validator, you can use only what you need. Even if you're a Play2 (or any others) user, these components are available for you as well.
+
+```
+libraryDependencies ++= Seq(
+  "org.skinny-framework" %% "skinny-orm"        % "[0.9,)",
+  "org.skinny-framework" %% "skinny-mailer"     % "[0.9,)",
+  "org.skinny-framework" %% "skinny-standalone" % "[0.9,)",
+  "org.skinny-framework" %% "skinny-validator"  % "[0.9,)"
+)
+```
+
+<hr/>
+## Skinny's Components Overview
+<hr/>
 
 ### Routing & Controller & Validator
+<hr/>
 
 Skinny's routing mechanism and controller layer on MVC architecture is a **rich Scalatra**. Skinny's extension provides you much simpler/rich syntax. Of course, if you need to use Scalatra's API directly, Skinny never bothers you.
 
@@ -147,12 +163,11 @@ object CompaniesController extends SkinnyResource {
 
 `Company` object should implement `skinny.SkinnyModel` APIs and you should prepare some view templates under `src/main/webapp/WEB-INF/views/members/`.
 
-See in detail:
-
-[Controller & Routes](documentation/controller-and-routes.html)
+See in detail: [Controller & Routes](documentation/controller-and-routes.html)
 
 <hr/>
-### ORM
+### Skinny ORM
+<hr/>
 
 Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc).
 
@@ -197,13 +212,12 @@ Member.updateById(123).withAttributes('name -> "Alice")
 Member.deleteById(234)
 ```
 
-See in detail:
-
-[O/R Mapper](documentation/orm.html)
+See in detail: [O/R Mapper](documentation/orm.html)
 
 
 <hr/>
-### DB Migration
+### DB Migration with Flyway
+<hr/>
 
 DB migration comes with [Flyway](http://flywaydb.org/). Usage is pretty simple.
 
@@ -215,13 +229,12 @@ DB migration comes with [Flyway](http://flywaydb.org/). Usage is pretty simple.
 
 This command expects `src/main/resources/db/migration/V***__***.sql` files. 
 
-See in detail:
-
-[DB Migration](documentation/db-migration.html)
+See in detail: [DB Migration](documentation/db-migration.html)
 
 
 <hr/>
 ### View Templates
+<hr/>
 
 Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesource.org/) Support, but Skinny has an additional convention.
 
@@ -260,12 +273,11 @@ class MembersController extends SkinnyController {
 
 And then, use `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
 
-See in detail:
-
-[View Templates](documentation/view-templates.html)
+See in detail: [View Templates](documentation/view-templates.html)
 
 <hr/>
 ### Assets Support (CoffeeScript, LESS, Sass and JXS for React)
+<hr/>
 
 ![CoffeeScript Logo](images/coffeescript.png)
 ![LESS Logo](images/less.png)
@@ -297,36 +309,11 @@ AssetsController supports Last-Modified header and returns status 304 correctly 
 
 However, precompiling them is highly recommended in production (./skinny package does that).
 
-#### CoffeeScript 
-
-http://coffeescript.org/
-
-Just put *.coffee files under `WEB-INF/assets/coffee`.
-
-#### LESS
-
-http://lesscss.org/
-
-Just put *.less files under `WEB-INF/assets/less`.
-
-#### Sass
-
-http://sass-lang.com/
-
-If you use Sassy CSS, put *.scss files under `WEB-INF/assets/scss` or `WEB-INF/assets/sass`. If you use Sass Indented Syntax, put *.sass files under `WEB-INF/assets/sass`.
-
-#### JSX for React
-
-http://facebook.github.io/react/
-
-If you use JSX templates for React, put *.jsx files under `WEB-INF/assets/jsx`.
-
-See in detail: 
-
-[Assets Support](documentation/assets.html)
+See in detail: [Assets Support](documentation/assets.html)
 
 <hr/>
-### Testing support
+### Testing Support
+<hr/>
 
 You can use Scalatra's great test support. Some optional feature is provided by skinny-test library.
 
@@ -342,12 +329,11 @@ class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
 }
 ```
 
-See in detail:
-
-[Testing](documentation/testing.html)
+See in detail: [Testing](documentation/testing.html)
 
 <hr/>
 ### FactoryGirl
+<hr/>
 
 Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module will be quite useful when testing your apps.
 
@@ -368,12 +354,11 @@ company {
 }
 ```
 
-See in detail:
-
-[FactoryGirl](documentation/factory-girl.html)
+See in detail: [FactoryGirl](documentation/factory-girl.html)
 
 <hr/>
-## License
+### Under The MIT License
+<hr/>
 
 (The MIT License)
 

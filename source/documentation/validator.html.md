@@ -5,7 +5,8 @@ title: Validator - Skinny Framework
 ## Validator
 
 <hr/>
-### Portable Validator
+### Quite Readable and Customizable DSL
+<hr/>
 
 skinny-validator is portable, so you can use skinny-validator with Play2, Scalatra (without Skinny) and any other web app frameworks. Furthermore, you can use it in not only web apps but also any other applications (batch operation, cli and so on).
 
@@ -15,6 +16,7 @@ You can see simple usage of skinny-validator here:
 
 <hr/>
 ### Creating New Validation Rule
+<hr/>
 
 The way to create new validation rule is pretty simple:
 
@@ -74,6 +76,7 @@ Basic usage is combining validation rules with `&`. If a failure is found, rest 
 
 <hr/>
 ### Built-in Validation Rules
+<hr/>
 
 In most of cases, built-in validators are useful.
 
@@ -84,6 +87,7 @@ In most of cases, built-in validators are useful.
 
 <hr/>
 ### Validator & MapValidator
+<hr/>
 
 skinny-validator provides `Validator` and `MapValidator`. You already see `Validator` in above code. This one accepts parameters when defining validation rules.
 
@@ -100,6 +104,7 @@ val validator = MapValidator(params)(
 
 <hr/>
 ### Error Messages
+<hr/>
 
 skinny-validator's `Error` looks like this:
 
@@ -137,6 +142,7 @@ messages.get("minLength", Seq("password", 6))
 
 <hr/>
 ### How It Works in Skinny apps
+<hr/>
 
 You can easily understand how skinny-valdiator works in Skinny apps.
 

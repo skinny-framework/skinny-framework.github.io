@@ -6,6 +6,7 @@ title: DB Migration - Skinny Framework
 
 <hr/>
 ### Flyway
+<hr/>
 
 DB migration comes with [Flyway](http://flywaydb.org/).
 
@@ -13,6 +14,7 @@ DB migration comes with [Flyway](http://flywaydb.org/).
 
 <hr/>
 ### Simple Usage
+<hr/>
 
 Just run the following command.
 
@@ -24,6 +26,7 @@ This command expects `src/main/resources/db/migration/V***__***.sql` files.
 
 Be aware of required two underscores at filename.
 
+<hr/>
 ### Customizing Migration
 
 If you need to change the location of SQL files or need to migrate several DBs, modify `{env}.db.{dbname}.migration.locations` in `application.conf`.
@@ -72,8 +75,9 @@ Command is like this:
 
 <hr/>
 ### Try now
+<hr/>
 
-Scaffolding generates migration SQL file. Try it with [blank-app](https://github.com/skinny-framework/skinny-framework/releases)!
+Scaffolding generates migration SQL file. Try it with [skinny-blank-app.zip](https://github.com/skinny-framework/skinny-framework/releases)!
 
 ```
 ./skinny g scaffold:jade members member name:String birthday:LocalDate

@@ -5,7 +5,8 @@ title: Controller & Routes - Skinny Framework
 ## Controller & Routes
 
 <hr/>
-### Routing & Controller
+## Routing & Controller
+<hr/>
 
 Skinny's routing mechanism and controller layer on MVC architecture is a **rich Scalatra**. 
 
@@ -89,7 +90,8 @@ render("/members/index")
 ```
 
 <hr/>
-#### Reverse Routes
+### Reverse Routes
+<hr/>
 
 You can use Scalatra's reverse routes.
 
@@ -122,7 +124,8 @@ FYI: You can see more examples for SkinnyResource by generating scaffold views.
 
 
 <hr/>
-#### SkinnyController & SkinnyServlet
+### SkinnyController & SkinnyServlet
+<hr/>
 
 There are two controller base trait. SkinnyController is a ScalatraFilter. SkinnyServlet is a ScalatraServlet.
 
@@ -135,6 +138,7 @@ However, really you need to use ScalatraServlet, use SkinnyServlet instead.
 
 <hr/>
 ### SkinnyResource
+<hr/>
 
 SkinnyResource is a useful base trait for RESTful web services. SkinnyResource is very similar to Rails ActiveResource.
 
@@ -229,6 +233,7 @@ In this case, SkinnyResource provides the following URLs by default.
 
 <hr/>
 ### skinny.Skinny
+<hr/>
 
 skinny.Skinny provides getters for basic elements in view templates.
 
@@ -254,6 +259,7 @@ skinny.Skinny provides getters for basic elements in view templates.
 
 <hr/>
 ### beforeAction/afterAction Filters
+<hr/>
 
 Thoguh Scalatra has before/after filters by default. But we recommend Skinny users to use Skinny's beforeAction/afterAction filters.
 
@@ -302,6 +308,7 @@ class MembersController extends SkinnyController with Routes {
 
 <hr/>
 ## SkinnyFilter
+<hr/>
 
 SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing SkinnyFilter based traits.
 
@@ -366,7 +373,8 @@ trait TxPerRequestFilter extends SkinnyFilter with Logging {
 ```
 
 <hr/>
-## Examples to do that
+## How to Do It? Examples
+<hr/>
 
 Basically, you will use Scalatra's DSL.
 
@@ -376,6 +384,7 @@ Basically, you will use Scalatra's DSL.
 
 <hr/>
 ### (Query/Form/Path) Parameters
+<hr/>
 
 #### params
 
@@ -426,6 +435,7 @@ get("""^\/f(.*)/b(.*)""".r) {
 
 <hr/>
 ### Cookies
+<hr/>
 
 ```java
 def hello = {
@@ -446,6 +456,7 @@ def helloWithOptions = {
 
 <hr/>
 ### Request/Response Headers
+<hr/>
 
 ```java
 val v: Option[String] = request.header(name)
@@ -462,6 +473,7 @@ response.headers -= "name"
 
 <hr/>
 ### Session
+<hr/>
 
 ```java
 val v: Any = session("name") // or session('name)
@@ -471,8 +483,75 @@ session -= "name"
 
 [/api/index.html#org.scalatra.RichSession](http://www.scalatra.org/2.2/api/index.html#org.scalatra.RichSession)
 
+Even if you don't use session by yourself, Scalatra's Flash and CSRF protection features are using servlet sessions.
+So your apps are not naturally stateless.
+
+We recommend you using SkinnySesison to keep your Skinny apps stateless.
+When you enable SkinnySession, these features also start using SkinnySession instead of Servlet session attributes.
+
+ScalatraBootstrap.scala:
+
+```java
+import scalikejdbc._
+import skinny.session.SkinnySessionInitializer
+class ScalatraBootstrap extends SkinnyLifeCycle {
+  override def initSkinnyApp(ctx: ServletContext) {
+    // Database queries will be increased
+    GlobalSettings.loggingSQLAndTime = LoggingSQLAndTimeSettings(
+      singleLineMode = true
+    )
+    ctx.mount(classOf[SkinnySessionInitializer], "/*")
+
+    Controllers.root.mount(ctx)
+    AssetsController.mount(ctx)
+  }
+}
+```
+
+controller/RootController.scala:
+
+```java
+class RootController extends ApplicationController with SkinnySessionFilter {
+
+  def index = {
+    val v: Option[Any] = skinnySession.getAttribute("name")
+    skinnySession.setAttribute("name", "value")
+    skinnySession.deleteAttribute("name")
+  }
+}
+```
+
+DB migration file:
+
+```sql
+-- H2 Database compatible
+create table skinny_sessions (
+  id bigserial not null primary key,
+  created_at timestamp not null,
+  expire_at timestamp not null
+);
+create table servlet_sessions (
+  jsession_id varchar(32) not null primary key,
+  skinny_session_id bigint not null,
+  created_at timestamp not null,
+  foreign key(skinny_session_id) references skinny_sessions(id)
+);
+create table skinny_session_attributes (
+  skinny_session_id bigint not null,
+  attribute_name varchar(128) not null,
+  attribute_value varbinary(10485760),
+  foreign key(skinny_session_id) references skinny_sessions(id)
+);
+alter table skinny_session_attributes add constraint
+  skinny_session_attributes_unique_idx
+  unique(skinny_session_id, attribute_name);
+```
+
 <hr/>
 ### Flash
+<hr/>
+
+Notice: Flash uses servlet sessions by default. Be aware of sticky session mode.
 
 ```java
 flash(name) = value
@@ -486,6 +565,7 @@ flash.now += (name -> value)
 
 <hr/>
 ### Request Body
+<hr/>
 
 ```java
 val body: String = request.body
@@ -496,6 +576,7 @@ val stream: InputStream = request.inputStream // raw HTTP POST data
 
 <hr/>
 ### File Upload
+<hr/>
 
 ```java
 class FilesController extends SkinnyController with FileUploadSupport {
@@ -522,6 +603,7 @@ class FilesController extends SkinnyController with FileUploadSupport {
 
 <hr/>
 ### Response handling
+<hr/>
 
 ```java
 halt(404)
@@ -541,4 +623,32 @@ redirect303("/complete") // 303
 
 [/core/src/main/scala/org/scalatra/ActionResult.scala](https://github.com/scalatra/scalatra/blob/2.2.x_2.10/core/src/main/scala/org/scalatra/ActionResult.scala)
 
+<hr/>
+### CSRF Protection
+<hr/>
 
+Notice: Scalatra CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.
+
+Define `protectFromForgery` in controller/RootController.scala:
+
+```java
+class RootController extends ApplicationController {
+  protectFromForgery()
+
+}
+```
+
+Use `Skinny.csrfMetaTags` in /WEB-INF/layouts/default.jade:
+
+```
+-@val body: String
+-@val s: skinny.Skinny
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    != s.csrfMetaTags
+  %body
+    =unescape(body)
+    %script(type="text/javascript" src={uri("/assets/js/skinny.js")})
+```

@@ -5,7 +5,8 @@ title: Testing - Skinny Framework
 ## Testing
 
 <hr/>
-### Testable Application
+### Testability is much important
+<hr/>
 
 You can use Scalatra's great test support. Some optional feature is provided by skinny-test library.
 
@@ -21,10 +22,9 @@ class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
 }
 ```
 
+<hr/>
 You can see some examples here:
 
 [example/src/test/scala](https://github.com/skinny-framework/skinny-framework/tree/master/example/src/test/scala)
 
-See also:
-
-[FactoryGirl](factory-girl.html)
+See also: [FactoryGirl](factory-girl.html)

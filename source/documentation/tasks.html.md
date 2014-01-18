@@ -6,10 +6,9 @@ title: Tasks - Skinny Framework
 
 <hr/>
 ### Task Launcher
+<hr/>
 
-skinny-task is a mechanism to run tasks easily.
-
-By default, the following tasks are already registered.
+skinny-task is a mechanism to run tasks easily. By default, the following tasks are already registered.
 
 [task/src/main/scala/skinny/task/TaskLauncher.scala](https://github.com/skinny-framework/skinny-framework/blob/master/task/src/main/scala/skinny/task/TaskLauncher.scala)
 
@@ -30,7 +29,8 @@ object TaskRunner extends skinny.task.TaskLauncher {
 ```
 
 <hr/>
-### Creating Custom Tasks
+### Creating Your Own Tasks
+<hr/>
 
 Creating tasks is pretty easy. It's just defining a function `(List[String]) => Unit`.
 

@@ -5,7 +5,8 @@ title: View Templates - Skinny Framework
 ## View Templates
 
 <hr/>
-### Scalate
+## Scalate
+<hr/>
 
 Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesource.org/) Support, but Skinny has an additional convention.
 
@@ -121,6 +122,7 @@ table(class="table table-bordered")
 
 <hr/>
 ### FreeMarker
+<hr/>
 
 If you prefer FreeMarker template engine, you can easily use it with Skinny framework.
 
@@ -151,6 +153,7 @@ And then, use `src/main/webapp/WEB-INF/views/members/index.html.ftl` instead.
 
 <hr/>
 ### Thymeleaf
+<hr/>
 
 If you prefer Thymeleaf template engine, you can easily use it with Skinny framework.
 

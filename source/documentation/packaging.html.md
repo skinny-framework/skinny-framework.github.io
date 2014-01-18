@@ -5,7 +5,8 @@ title: Packaging - Skinny Framework
 ## Packaging
 
 <hr/>
-### Servlet application
+### As you know, it's a servlet application
+<hr/>
 
 Skinny applications runs on any Serlvet containers. 
 
@@ -13,6 +14,7 @@ So what you need to do is just creating war file and deploying it to your produc
 
 <hr/>
 ### Packaging war file
+<hr/>
 
 It's utmost simple to do that. Just 
 
@@ -26,6 +28,7 @@ If you deploy war file to maven repository (e.g. Artifactory), just `./skinny pu
 
 <hr/>
 ### Creating stand alone app
+<hr/>
 
 What's more, you can easily create stand alone jar file by just run the following command: 
 
@@ -48,6 +51,7 @@ java -jar -Dskinny.port=9000 -Dskinny.env=production \
 
 <hr/>
 ### Configuration
+<hr/>
 
 Options to configure your Skinny applications. You can pass the following values from environment variables or system properties.
 

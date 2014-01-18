@@ -5,7 +5,8 @@ title: Working with JSON - Skinny Framework
 ## Working with JSON
 
 <hr/>
-### JSONStringOps
+## Easy-to-use json4s wrapper
+<hr/>
 
 `SkinnyController` provides the following useful methods from `JSONStringOps` trait by default.
 
