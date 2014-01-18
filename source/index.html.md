@@ -276,6 +276,38 @@ And then, use `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
 See in detail: [View Templates](documentation/view-templates.html)
 
 <hr/>
+### Skinny Mailer
+<hr/>
+
+SkinnyMailer makes sending emails pretty easy.
+
+```java
+val config = SkinnyMailerConfig.default.copy(
+  debug = true
+)
+val mailer = SkinnyMailer(config)
+
+mailer
+  .from("info@skinny-framework.org")
+  .to("you@example.com")
+  .cc("support@skinny-framework.org", "xxx@example.com")
+  .subject("Skinny Framework 1.0.0 is out!")
+  .body {
+    """Hi all,
+    |
+    |We're very proud to announce that Sinny Framework version 1.0.0 is relaesed.
+    |
+    |.....
+    |
+    |Best,
+    |Skinny Framework Team
+    |"""
+  }.deliver()
+```
+
+See in detail: [Mail](documentation/mail.html)
+
+<hr/>
 ### Assets Support (CoffeeScript, LESS, Sass and JXS for React)
 <hr/>
 
