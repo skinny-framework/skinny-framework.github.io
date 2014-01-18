@@ -3,9 +3,6 @@ title: Controller & Routes - Skinny Framework
 ---
 
 ## Controller & Routes
-
-<hr/>
-## Routing & Controller
 <hr/>
 
 Skinny's routing mechanism and controller layer on MVC architecture is a **rich Scalatra**. 
@@ -307,7 +304,7 @@ class MembersController extends SkinnyController with Routes {
 ```
 
 <hr/>
-## SkinnyFilter
+### SkinnyFilter
 <hr/>
 
 SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing SkinnyFilter based traits.
@@ -373,7 +370,7 @@ trait TxPerRequestFilter extends SkinnyFilter with Logging {
 ```
 
 <hr/>
-## How to Do It? Examples
+### How to Do It? Examples
 <hr/>
 
 Basically, you will use Scalatra's DSL.
@@ -383,7 +380,7 @@ Basically, you will use Scalatra's DSL.
 [http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
 
 <hr/>
-### (Query/Form/Path) Parameters
+#### (Query/Form/Path) Parameters
 <hr/>
 
 #### params
@@ -402,6 +399,7 @@ val ids: Option[Seq[Int]] = multiParams.getAs[Int]("ids")
 
 [/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams)
 
+<hr/>
 #### multiParams("splat")
 
 ```java
@@ -420,6 +418,7 @@ get("/download/*.*") {
 
 [/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
 
+<hr/>
 #### multiParams("captures")
 
 ```java
@@ -434,7 +433,7 @@ get("""^\/f(.*)/b(.*)""".r) {
 [/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
 
 <hr/>
-### Cookies
+#### Cookies
 <hr/>
 
 ```java
@@ -455,7 +454,7 @@ def helloWithOptions = {
 [/api/org/scalatra/CookieOptions.html](http://www.scalatra.org/2.2/api/org/scalatra/CookieOptions.html)
 
 <hr/>
-### Request/Response Headers
+#### Request/Response Headers
 <hr/>
 
 ```java
@@ -472,7 +471,7 @@ response.headers -= "name"
 [/api/index.html#org.scalatra.servlet.RichResponse](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichResponse)
 
 <hr/>
-### Session
+#### Session
 <hr/>
 
 ```java
@@ -548,7 +547,7 @@ alter table skinny_session_attributes add constraint
 ```
 
 <hr/>
-### Flash
+#### Flash
 <hr/>
 
 Notice: Flash uses servlet sessions by default. Be aware of sticky session mode.
@@ -564,7 +563,7 @@ flash.now += (name -> value)
 [/api/index.html#org.scalatra.FlashMap](http://www.scalatra.org/2.2/api/index.html#org.scalatra.FlashMap)
 
 <hr/>
-### Request Body
+#### Request Body
 <hr/>
 
 ```java
@@ -575,7 +574,7 @@ val stream: InputStream = request.inputStream // raw HTTP POST data
 [/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichRequest)
 
 <hr/>
-### File Upload
+#### File Upload
 <hr/>
 
 ```java
@@ -602,7 +601,7 @@ class FilesController extends SkinnyController with FileUploadSupport {
 
 
 <hr/>
-### Response handling
+#### Response handling
 <hr/>
 
 ```java
@@ -624,7 +623,7 @@ redirect303("/complete") // 303
 [/core/src/main/scala/org/scalatra/ActionResult.scala](https://github.com/scalatra/scalatra/blob/2.2.x_2.10/core/src/main/scala/org/scalatra/ActionResult.scala)
 
 <hr/>
-### CSRF Protection
+#### CSRF Protection
 <hr/>
 
 Notice: Scalatra CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.

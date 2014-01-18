@@ -5,7 +5,7 @@ title: View Templates - Skinny Framework
 ## View Templates
 
 <hr/>
-## Scalate
+### Scalate
 <hr/>
 
 Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesource.org/) Support, but Skinny has an additional convention.

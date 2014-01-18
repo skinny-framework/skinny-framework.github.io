@@ -6,6 +6,7 @@ title: Getting Started - Skinny Framework
 
 <hr/>
 ### Downloading skinny-blank-app.zip
+<hr/>
 
 We highly recommend using skinny-blank-app for your first Skinny app.
 
@@ -23,6 +24,7 @@ And then, access `http://localhost:8080/` and app should return 200 OK.
 
 <hr/>
 ### Using generator
+<hr/>
 
 Let's create your first Skinny app by using scaffold generator.
 
@@ -57,6 +59,7 @@ Finally, let's create war file to deploy.
 
 <hr/>
 ### Yeoman generator
+<hr/>
 
 ![Yeoman](images/yeoman.png)
 
@@ -74,6 +77,7 @@ yo skinny
 
 <hr/>
 ### Project Structure
+<hr/>
 
 The following tree is directories and files in skinny-blank-app project. Basically using this style is preferred.
 
