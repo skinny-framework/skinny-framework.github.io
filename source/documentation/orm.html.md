@@ -224,7 +224,7 @@ Find more here: https://github.com/skinny-framework/skinny-framework/blob/develo
 <hr/>
 #### HasOne
 
-Same as ActiveRecord's `belongs_to` assocation:
+Same as ActiveRecord's `has_one` assocation:
 
 http://guides.rubyonrails.org/association_basics.html#the-has-one-association
 
@@ -260,7 +260,7 @@ create table names (
 <hr/>
 #### HasMany
 
-Same as ActiveRecord's `belongs_to` assocation:
+Same as ActiveRecord's `has_many` assocation:
 
 http://guides.rubyonrails.org/association_basics.html#the-has-many-association
 
