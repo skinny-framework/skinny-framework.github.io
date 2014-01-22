@@ -175,6 +175,7 @@ We need to specify some types, so definitions are not so simple as ActiveRecord,
 
 
 ```java
+case class Company(id: Long, name: String)
 class Member(id: Long, name: String,
   mentorId: Long, mentor: Option[Member] = None,
   companyId: Long, company: Option[Company] = None)
@@ -216,6 +217,10 @@ create table members (
   id bigint auto_increment primary key not null,
   company_id bigint,
   mentor_id bigint
+);
+create table companies (
+  id bigint auto_increment primary key not null,
+  name varchar(64) not null
 );
 ```
 
