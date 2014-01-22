@@ -20,11 +20,21 @@ Furthermore, the `#byDefault` option allows you resolving assocations anytime. I
 
 On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with eagar loading by using `#includes` method.
 
-Examples:
+<hr/>
+#### The Best way to learn
 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala
+The best way to learn is seeing the following examamples. 
 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
+Table definitions: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala
+
+Model examples: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala
+
+Usage: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
+
+If you have some questions or feedbacks, feel free to ask Skinny team or users in the mailing list.
+
+https://groups.google.com/forum/#!forum/skinny-framework
+
 
 <hr/>
 ### Your First Mapper
@@ -170,7 +180,7 @@ class Member(id: Long, name: String,
   companyId: Long, company: Option[Company] = None)
 
 object Member extends SkinnyCRUDMapper[Member] {
-  override def defaultAlias = createAlias("m")
+  // basic settings ...
 
   // If byDefault is called, this join condition is enabled by default
   belongsTo[Company](Company, (m, c) => m.copy(company = c)).byDefault
@@ -225,6 +235,8 @@ case class Name(first: String, last: String)
 case class Member(id: Long, name: Option[Name] = None)
 
 object Member extends SkinnyCRUDMapper[Member] {
+  // basic settings ...
+
   val name = hasOne[Name](
     right = Name, 
     merge = (member, name) => m.copy(name = name)
@@ -265,6 +277,7 @@ case class Skill(id: Long, name: String)
 // -----------------------
 // hasMany example
 object Company extends SkinnyCRUDMapper[Company] {
+  // basic settings ...
 
   val membersRef = hasMany[Member](
     // association's SkinnyMapper and alias
@@ -288,6 +301,7 @@ object MemberSkill extends SkinnyJoinTable[MemberSkill] {
 }
 // hasManyThrough
 object Member extends SkinnyCRUDMapper[Member] {
+  // basic settings ...
 
   val skillsRef = hasManyThrough[Skill](
     through = MemberSkill, 
