@@ -22,9 +22,9 @@ On the other hand, it's impossible to resolve all the nested attributes' relatio
 
 Examples:
 
-[orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala)
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala
 
-[orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
 
 <hr/>
 ### Your First Mapper
@@ -134,7 +134,8 @@ Member.deleteById(234)
 Member.deleteBy(sqls.eq(m.groupId, 123))
 ```
 
-Source code: [skinny.orm.feature.CRUDFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala
 
 <hr/>
 ### Associations
@@ -142,7 +143,8 @@ Source code: [skinny.orm.feature.CRUDFeature.scala](https://github.com/skinny-fr
 
 If you need to join other tables, just add `belongsTo`, `hasOne` or `hasMany(Through)` to the companion. 
 
-Examples: [orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala)
+Examples: 
+https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala
 
 Be aware of Skinny ORM's concept that basically joins tables to resolve associations to reduce N+1 queries. We recommend enabling query logging for development.
 
@@ -152,10 +154,20 @@ Typically defining associations are fundamentally not so simple, so you might be
 
 http://scalikejdbc.org/documentation/one-to-x.html
 
+<hr/>
+#### BelongsTo
+
+Same as ActiveRecord's `belongs_to` assocation:
+
+http://guides.rubyonrails.org/association_basics.html#the-belongs-to-association
+
+We need to specify some types, so definitions are not so simple as ActiveRecord, it's easy to understand nad simple enough.
+
 
 ```java
-class Member(id: Long, name: String, companyId: Long,
-  company: Option[Company] = None, skills: Seq[Skill] = Nil)
+class Member(id: Long, name: String,
+  mentorId: Long, mentor: Option[Member] = None,
+  companyId: Long, company: Option[Company] = None)
 
 object Member extends SkinnyCRUDMapper[Member] {
   override def defaultAlias = createAlias("m")
@@ -163,18 +175,163 @@ object Member extends SkinnyCRUDMapper[Member] {
   // If byDefault is called, this join condition is enabled by default
   belongsTo[Company](Company, (m, c) => m.copy(company = c)).byDefault
 
-  val skills = hasManyThrough[Skill](
-    MemberSkill, Skill, (m, skills) => m.copy(skills = skills))
+  // or more explanatory
+  belongsTo[Company](
+    // entity mapper on the right side
+    // in this case, default alias will be used in join query
+    right = Company, 
+    // function to merge association to main entity
+    merge = (member, company) => member.copy(company = company)
+  ).byDefault
+ 
+  // when you cannot use defaultAlias, use this instead
+  val mentorAlais = createAlias("mentor")
+  val mentor = belongToWithAlias(
+    // in this case, "mentor" alias will be used in join query
+    right = Member -> mentorAlias,
+    merge = (member, mentor) => member.copy(mentor = mentor))
+    // mentor will be resolved only when calling #joins 
+    /*.byDefault */ 
 }
 
-Member.findById(123) // without skills
+Member.findById(123) // without mentor
 
-Member.joins(Member.skills).findById(123) // with skills
+Member.joins(Member.mentor).findById(123) // with mentor
 ```
 
-You can find more examples here: [orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala)
+In this case, following table is expected:
 
-Source code: [skinny.orm.feature.AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
+```sql
+create table members (
+  id bigint auto_increment primary key not null,
+  company_id bigint,
+  mentor_id bigint
+);
+```
+
+Find more here: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala
+
+<hr/>
+#### HasOne
+
+Same as ActiveRecord's `belongs_to` assocation:
+
+http://guides.rubyonrails.org/association_basics.html#the-has-one-association
+
+We need to specify some types, so definitions are not so simple as ActiveRecord, it's easy to understand nad simple enough.
+
+```java
+case class Name(first: String, last: String)
+case class Member(id: Long, name: Option[Name] = None)
+
+object Member extends SkinnyCRUDMapper[Member] {
+  val name = hasOne[Name](
+    right = Name, 
+    merge = (member, name) => m.copy(name = name)
+  ).byDefault
+}
+```
+
+In this case, following tables are expected:
+
+```sql
+create table members (
+  id bigint auto_increment primary key not null
+);
+create table names (
+  member_id bigint primary key not null,
+  first varchar(64) not null,
+  last varchar(64) not null
+);
+```
+
+<hr/>
+#### HasMany
+
+Same as ActiveRecord's `belongs_to` assocation:
+
+http://guides.rubyonrails.org/association_basics.html#the-has-many-association
+
+We need to specify some types, so definitions are not so simple as ActiveRecord, it's easy to understand nad simple enough.
+
+```java
+case class Company(id: Long, name: String, members: Seq[Member] = Nil)
+case class Member(id: Long, 
+  companyId: Option[Long] = None, company: Option[Company] = None,
+  skills: Seq[Skill] = Nil
+)
+case class Skill(id: Long, name: String)
+
+// -----------------------
+// hasMany example
+object Company extends SkinnyCRUDMapper[Company] {
+
+  val membersRef = hasMany[Member](
+    // association's SkinnyMapper and alias
+    many = Member -> Member.membersAlias,
+    // defines join condition by using aliases
+    on = (c, m) => sqls.eq(c.id, m.companyId),
+    // function to merge associations to main entity
+    merge = (company, members) => company.copy(members = members)
+  )
+}
+Company.joins(Company.membersRef).findById(123) // with members
+
+// -----------------------
+// hasManyThrough example
+
+// join table definition
+case class MemberSkill(memberId: Long, skillId: Long)
+object MemberSkill extends SkinnyJoinTable[MemberSkill] {
+  override val tableName = "members_skills"
+  override val defaultAlias = createAlias("ms")
+}
+// hasManyThrough
+object Member extends SkinnyCRUDMapper[Member] {
+
+  val skillsRef = hasManyThrough[Skill](
+    through = MemberSkill, 
+    many = Skill, 
+    merge = (member, skills) => member.copy(skills = skills)
+  )
+}
+Member.joins(Member.skillsRef).findById(234) // with skills
+```
+
+In this case, following tables are expected:
+
+```sql
+create table companies (
+  id bigint auto_increment primary key not null,
+  name varchar(255) not null
+);
+create table members (
+  id bigint auto_increment primary key not null,
+  company_id bigint
+);
+create table skills (
+  id bigint auto_increment primary key not null,
+  name varchar(255) not null
+);
+create table members_skills (
+  member_id bigint not null,
+  skill_id bigint not null
+);
+```
+
+<hr/>
+#### What's more
+
+You can find more examples here:
+
+Table definitions:
+https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala
+
+Model examples:
+https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala
+
+Usage:
+https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
 
 <hr/>
 #### Entity Equality
@@ -203,7 +360,38 @@ See also detail explanation here: http://scalikejdbc.org/documentation/one-to-x.
 ### Eager Loading
 <hr/>
 
-You can call `includes` for eager loading. But nested entities's eager loading is not supported yet.
+When you use eager loading by `includes` API, define both of `belongsTo` and `includes`. 
+
+Note: nested entities's eager loading is not supported yet.
+
+Indeed, it's not incredibly simple. But we believe that what it does is so clear that you can easily write the definition.
+
+```java
+object Member extends SkinnyCRUDMapper[Member] {
+
+  // Unfortunately the combination of Scala macros and type-dynamic sometimes doesn't work as expected
+  // when "val company" is defined in Scala 2.10.x.
+  // If you suffered that, use "val companyOpt" "companyRef" and so on instead.
+  val companyOpt = {
+    // normal belongsTo
+    belongsTo[Company](
+      right = Company,
+      merge = (member, company) => member.copy(company = company))
+    // eager loading operation for this one-to-one relation
+    .includes[Company](
+      merge = (members, companies) => members.map { m =>
+        companies.find { c => m.company
+          .exists(_.id == c.id))
+          .map(v => m.copy(company = Some(v)))
+          .getOrElse(m)
+      })
+  }
+}
+
+Member.includes(companyOpt).findAll()
+```
+
+Yet another example:
 
 ```java
 object Member extends SkinnyCRUDMapper[Member] {
@@ -218,9 +406,10 @@ object Member extends SkinnyCRUDMapper[Member] {
 Member.includes(Member.skills).findById(123) // with skills
 ```
 
-Examples: [orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala)
+Note: when your entities have same associations (e.g. Company has Employee, Country and Employee has Country), avoiding to use default alias for the associations is recommended because that may cause invalid join query generation when you use eager loading. We have a plan to provide more kind error message for such cases until version 1.0.0.
 
-Source code: [skinny.orm.feature.IncludesFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala
 
 
 <hr/>
@@ -270,7 +459,7 @@ object GroupMember extends SkinnyCRUDMapper[Member] {
 
   // with OptimisticLockWithTimestampFeature[GroupMember] 
   // default: "lockTimestamp"
-  override val lockTimestampFieldName = "locked_at"
+  override val lockTimestampFieldName = "lockedAt"
 
   // with OptimisticLockWithVersionFeature[GroupMember]
   // default: "lockVersion"
@@ -306,7 +495,8 @@ Order.count()
 Order.withTableName("orders_2012").count()
 ```
 
-Source code: [skinny.orm.feature.DynamicTableNameFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala
 
 <hr/>
 ### Adding Methods
@@ -460,7 +650,8 @@ object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
 }
 ```
 
-Source code: [skinny.orm.feature.TimestampsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala
 
 <hr/>
 ### Soft Deletion
@@ -479,9 +670,11 @@ object Member extends SkinnyCRUDMapper[Member]
 }
 ```
 
-Source code: [skinny.orm.feature.SoftDeleteWithBooleanFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala
 
-Source code: [skinny.orm.feature.SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala
 
 <hr/>
 ### Optimistic Lock
@@ -497,9 +690,11 @@ object Member extends SkinnyCRUDMapper[Member]
 // lock_version bigint
 ```
 
-Source code: [skinny.orm.feature.OptimisticLockWithVersionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala
 
-Source code: [skinny.orm.feature.OptimisticLockWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala)
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala
 
 <hr/>
 ### FactoryGirl
