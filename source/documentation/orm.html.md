@@ -18,7 +18,7 @@ Skinny-ORM is naturally characterized by avoding N+1 queries because association
 
 Furthermore, the `#byDefault` option allows you resolving assocations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
 
-On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with eagar loading by using `#includes` method.
+On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with eager loading by using `#includes` method.
 
 <hr/>
 #### The Best way to learn
