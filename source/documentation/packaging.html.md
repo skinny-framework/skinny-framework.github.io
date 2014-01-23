@@ -56,18 +56,17 @@ java -jar -Dskinny.port=9000 -Dskinny.env=production \
 Options to configure your Skinny applications. You can pass the following values from environment variables or system properties.
 
 <hr/>
-#### skinny.env
+#### skinny.env or SKINNY_ENV
+<hr/>
 
 Default value is "development". If skinny.env is "production", application load the "production" settings from "src/main/resources/application.conf".
 
 You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/SkinnyEnv.scala) in application.
 
- default: development
-- skinny.port: for stand alone apps
-
 <hr/>
-#### skinny.port (only for stand alone apps)
+#### skinny.port
+<hr/>
 
-Default value is 8080. You can customize the port number stand alone app server listens.
+This value is only for stand alone apps. Default value is 8080. You can customize the port number stand alone app server listens.
 
 
