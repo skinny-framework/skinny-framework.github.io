@@ -72,19 +72,9 @@ Scalate supports many template engines.
 
 [http://scalate.fusesource.org/index.html](http://scalate.fusesource.org/index.html)
 
+For example, if you want to write your template using Jade, save it as `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
 
-If you'd like to use other Scalate templates, just override the settings in controllers.
-
-```java
-class MembersController extends SkinnyController {
-  override val scalateExtension = "jade"
-  // ssp(default), scaml, jade ,mustache
-}
-```
-
-And then, use `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
-
-Scaffoding will be the easiest way to understand. Try it now!
+Scaffolding will be the easiest way to understand. Try it now!
 
 ```sh
 ./skinny g scaffold members member name:String activated:Boolean birthday:Option[LocalDate]
@@ -95,7 +85,7 @@ Scaffoding will be the easiest way to understand. Try it now!
 ./skinny run
 ```
 
-For instance, if you use jade instead, above code will be simpler like this. Scaml is very similar.
+For instance, if you use Jade instead, the above code will look like this. Scaml is very similar.
 
 ```
 -@val members: Seq[model.Member] 
@@ -124,7 +114,7 @@ table(class="table table-bordered")
 ### FreeMarker
 <hr/>
 
-If you prefer FreeMarker template engine, you can easily use it with Skinny framework.
+If you prefer the FreeMarker template engine, you can easily use it with Skinny framework.
 
 [http://freemarker.org/](http://freemarker.org/)
 
@@ -155,7 +145,7 @@ And then, use `src/main/webapp/WEB-INF/views/members/index.html.ftl` instead.
 ### Thymeleaf
 <hr/>
 
-If you prefer Thymeleaf template engine, you can easily use it with Skinny framework.
+If you prefer the Thymeleaf template engine, you can easily use it with Skinny framework.
 
 [http://www.thymeleaf.org/](http://www.thymeleaf.org/)
 
