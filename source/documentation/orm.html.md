@@ -291,7 +291,7 @@ object Company extends SkinnyCRUDMapper[Company] {
     on = (c, m) => sqls.eq(c.id, m.companyId),
     // function to merge associations to main entity
     merge = (company, members) => company.copy(members = members)
-  )
+  ).byDefault
 }
 Company.joins(Company.membersRef).findById(123) // with members
 
@@ -312,7 +312,7 @@ object Member extends SkinnyCRUDMapper[Member] {
     through = MemberSkill, 
     many = Skill, 
     merge = (member, skills) => member.copy(skills = skills)
-  )
+  ).byDefault
 }
 Member.joins(Member.skillsRef).findById(234) // with skills
 ```
