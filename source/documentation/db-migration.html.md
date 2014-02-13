@@ -87,3 +87,15 @@ Scaffolding generates migration SQL file. Try it with [skinny-blank-app.zip](htt
 ./skinny db:migrate
 ./skinny db:migrate test
 ````
+
+When your migration failed, Run `db:repair` command and fix migration files.
+
+```
+./skinny db:repair
+
+// fix migration files...
+
+// retry!
+./skinny db:migrate
+```
+
