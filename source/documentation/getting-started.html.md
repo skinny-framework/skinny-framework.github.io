@@ -34,6 +34,12 @@ Let's create your first Skinny app by using scaffold generator.
 ./skinny run
 ```
 
+FYI: It's also possible to specify column data type for each field. Legnth validation at MembersController should be modified by yourself.
+
+```sh
+./skinny g scaffold members member "name:String:varchar(128)"
+```
+
 And then, access `http://localhost:8080/members`.
 
 You can run generated tests.
@@ -116,9 +122,9 @@ The following tree is directories and files in skinny-blank-app project. Basical
 │   │       ├── WEB-INF
 │   │       │   ├── assets
 │   │       │   │   ├── coffee
-│   │       │   │   │   └── echo.coffee # converted JS at localhost:8080/assets/echo.js
-│   │       │   │   └── less
-│   │       │   │       └── box.less    # converted CSS at localhost:8080/assets/box.css
+│   │       │   │   jsx
+│   │       │   │   less
+│   │       │   │   scss
 │   │       │   ├── layouts
 │   │       │   │   └── default.jade # layout file (ssp, scaml and mustache are also OK)
 │   │       │   ├── views
@@ -143,8 +149,6 @@ The following tree is directories and files in skinny-blank-app project. Basical
 │   │       │   └── web.xml
 │   │       └── assets
 │   │           └── js
-│   │               ├── jquery-2.0.3.min.js
-│   │               └── jquery-2.0.3.min.map
 │   └── test
 │       ├── resources
 │       │   ├── factories.conf # FactoryGirl's configuration

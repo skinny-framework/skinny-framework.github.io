@@ -33,7 +33,7 @@ Download `skinny-blank-app.zip` and unzip it, then just run ./skinny command on 
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/0.9.29/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/1.0.0-RC1/skinny-blank-app.zip)
 
 Let's create your first Skinny app by using scaffold generator.
 
@@ -94,10 +94,10 @@ After preparing Scalatra app, just add the following dependency to your `project
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-assets"    % "[0.9,)",
-  "org.skinny-framework" %% "skinny-framework" % "[0.9,)",
-  "org.skinny-framework" %% "skinny-task"      % "[0.9,)",
-  "org.skinny-framework" %% "skinny-test"      % "[0.9,)" % "test"
+  "org.skinny-framework" %% "skinny-assets"    % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-framework" % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-task"      % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-test"      % "1.0.0-RC1" % "test"
 )
 ```
 
@@ -105,10 +105,10 @@ If you need only Skinny-ORM or Skinny-Validator, you can use only what you need.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-orm"        % "[0.9,)",
-  "org.skinny-framework" %% "skinny-mailer"     % "[0.9,)",
-  "org.skinny-framework" %% "skinny-standalone" % "[0.9,)",
-  "org.skinny-framework" %% "skinny-validator"  % "[0.9,)"
+  "org.skinny-framework" %% "skinny-orm"        % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-mailer"     % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-standalone" % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-validator"  % "1.0.0-RC1"
 )
 ```
 
@@ -320,9 +320,9 @@ First, add `skinny-assets` to libraryDependencies.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-framework" % "[0.9,)",
-  "org.skinny-framework" %% "skinny-assets"    % "[0.9,)",
-  "org.skinny-framework" %% "skinny-test"      % "[0.9,)" % "test"
+  "org.skinny-framework" %% "skinny-framework" % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-assets"    % "1.0.0-RC1",
+  "org.skinny-framework" %% "skinny-test"      % "1.0.0-RC1" % "test"
 )
 ```
 

@@ -23,6 +23,27 @@ class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
 ```
 
 <hr/>
+### How to run tests
+
+Simply use skinny command or sbt directly.
+
+```
+./skinny test
+./skinny test-only models.MemberSpec
+```
+
+If you need code coverage report, use `scoverage:test` instead. 
+
+https://github.com/scoverage/sbt-scoverage
+
+```
+./skinny scoverage:test
+```
+
+WARNING: There is a known issue that scoverage doesn't work fine with Skinny ORM.
+
+
+<hr/>
 You can see some examples here:
 
 [example/src/test/scala](https://github.com/skinny-framework/skinny-framework/tree/master/example/src/test/scala)

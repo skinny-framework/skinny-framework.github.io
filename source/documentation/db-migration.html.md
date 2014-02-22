@@ -26,6 +26,14 @@ This command expects `src/main/resources/db/migration/V***__***.sql` files.
 
 Be aware of required two underscores at filename.
 
+When your migration file is invalid and migration failed, you must do `db:repair` in front of retying.
+
+```
+./skinny db:repair [env] [dbname]
+# fix your invalid migration file
+./skinny db:migrate [env] [dbname]
+```
+
 <hr/>
 ### Customizing Migration
 
