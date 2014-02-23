@@ -28,7 +28,7 @@ class MembersController extends SkinnyController {
 The render method expects that `src/main/webapp/WEB-INF/views/members/index.html.ssp` exists.
 
 ```
-<%@val members: Seq[model.Member] %>
+<%%@val members: Seq[model.Member] %>
 <h3>Members</h3>
 <hr/>
 <table class="table table-bordered">
@@ -121,7 +121,7 @@ If you prefer the FreeMarker template engine, you can easily use it with Skinny 
 First, add `skinny-freemarker` to your library-dependencies.
 
 ```
-libraryDependencies += "org.skinny-framewrok" %% "skinny-freemarker" % "[0.9,)"
+libraryDependencies += "org.skinny-framewrok" %% "skinny-freemarker" % "<%= @skinny_version %>"
 ```
 
 Mixin `FreeMarkerTemplateEngineFeature` to your controllers.
@@ -152,7 +152,7 @@ If you prefer the Thymeleaf template engine, you can easily use it with Skinny f
 First, add `skinny-thymeleaf` to your library-dependencies.
 
 ```
-libraryDependencies += "org.skinny-framewrok" %% "skinny-thymeleaf" % "[0.9,)"
+libraryDependencies += "org.skinny-framewrok" %% "skinny-thymeleaf" % "<%= @skinny_version %>"
 ```
 
 Mixin `ThymeleafTemplateEngineFeature` to your controllers.
