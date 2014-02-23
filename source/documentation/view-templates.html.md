@@ -12,9 +12,9 @@ Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesourc
 
 ![Scalate Logo](images/scalate.png)
 
-Templates' path should be `{path}.{format}.{extension}`. Expected {format} are `html`, `json`, `js` and `xml`.
+Template paths should be of the form `{path}.{format}.{extension}`. Expected {format} are `html`, `json`, `js` and `xml`.
 
-For instance, your controller code will be like this:
+For instance, assuming your controller code looks like this:
 
 ```java
 class MembersController extends SkinnyController {

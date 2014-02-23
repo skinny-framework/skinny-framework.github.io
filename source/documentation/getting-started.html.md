@@ -20,13 +20,13 @@ If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 ./skinny run
 ```
 
-And then, access `http://localhost:8080/` and app should return 200 OK.
+And then, access `http://localhost:8080/` and the app should return 200 OK.
 
 <hr/>
 ### Using generator
 <hr/>
 
-Let's create your first Skinny app by using scaffold generator.
+Let's create our first Skinny app by using the scaffold generator.
 
 ```sh
 ./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]
@@ -34,7 +34,7 @@ Let's create your first Skinny app by using scaffold generator.
 ./skinny run
 ```
 
-FYI: It's also possible to specify column data type for each field. Legnth validation at MembersController should be modified by yourself.
+FYI: It's also possible to specify the column data type for each field. However you will need to add the length validation code to MembersController yourself.
 
 ```sh
 ./skinny g scaffold members member "name:String:varchar(128)"
@@ -42,14 +42,14 @@ FYI: It's also possible to specify column data type for each field. Legnth valid
 
 And then, access `http://localhost:8080/members`.
 
-You can run generated tests.
+You can also run the generated tests.
 
 ```
 ./skinny db:migrate test
 ./skinny test
 ```
 
-If you just need a controller, run generator like this:
+If you just need a controller, run the generator like this:
 
 ```sh
 ./skinny g controller help
@@ -57,7 +57,7 @@ If you just need a controller, run generator like this:
 
 And then, access `http://localhost:8080/help`.
 
-Finally, let's create war file to deploy.
+Finally, let's create a war file to deploy.
 
 ```sh
 ./skinny package
@@ -85,7 +85,7 @@ yo skinny
 ### Project Structure
 <hr/>
 
-The following tree is directories and files in skinny-blank-app project. Basically using this style is preferred.
+The following tree shows the directories and files in skinny-blank-app project. Using this directory layout is recommended.
 
 ```sh
 .
@@ -169,7 +169,7 @@ The following tree is directories and files in skinny-blank-app project. Basical
 <hr/>
 #### Avoiding sbt's frequent OOMError 
 
-Skinny Framework uses xsbt-web-plugin. `skinny run` with sbt plugin invokes Jetty and detects source code changes and re-compiles and restarts Jetty server. Finally, you will see OutOfMemoryError (PermGen) after refreshing several times. To reduce this pain, specify sbt options like this:
+Skinny Framework uses xsbt-web-plugin. `skinny run` with sbt plugin invokes Jetty and detects source code changes and re-compiles and restarts Jetty server. Eventually, you will see OutOfMemoryError (PermGen) after refreshing several times. To reduce this pain, specify sbt options like this:
 
 ```
 SBT_OPTS="-XX:+CMSClassUnloadingEnabled -Xmx2048M -XX:MaxPermSize=512M"

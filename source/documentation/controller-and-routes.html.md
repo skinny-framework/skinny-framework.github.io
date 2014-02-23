@@ -5,13 +5,13 @@ title: Controller & Routes - Skinny Framework
 ## Controller & Routes
 <hr/>
 
-Skinny's routing mechanism and controller layer on MVC architecture is a **rich Scalatra**. 
+Skinny's routing mechanism and controller layer on MVC architecture can be thought of as a **rich Scalatra**. 
 
-Skinny's extension provides you much simpler/rich syntax. Of course, if you need to use Scalatra's API directly, Skinny never bothers you.
+Skinny's extensions provide you with much simpler and richer syntax. Of course, if you need to use Scalatra's API directly, Skinny never bothers you.
 
 ![Scalatra](images/scalatra.png)
 
-`SkinnyController` is a trait which extends `ScalatraFilter` and out-of-the-box components are integrated.
+`SkinnyController` is a trait which extends `ScalatraFilter` and includes various useful components out-of-the-box.
 
 ```java
 // src/main/scala/controller/MembersController.scala
@@ -42,7 +42,7 @@ class MembersController extends SkinnyController {
     render("/members/new")
   }
 
-  // whether query param or path param
+  // searches both query params and path params
   def show = params.getAs[Long]("id").map { id =>
     Member.findById(id).map { member =>
       set("member" -> member)
@@ -124,14 +124,14 @@ FYI: You can see more examples for SkinnyResource by generating scaffold views.
 ### SkinnyController & SkinnyServlet
 <hr/>
 
-There are two controller base trait. SkinnyController is a ScalatraFilter. SkinnyServlet is a ScalatraServlet.
+There are the two controller base traits. SkinnyController is a ScalatraFilter. SkinnyServlet is a ScalatraServlet.
 
 - [org.scalatra.ScalatraFilter]((http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraFilter))
 - [org.scalatra.ScalatraServlet]((http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraServlet))
 
-Basically SkinnyController is more suitable for Skinny framework based applications.
+In general SkinnyController is more suitable for Skinny framework based applications.
 
-However, really you need to use ScalatraServlet, use SkinnyServlet instead.
+However, if you really need to use a ScalatraServlet instead of a filter, use SkinnyServlet.
 
 <hr/>
 ### SkinnyResource
@@ -150,7 +150,7 @@ SkinnyResource is also useful as a controller sample. If you're a Skinny beginne
 SkinnyResourceActions has action methods for the resource and SkinnyResourceRoutes defines routings for the resource.
 If you'd like to customize routings (e.g. use only creation and deletion), just mixin only SkinnyResourceActions and define routings by yourself.
 
-You can get SkinnyResource example by scaffolding.
+You can see a SkinnyResource example using the scaffolding generator.
 
 ```
 ./skinny g scaffold members member name:String birthday:LocalDate
@@ -258,9 +258,9 @@ skinny.Skinny provides getters for basic elements in view templates.
 ### beforeAction/afterAction Filters
 <hr/>
 
-Thoguh Scalatra has before/after filters by default. But we recommend Skinny users to use Skinny's beforeAction/afterAction filters.
+Scalatra has before/after filters by default, but we recommend Skinny users to use Skinny's beforeAction/afterAction filters.
 
-The reason is that Scalatra's filters might effect other controllers that are defined below in ScalatraBootstrap.scala and it's not easy to figure out where each controller's before/after affects completely.
+The reason is that Scalatra's filters might affect other controllers that are defined further down in ScalatraBootstrap.scala and it's not easy to figure out where each controller's before/after affects completely.
 
 So if you need filters that are similar to Rails filters, just use Skinny filters.
 
@@ -279,7 +279,7 @@ So if you need filters that are similar to Rails filters, just use Skinny filter
 class MembersController extends SkinnyController with Routes {
 
   // Scalatra filters
-  before() { ... } // might affect in other controllers
+  before() { ... } // might affect other controllers
   after() { ... }
 
   // Skinny filters
@@ -307,9 +307,9 @@ class MembersController extends SkinnyController with Routes {
 ### SkinnyFilter
 <hr/>
 
-SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing SkinnyFilter based traits.
+SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing in SkinnyFilter-based traits.
 
-Contrary to your expectations, Scalatra doesn't run all the handlers for after and error. Only the first one would be applied and the others are just ignored. We think it's difficult to be aware of this specification (it's not a bug but by design). So SkinnyFilter's before/after/error handlers would be always applied. 
+Contrary to your expectations, Scalatra doesn't run all the handlers for after and error. Only the first one would be applied and the others are just ignored. We think it's difficult to be aware of this specification (it's not a bug but by design). So SkinnyFilter's before/after/error handlers are always applied. 
 
 For instance, in skinny-blank-app, ErrrorPageFilter is applied to ApplicationController. 
 
@@ -320,7 +320,7 @@ trait ApplicationController extends SkinnyController
 }
 ```
 
-ErrorPageFilter is as follows. It's pretty easy to customized such a filter (e.g. adding error notification). Isn't it?
+ErrorPageFilter is as follows. It's pretty easy to customize such a filter (e.g. adding error notification) as follows.
 
 ```java
 trait ErrorPageFilter extends SkinnyRenderingFilter {
@@ -338,9 +338,9 @@ trait ErrorPageFilter extends SkinnyRenderingFilter {
 }
 ```
 
-It just outputs error logging, set status as 500 and renders "/error/500.html.ssp" or similar templates. `SkinnyRenderingFilter` is a sub trait of `SkinnyFilter`. `SkinnyFilter`'s response value is always ignored. But `SkinnyRenderingFilter` can return response body like above.
+It just outputs error logging, set status as 500 and renders "/error/500.html.ssp" or similar templates. `SkinnyRenderingFilter` is a sub-trait of `SkinnyFilter`. `SkinnyFilter`'s response value is always ignored. But `SkinnyRenderingFilter` can return a response body like above.
 
-Second example is `TxPerRequestFilter` which enables to apply open-session-in-view pattern to your apps.
+The second example is `TxPerRequestFilter` which enables you to apply the open-session-in-view pattern to your apps.
 
 ```java
 trait TxPerRequestFilter extends SkinnyFilter with Logging {
@@ -482,10 +482,10 @@ session -= "name"
 
 [/api/index.html#org.scalatra.RichSession](http://www.scalatra.org/2.2/api/index.html#org.scalatra.RichSession)
 
-Even if you don't use session by yourself, Scalatra's Flash and CSRF protection features are using servlet sessions.
-So your apps are not naturally stateless.
+Even if you don't use sessions in your application code, Scalatra's Flash and CSRF protection features are using servlet sessions.
+So your apps are not naturally stateless when using vanilla Scalatra.
 
-We recommend you using SkinnySesison to keep your Skinny apps stateless.
+We recommend you use SkinnySession to keep your Skinny apps stateless.
 When you enable SkinnySession, these features also start using SkinnySession instead of Servlet session attributes.
 
 ScalatraBootstrap.scala:

@@ -3,7 +3,7 @@
 # Skinny Framework
 <hr/>
 
-Skinny is a full-stack web app framework, which is built on [Scalatra](http://scalatra.org) and additional components are integrated.
+Skinny is a full-stack web app framework built on [Scalatra](http://scalatra.org).
 
 To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is highly inspired by [Ruby on Rails](http://rubyonrails.org/) and it is optimized for sustainable productivity for ordinary Servlet-based app development.
 
@@ -11,19 +11,19 @@ To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is hi
 ### Why Skinny?
 <hr/>
 
-What does the name of `Skinny` actually mean? We have three reasons as follows.
+What does the name `Skinny` actually mean? We have three reasons as follows.
 
 #### Application should be skinny
 
-All the parts of web application - controllers, models, views, routings and other settings - should be skinny. If you use Skinny framework, you don't need to have non-essential code anymore. For instance, when you create a simple registration form, all you need to do is just defining parameters and validation rules and creating view templates in an efficient way (ssp, scaml, jade, FreeMarker or something else) in most cases.
+All the parts of a web application - controllers, models, views, routings and other settings - should be skinny. If you use Skinny framework, you can do without a lot of non-essential boilerplate code. For instance, when you create a simple registration form, all you need to do is define the parameters and validation rules and create view templates in an efficient way (ssp, scaml, jade, FreeMarker or something else) in most cases.
 
 #### Framework should be skinny
 
-Even if you need to investigate Skinny's inside, don't worry. Skinny keeps itself skinny, too. I believe that if the framework is well-designed, eventually the implementation is skinny. 
+Even if you need to investigate Skinny's internals, don't worry. Skinny keeps itself skinny, too. We believe that if the framework is well-designed, the resulting implementation will be skinny. 
 
 #### "su-ki-ni" in Japanese means "as you like it"
 
-A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like it"**. This is only half kidding but it also represents Skinny's concept. Skinny framework should provide flexible APIs to empower developers as much as possible and shouldn't bother them.
+A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like it"**. This is only half kidding but it also represents Skinny's concept. Skinny framework should provide flexible APIs to empower developers as much as possible and shouldn't get in the way.
 
 <hr/>
 ## Try Skinny Framework now!
@@ -35,7 +35,7 @@ If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
 [![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/1.0.0-RC1/skinny-blank-app.zip)
 
-Let's create your first Skinny app by using scaffold generator.
+Let's create our first Skinny app by using the scaffold generator.
 
 ```sh
 ./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]
@@ -45,20 +45,20 @@ Let's create your first Skinny app by using scaffold generator.
 
 And then, access `http://localhost:8080/members`.
 
-You can run generated tests.
+You can also run the generated tests.
 
 ```
 ./skinny db:migrate test
 ./skinny test
 ```
 
-Let's create war file to deploy.
+Now let's create a war file for deployment to a Servlet container.
 
 ```sh
 ./skinny package
 ```
 
-or it's possible to portable runnable jar file (with embedded Jetty server).
+It's also possible to build a standalone runnable jar file (with embedded Jetty server).
 
 ```sh
 ./skinny package:standalone
@@ -88,9 +88,9 @@ yo skinny
 ### Integrating with existing Scalatra apps
 <hr/>
 
-Actually, application built with Skinny framework is a Scalatra application.
+Actually, an application built with Skinny framework is a normal Scalatra application.
 
-After preparing Scalatra app, just add the following dependency to your `project/Build.scala`.
+After preparing the Scalatra app, just add the following dependency to your `project/Build.scala`.
 
 ```
 libraryDependencies ++= Seq(
@@ -101,7 +101,7 @@ libraryDependencies ++= Seq(
 )
 ```
 
-If you need only Skinny-ORM or Skinny-Validator, you can use only what you need. Even if you're a Play2 (or any others) user, these components are available for you as well.
+If you need only Skinny-ORM or Skinny-Validator, you can use only what you need. Even if you're using Play2 (or any other framework), these components are available for you as well.
 
 ```
 libraryDependencies ++= Seq(
@@ -119,11 +119,11 @@ libraryDependencies ++= Seq(
 ### Routing & Controller & Validator
 <hr/>
 
-Skinny's routing mechanism and controller layer on MVC architecture is a **rich Scalatra**. Skinny's extension provides you much simpler/rich syntax. Of course, if you need to use Scalatra's API directly, Skinny never bothers you.
+Skinny's routing mechanism and controller layer on MVC architecture can be thought of as a **rich Scalatra**. Skinny's extension provides you much simpler/rich syntax. Of course, if you need to use Scalatra's API directly, Skinny never bothers you.
 
 ![Scalatra](images/scalatra.png)
 
-`SkinnyController` is a trait which extends `ScalatraFilter` and out-of-the-box components are integrated. 
+`SkinnyController` is a trait which extends `ScalatraFilter` and includes various useful components out-of-the-box. 
 
 ```java
 // src/main/scala/controller/MembersController.scala
@@ -147,7 +147,7 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 }
 ```
 
-`SkinnyResource` which is similar to Rails ActiveResource is available. That's a pretty DRY way.
+`SkinnyResource`, which is similar to Rails ActiveResource, is also available. It's a pretty DRY way to define RESTful resources.
 
 ```java
 object CompaniesController extends SkinnyResource {
@@ -173,7 +173,7 @@ Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [S
 
 ![Logo](images/scalikejdbc.png)
 
-Skinny-ORM is much powerful, so you don't need to write much code. Your first model class and companion are here.
+Skinny-ORM does a lot of work under the hood, so you don't need to write much code. Your first model class and companion are here.
 
 ```java
 case class Member(id: Long, name: String, createdAt: DateTime)
@@ -219,7 +219,7 @@ See in detail: [O/R Mapper](documentation/orm.html)
 ### DB Migration with Flyway
 <hr/>
 
-DB migration comes with [Flyway](http://flywaydb.org/). Usage is pretty simple.
+DB migration is provided by [Flyway](http://flywaydb.org/). Usage is pretty simple.
 
 ![Flyway Logo](images/flyway.png)
 
@@ -240,9 +240,9 @@ Skinny framework basically follows Scalatra's [Scalate](http://scalate.fusesourc
 
 ![Scalate Logo](images/scalate.png)
 
-Templates' path should be `{path}.{format}.{extension}`. Expected {format} are `html`, `json`, `js` and `xml`.
+Template paths should be of the form `{path}.{format}.{extension}`. Expected {format} are `html`, `json`, `js` and `xml`.
 
-For instance, your controller code will be like this:
+For instance, assuming your controller code looks like this:
 
 ```java
 class MembersController extends SkinnyController {
@@ -263,15 +263,7 @@ The render method expects that `src/main/webapp/WEB-INF/views/members/index.html
 #end
 ```
 
-Scalate supports many template engines. If you'd like to use other Scalate templates, just override the settings in controllers.
-
-```java
-class MembersController extends SkinnyController {
-  override val scalateExtension = "jade"
-}
-```
-
-And then, use `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
+Scalate supports many template engines. For example, if you want to write your template using Jade, save it as `src/main/webapp/WEB-INF/views/members/index.html.jade` instead.
 
 See in detail: [View Templates](documentation/view-templates.html)
 
@@ -295,7 +287,7 @@ mailer
   .body {
     """Hi all,
     |
-    |We're very proud to announce that Sinny Framework version 1.0.0 is relaesed.
+    |We're very proud to announce that Skinny Framework version 1.0.0 is relaesed.
     |
     |.....
     |
@@ -339,7 +331,7 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 
 AssetsController supports Last-Modified header and returns status 304 correctly if the requested file isn't changed. 
 
-However, precompiling them is highly recommended in production (./skinny package does that).
+However, precompiling the assets is highly recommended in production (`./skinny package` does that).
 
 See in detail: [Assets Support](documentation/assets.html)
 
@@ -347,7 +339,7 @@ See in detail: [Assets Support](documentation/assets.html)
 ### Testing Support
 <hr/>
 
-You can use Scalatra's great test support. Some optional feature is provided by skinny-test library.
+You can use Scalatra's great test support. Some extra optional features are provided by the skinny-test library.
 
 ```java
 class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
@@ -355,7 +347,7 @@ class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
 
   it should "show index page" in {
     withSession("userId" -> "Alice") {
-    i  get("/members") { status should equal(200) }
+      get("/members") { status should equal(200) }
     }
   }
 }
@@ -378,7 +370,7 @@ object Company extends SkinnyCRUDMapper[Company] {
 val company1 = FactoryGirl(Company).create()
 ```
 
-Settings is not in yaml files but typesafe-config conf file. In this example, `src/test/resources/factories.conf` is like this:
+Configuration is not in yaml files but a typesafe-config conf file. In this example, `src/test/resources/factories.conf` looks like this:
 
 ```
 company {

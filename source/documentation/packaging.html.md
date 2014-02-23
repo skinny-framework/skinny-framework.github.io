@@ -8,35 +8,35 @@ title: Packaging - Skinny Framework
 ### As you know, it's a servlet application
 <hr/>
 
-Skinny applications runs on any Serlvet containers. 
+Skinny applications run on any Serlvet container. 
 
-So what you need to do is just creating war file and deploying it to your production servers.
+So you just need to build a war file and deploy it to your production servers.
 
 <hr/>
 ### Packaging war file
 <hr/>
 
-It's utmost simple to do that. Just 
+It's very simple to do that. Just 
 
 ```
 ./skinny package
 ```
 
-You will see created war file under `build/target/scala_2.10`.
+You will see the created war file under `build/target/scala_2.10`.
 
-If you deploy war file to maven repository (e.g. Artifactory), just `./skinny publish` after configuring build settings (default settings doesn't work for you).
+If you want to deploy the war file to a Maven repository (e.g. Artifactory), just run `./skinny publish` after customizing the build settings file.
 
 <hr/>
 ### Creating stand alone app
 <hr/>
 
-What's more, you can easily create stand alone jar file by just run the following command: 
+What's more, you can easily create a stand alone jar file by just running the following command: 
 
 ```
 ./skinny package:standalone
 ```
 
-After a while, you will get standalone jar file. 
+After a while, you will get a standalone jar file. 
 
 ```
 java -jar standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
@@ -53,7 +53,7 @@ java -jar -Dskinny.port=9000 -Dskinny.env=production \
 ### Configuration
 <hr/>
 
-Options to configure your Skinny applications. You can pass the following values from environment variables or system properties.
+The following options are available to configure your Skinny applications. You can pass the following values from environment variables or system properties.
 
 <hr/>
 #### skinny.env or SKINNY_ENV
@@ -67,6 +67,6 @@ You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-fram
 #### skinny.port
 <hr/>
 
-This value is only for stand alone apps. Default value is 8080. You can customize the port number stand alone app server listens.
+This value is only for stand alone apps. Default value is 8080. You can customize the port number on which the stand alone app server listens.
 
 

@@ -5,10 +5,10 @@ title: Testing - Skinny Framework
 ## Testing
 
 <hr/>
-### Testability is much important
+### Testability is very important
 <hr/>
 
-You can use Scalatra's great test support. Some optional feature is provided by skinny-test library.
+You can use Scalatra's great test support with Skinny. Some optional features are provided by the skinny-test library.
 
 ```java
 class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
@@ -32,7 +32,7 @@ Simply use skinny command or sbt directly.
 ./skinny test-only models.MemberSpec
 ```
 
-If you need code coverage report, use `scoverage:test` instead. 
+If you need a code coverage report, use `scoverage:test` instead. 
 
 https://github.com/scoverage/sbt-scoverage
 
@@ -40,7 +40,7 @@ https://github.com/scoverage/sbt-scoverage
 ./skinny scoverage:test
 ```
 
-WARNING: There is a known issue that scoverage doesn't work fine with Skinny ORM.
+WARNING: There is a known issue that scoverage doesn't work perfectly with Skinny ORM.
 
 
 <hr/>
