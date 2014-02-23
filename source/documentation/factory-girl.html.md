@@ -8,26 +8,26 @@ title: FactoryGirl - Skinny Framework
 ### Easy-to-use Fixture Tool
 <hr/>
 
-Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module will be quite useful when testing your apps.
+Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module is quite useful when testing your apps.
 
 FactoryGirl is a part of Skinny ORM, so you can use FactoryGirl even in your Play2 apps!
 
-Just add skinny-orm to your apps.
+Just add skinny-ORM to your apps.
 
 ```
-libraryDependencies += "org.skinny-framewrok" %% "skinny-orm" % "[0.9,)"
+libraryDependencies += "org.skinny-framework" %% "skinny-orm" % "1.0.0-RC1"
 ```
 
 <hr/>
 ### Usage
 <hr/>
 
-FactoryGirl' usage is very simple.
+FactoryGirl's usage is very simple.
 
 - Defining `SkinnyCRUDMapper`
 - Append definitions to `factories.conf`
 
-Exaple code:
+Example code:
 
 ```java
 case class Company(id: Long, name: String)
@@ -73,12 +73,12 @@ skill {
 <hr/>
 ### Methods
 
-You should be aware that FactoryGirl has following two methods.
+You should be aware that FactoryGirl has the following two methods.
 
 <hr/>
 ### withVariables
 
-Attributes passed by this method will be used for replacing variables such as "#{userId}" in factories.conf.
+Attributes passed to this method will be used for replacing variables such as "#{userId}" in factories.conf.
 
 ```java
 /* factories.conf
@@ -96,7 +96,7 @@ FactoryGirl(Member).withVariables(
 <hr/>
 ### withAttributes
 
-Thesse attributes will overwrite the values in factories.conf. 
+These attributes will overwrite the values in factories.conf. 
 
 ```java
 /* factories.conf

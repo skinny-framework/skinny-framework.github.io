@@ -33,7 +33,7 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 
 AssetsController supports Last-Modified header and returns status 304 correctly if the requested file isn't changed.
 
-However, precompiling them is highly recommended in production (./skinny package does that).
+However, precompiling them is highly recommended in production (`./skinny package` does that).
 
 <hr/>
 ## CoffeeScript
@@ -43,8 +43,8 @@ However, precompiling them is highly recommended in production (./skinny package
 
 http://coffeescript.org/
 
-Skinny tries to find native compiler (npm install -g coffee-script) at first.
-If it's absent, Skinny uses own compiler on the Rhino JS engine. So you don't need preparing CoffeeScript compiler in advance.
+Skinny tries to find the native compiler (`npm install -g coffee-script`) at first.
+If it's absent, Skinny uses its own compiler on the Rhino JS engine. So you don't need to prepare a CoffeeScript compiler in advance.
 
 Easy to start! Just put *.coffee files under `WEB-INF/assets/coffee`:
 
@@ -64,8 +64,8 @@ You can access the latest compiled JavaScript code at `http://localhost:8080/ass
 
 http://lesscss.org/
 
-Skinny tries to find native compiler (npm install -g less) at first.
-If it's absent, Skinny uses own compiler on the Rhino JS engine. So you don't need preparing LESS compiler in advance.
+Skinny tries to find the native compiler (`npm install -g less`) at first.
+If it's absent, Skinny uses its own compiler on the Rhino JS engine. So you don't need to prepare a LESS compiler in advance.
 
 Easy to start! Just put *.less files under `WEB-INF/assets/less`:
 
@@ -88,7 +88,7 @@ You can access the latest compiled CSS file at `http://localhost:8080/assets/css
 
 http://sass-lang.com/
 
-Sass is implemented by Ruby and it works on the Ruby runtime. You need preparing Ruby runtime and Sass native compiler in advance.
+Sass is implemented in Ruby and it works on the Ruby runtime. You will need to prepare a Ruby runtime and Sass native compiler in advance.
 
 And then, just put *.scss files under `WEB-INF/assets/scss` or `WEB-INF/assets/sass`.
 
@@ -115,8 +115,8 @@ You can access the latest compiled CSS file at `http://localhost:8080/assets/css
 
 http://facebook.github.io/react/
 
-Skinny tries to find native compiler (npm install -g react-tools) at first.
-If it's absent, Skinny uses own compiler on the Rhino JS engine. So you don't need preparing JSX compiler in advance.
+Skinny tries to find the native compiler (`npm install -g react-tools`) at first.
+If it's absent, Skinny uses its own compiler on the Rhino JS engine. So you don't need to prepare a JSX compiler in advance.
 
 Easy to start! Just put *.jsx files under `WEB-INF/assets/jsx`:
 
@@ -135,7 +135,7 @@ You can access the latest transformed JS file at `http://localhost:8080/assets/j
 ## Adding Other Compilers
 <hr/>
 
-If you need other script support, you can add compiler to AssetsController.
+If you need other script support, you can add compilers to AssetsController.
 
 AssetsController: [assets/src/main/scala/skinny/controller/AssetsController.scala](https://github.com/skinny-framework/skinny-framework/blob/master/assets/src/main/scala/skinny/controller/AssetsController.scala)
 

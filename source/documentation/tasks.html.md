@@ -12,7 +12,7 @@ skinny-task is a mechanism to run tasks easily. By default, the following tasks 
 
 [task/src/main/scala/skinny/task/TaskLauncher.scala](https://github.com/skinny-framework/skinny-framework/blob/master/task/src/main/scala/skinny/task/TaskLauncher.scala)
 
-skinny-blank-app prepares easy-to-use TaksRunner.
+skinny-blank-app prepares the easy-to-use `TaskRunner`.
 
 [task/src/main/scala/TaskRunner.scala](https://github.com/skinny-framework/skinny-framework/blob/master/yeoman-generator-skinny/app/templates/task/src/main/scala/TaskRunner.scala)
 
@@ -32,7 +32,7 @@ object TaskRunner extends skinny.task.TaskLauncher {
 ### Creating Your Own Tasks
 <hr/>
 
-Creating tasks is pretty easy. It's just defining a function `(List[String]) => Unit`.
+Creating tasks is pretty easy. You just need to define a function `(List[String]) => Unit`.
 
 ```java
 register("echo", (params) => params foreach println)
@@ -51,4 +51,4 @@ baz
 
 Improve your development with tasks.
 
-If you have good idea, please write a blog post or give us some feedback.
+If you have any good ideas for how to use tasks or improve the API, please write a blog post or give us some feedback.

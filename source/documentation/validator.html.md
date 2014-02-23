@@ -5,7 +5,7 @@ title: Validator - Skinny Framework
 ## Validator
 
 <hr/>
-### Quite Readable and Customizable DSL
+### Readable and Customizable DSL
 <hr/>
 
 skinny-validator is portable, so you can use skinny-validator with Play2, Scalatra (without Skinny) and any other web app frameworks. Furthermore, you can use it in not only web apps but also any other applications (batch operation, cli and so on).
@@ -25,7 +25,7 @@ The way to create new validation rule is pretty simple:
 
 That's all.
 
-The following is an example from built-in validations.
+The following is an example from the built-in validations.
 
 ```java
 import skinny.validator._
@@ -54,7 +54,7 @@ error.name // -> "required"
 error.messageParmas // -> List("name")
 ```
 
-Validation rule which accepts value when using such as `minLength(6)` is like this:
+A validation rule which accepts value when using such as `minLength(6)` is like this:
 
 ```java
 case class minLength(min: Int) extends ValidationRule {
@@ -72,13 +72,13 @@ val validator = Validator(
 )
 ```
 
-Basic usage is combining validation rules with `&`. If a failure is found, rest of them will be skipped. `checkAll` executes all the validations even if some of them already failed.
+Basic usage involves combining validation rules with `&`. If a failure is found, by default the rest of the validation rules will be skipped. `checkAll` executes all the validations even if some of them already failed.
 
 <hr/>
 ### Built-in Validation Rules
 <hr/>
 
-In most of cases, built-in validators are useful.
+The built-in validators are good enough to cover most common cases.
 
 [validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/master/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
 
@@ -125,7 +125,7 @@ error {
 }
 ```
 
-Now `Messages` can load error messages for validation errors named "required" or "minLength". Name comes from `ValidationRule#name`.
+Now `Messages` can load error messages for validation errors named "required" or "minLength". The name comes from `ValidationRule#name`.
 
 ```java
 val messages = Messages.loadFromConfig()

@@ -8,22 +8,22 @@ title: ORM - Skinny Framework
 ### Skinny-ORM
 <hr/>
 
-Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). This is a portable library. So you can use it with Play2, pure Scalatra, Lift and any other frameworks.
+Skinny provides you with Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). This is a portable library, so you can also use it with Play2, pure Scalatra, Lift and any other frameworks.
 
 ![Logo](images/scalikejdbc.png)
 
-Skinny-ORM is naturally characterized by avoding N+1 queries because associations are resolved by join queries. 
+A key feature of Skinny-ORM is that it avoids N+1 queries because associations are resolved by join queries. 
 
-`#belongsTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to take care about performance problems caused by so many N+1 queries any more. 
+`#belongsTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to worry about performance problems caused by N+1 queries. 
 
-Furthermore, the `#byDefault` option allows you resolving assocations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
+Furthermore, the `#byDefault` option allows you to resolve assocations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
 
-On the other hand, it's impossible to resolve all the nested attributes' relationships by single join query. If you need to resolve nested relationships, you can retrieve them with eager loading by using `#includes` method.
+On the other hand, it's impossible to resolve all the nested attributes' relationships by a single join query. If you need to resolve nested relationships, you can retrieve them with eager loading by using `#includes` method.
 
 <hr/>
 #### The Best way to learn
 
-The best way to learn is seeing the following examamples. 
+The best way to learn is by reading the following examamples. 
 
 Table definitions: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala
 
@@ -31,7 +31,7 @@ Model examples: https://github.com/skinny-framework/skinny-framework/blob/develo
 
 Usage: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
 
-If you have some questions or feedbacks, feel free to ask Skinny team or users in the mailing list.
+If you have any questions or feedback, feel free to ask the Skinny team or users in the mailing list.
 
 https://groups.google.com/forum/#!forum/skinny-framework
 
@@ -42,7 +42,7 @@ https://groups.google.com/forum/#!forum/skinny-framework
 <hr/>
 #### Easy to use and powerful
 
-Skinny-ORM is much powerful, so you don't need to write much code. Your first model class and companion are here.
+Skinny-ORM is very powerful, so you don't need to write much code. Your first model class and companion are here.
 
 ```java
 case class Member(id: Long, name: String, createdAt: DateTime)
@@ -160,7 +160,7 @@ Be aware of Skinny ORM's concept that basically joins tables to resolve associat
 
 http://scalikejdbc.org/documentation/query-inspector.html
 
-Typically defining associations are fundamentally not so simple, so you might be confused when specifying these definitions. Understanding how ScalikeJDBC's join queries and One-to-X APIs work may be a short cut.
+Typically defining associations are fundamentally not so simple, so you might be confused when specifying these definitions. Understanding how ScalikeJDBC's join queries and One-to-X APIs work may be useful.
 
 http://scalikejdbc.org/documentation/one-to-x.html
 
@@ -171,7 +171,7 @@ Same as ActiveRecord's `belongs_to` assocation:
 
 http://guides.rubyonrails.org/association_basics.html#the-belongs-to-association
 
-We need to specify some types, so definitions are not so simple as ActiveRecord, it's easy to understand nad simple enough.
+We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
 
 ```java
@@ -233,7 +233,7 @@ Same as ActiveRecord's `has_one` assocation:
 
 http://guides.rubyonrails.org/association_basics.html#the-has-one-association
 
-We need to specify some types, so definitions are not so simple as ActiveRecord, it's easy to understand nad simple enough.
+We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
 ```java
 case class Name(first: String, last: String)
@@ -269,7 +269,7 @@ Same as ActiveRecord's `has_many` assocation:
 
 http://guides.rubyonrails.org/association_basics.html#the-has-many-association
 
-We need to specify some types, so definitions are not so simple as ActiveRecord, it's easy to understand nad simple enough.
+We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
 ```java
 case class Company(id: Long, name: String, members: Seq[Member] = Nil)
@@ -357,7 +357,7 @@ https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/s
 
 Basically using case classes for entities is recommended. As you know, Scala (until 2.11) has 22 limitation, so you may need to use normal classes for entities to treat tables that have more than 22 columns.
 
-In this case, entity should be defined like this (Skinny 0.9.21 or ScalikeJDBC 1.7.3 is required):
+In this case, entities should be defined like this (Skinny 0.9.21 or ScalikeJDBC 1.7.3 is required):
 
 ```java
 class LegacyData(val id: Long, val c2: String, val c3: Int, ..., val c23: Int)
@@ -371,17 +371,17 @@ object LegacyData extends SkinnyCRUDMapper[LegacyData] {
 }
 ```
 
-If you missed above implementation, one-to-many relationships doesn't work as you expect.
+If you don't implement like this, one-to-many relationships won't work as you expect.
 
-See also detail explanation here: http://scalikejdbc.org/documentation/one-to-x.html
+See also the detailed explanation here: http://scalikejdbc.org/documentation/one-to-x.html
 
 <hr/>
 ### Eager Loading
 <hr/>
 
-When you use eager loading by `includes` API, define both of `belongsTo` and `includes`. 
+When you enable eager loading using the `includes` API, you need to define both `belongsTo` and `includes`. 
 
-Note: nested entities's eager loading is not supported yet.
+Note: eager loading of nested entities is not supported yet.
 
 Indeed, it's not incredibly simple. But we believe that what it does is so clear that you can easily write the definition.
 
@@ -390,7 +390,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 
   // Unfortunately the combination of Scala macros and type-dynamic sometimes doesn't work as expected
   // when "val company" is defined in Scala 2.10.x.
-  // If you suffered that, use "val companyOpt" "companyRef" and so on instead.
+  // If you suffer from this issue, use "val companyOpt" "companyRef" and so on instead.
   val companyOpt = {
     // normal belongsTo
     belongsTo[Company](
@@ -425,7 +425,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 Member.includes(Member.skills).findById(123) // with skills
 ```
 
-Note: when your entities have same associations (e.g. Company has Employee, Country and Employee has Country), avoiding to use default alias for the associations is recommended because that may cause invalid join query generation when you use eager loading. We have a plan to provide more kind error message for such cases until version 1.0.0.
+Note: when your entities have the same associations (e.g. Company has Employee, Country and Employee have Country), avoiding using the default alias for the associations is recommended because that may cause invalid join query generation when you use eager loading. We plan to provide more useful error messages for such cases in version 1.0.0.
 
 Source code: 
 https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala
@@ -459,7 +459,7 @@ object GroupMember extends SkinnyCRUDMapper[Member] {
   override def primaryKeyFieldName = "uid" 
 
   // with SkinnyCRUDMapper[GroupMember]
-  // createWithAttributes will try returing generated id if true
+  // createWithAttributes will try to return generated id if true
   // default: true
   override def useAutoIncrementPrimaryKey = false
 
@@ -499,7 +499,7 @@ object GroupMember extends SkinnyCRUDMapper[Member] {
 ### Dynamic Table Name
 <hr/>
 
-`#withTableName` enables using another table name only for current query.
+`#withTableName` enables using another table name only for the current query.
 
 ```java
 object Order extends SkinnyCRUDMapper[Order] {
@@ -521,7 +521,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 ### Adding Methods
 <hr/>
 
-If you need to add methods, just write methods that use `#findBy`, `#countBy` or ScalikeJDBC' APIs directly.
+If you need to add methods, just write methods that use `#findBy`, `#countBy` or ScalikeJDBC's APIs directly.
 
 ```java
 object Member extends SkinnyCRUDMapper[Member] {
@@ -533,7 +533,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 }
 ```
 
-If you're using ORM with Skinny Framework,
+If you're using Skinny-ORM with Skinny Framework,
 [skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applciations.
 
 ```java
@@ -545,24 +545,24 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 }
 ```
 
-And then your ORM models can retrieve current DB session as thread-local value per request, so you don't need to pass `DBSession` value as an implicit parameter in each method. 
+And then your ORM models can retrieve the current DB session as a thread-local value per request, so you don't need to pass `DBSession` value as an implicit parameter in each method. 
 
 ```java
 def findAllByGroupId(groupId: Long): List[Member] = findAllBy(sqls.eq(m.groupId, groupId)
 ```
 
-On the other hand, if you work with multiple threads for single HTTP request, you should be aware that the thread-local db session won't be shared.
+On the other hand, if you work with multiple threads for single HTTP request, you should be aware that the thread-local DB session won't be shared.
 
 
 <hr/>
 ### Using Non-Numerical or Typed Primary Key
 <hr/>
 
-SkinnyMapper expects Long (bigint) value named `id` for primary key column.
+SkinnyMapper expects a Long (bigint) value named `id` for primary key column.
 
-If your application uses non-numerical primary key for some reasons, use `****WithId` traits instead. In this case, you must implement `idToRawValue` and `rawValueToId` methods.
+If your application uses a non-numerical primary key for some reason, use `****WithId` traits instead. In this case, you must implement `idToRawValue` and `rawValueToId` methods.
 
-If you need `MemberId` class for primary key, it's also easy to implement.
+If you need to use a complex object (e.g. `MemberId` class) as a primary key, it's also easy to implement.
 
 ```java
 case class MemberId(value: Long)
@@ -618,7 +618,7 @@ object CompaniesController extends SkinnyResourceWithId[CompanyId] with Applicat
 }
 ```
 
-If you use alternative Id generator instead of RDB's auto-incremental value, set `useExternalIdGenerator` as true and implement `generateId` method.
+If you use an alternative Id generator instead of the RDB's auto-incremental value, set `useExternalIdGenerator` as true and implement the `generateId` method.
 
 ```java
 case class Member(uuid: UUID, name: String)
@@ -719,7 +719,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 ### FactoryGirl
 <hr/>
 
-Easy-to-use fixture tool named FactoryGirl makes your testing more comfortable.
+An easy-to-use fixture tool named FactoryGirl makes testing easy.
 
 See in detail here: [FactoryGirl](factory-girl.html)
 

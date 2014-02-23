@@ -5,18 +5,18 @@ title: Mail - Skinny Framework
 ## Mail
 
 <hr/>
-### out-of-the-box SkinnyMailer
+### Out-of-the-box SkinnyMailer
 <hr/>
 
 `SkinnyMailer` is the out-of-the-box email module for Skinny applications.
 
-That is an independent library, so you can use only skinny-mailer for any other use cases.
+It's also available as a standalone library, so you can use skinny-mailer for any other use cases.
 
 <hr/>
 ### Sending emails via GMail STMP servers
 <hr/>
 
-To understand how to use SkinnyMailer, try the following code on the Scala REPL (./skinny console)
+To understand how to use SkinnyMailer, try the following code on the Scala REPL (`./skinny console`)
 
 ```java
 // https://support.google.com/accounts/answer/185833
