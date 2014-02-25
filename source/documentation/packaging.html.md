@@ -64,7 +64,7 @@ Default value is "development". If skinny.env is "production", application load 
 You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/SkinnyEnv.scala) in application.
 
 <hr/>
-#### skinny.port
+#### skinny.port or SKINNY_PORT
 <hr/>
 
 This value is only for stand alone apps. Default value is 8080. You can customize the port number on which the stand alone app server listens.
