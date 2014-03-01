@@ -9,6 +9,7 @@ title: Assets Support - Skinny Framework
 ![LESS Logo](images/less.png)
 ![Sass Logo](images/sass.png)
 ![React Logo](images/react.png)
+![Scala.js](images/scalajs.png)
 
 First, add `skinny-assets` to libraryDependencies.
 
@@ -130,6 +131,59 @@ React.renderComponent(
 ```
 
 You can access the latest transformed JS file at `http://localhost:8080/assets/js/react-example.js`.
+
+<hr/>
+## Scala.js
+<hr/>
+
+![Scala.js](images/scalajs.png)
+
+http://www.scala-js.org/
+
+<b>Important notice!</b>
+
+Scala.js is still experimental! Although this is a project of LAMP/EPFL for which we will continue to provide best-effort improvements and bug fixes, it is not supported by Typesafe, and not part of any of their support contracts. You have been warned!
+
+So Skinny's Scala.js is still optional. You need to change the following settings before working with Scala.js
+
+### project/plugins.sbt
+
+Activate scalajs-sbt-plugin. Following version may be old. Check the latest version.
+
+```java
+// --------
+// Scala.js
+// http://www.scala-js.org/
+//addSbtPlugin("org.scala-lang.modules.scalajs" % "scalajs-sbt-plugin" % "0.3")
+```
+
+### project/Build.scala
+
+Activate scalaJS project settings. Following version may be old. Check the latest version.
+
+```java
+  // -------------------------------------------------------
+  // Scala.JS Trial
+  // -------------------------------------------------------
+/*
+  lazy val scalaJS = Project(id = "scalajs", base = file("src/main/webapp/WEB-INF/assets"),
+    settings = Defaults.defaultSettings ++ Seq(
+      name := "application", // JavaScript file name
+      unmanagedSourceDirectories in Compile <+= baseDirectory(_ / "scala"),
+      libraryDependencies ++= Seq(
+        "org.scala-lang.modules.scalajs" %% "scalajs-dom"                    % "0.2",
+        "org.scala-lang.modules.scalajs" %% "scalajs-jasmine-test-framework" % "0.3" % "test"
+      ),
+      crossTarget in Compile <<= baseDirectory(_ / ".." / ".." / "assets" / "js")
+    )
+  )
+*/
+```
+
+Easy to start! Just put *.scala files under `WEB-INF/assets/scala`:
+
+You can access the latest transformed JS file at `http://localhost:8080/assets/js/application.js`.
+
 
 <hr/>
 ## Adding Other Compilers

@@ -42,6 +42,8 @@ FYI: It's also possible to specify the column data type for each field. However 
 
 And then, access `http://localhost:8080/members`.
 
+See in detail here: [Scaffolding](/documentation/scaffolding.html)
+
 You can also run the generated tests.
 
 ```
