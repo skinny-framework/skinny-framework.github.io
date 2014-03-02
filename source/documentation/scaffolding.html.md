@@ -169,7 +169,7 @@ When you have `project_members` table in database,
 ```sql
 -- For H2 Database
 create table project_members (
-  id bigserial not null primary key,
+  member_id bigserial not null primary key,
   name varchar(512) not null,
   nickname varchar(32),
   joined_at timestamp not null,
@@ -194,9 +194,10 @@ $ ./skinny g reverse-scaffold:scaml project_members projectMembers projectMember
 
  *** Skinny Reverse Engineering Task ***
 
-  Table: project_members
-  Resources: projectMembers
-  Resource: projectMember
+  Table     : project_members
+  ID        : memberId
+  Resources : projectMembers
+  Resource  : projectMember
 
   Columns:
    - name:String:varchar(512)
