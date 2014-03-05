@@ -180,9 +180,33 @@ Activate scalaJS project settings. Following version may be old. Check the lates
 */
 ```
 
-Easy to start! Just put *.scala files under `WEB-INF/assets/scala`:
+### How to work with Scala.js
+
+Easy to start! 
+
+#### Terminal A
+
+Just invoke Skinny app.
+
+```sh
+./skinny run
+````
+
+#### Terminal B
+
+Invoke Scala.js assets watcher process (which is similar to grunt watch).
+
+```sh
+./skinny scalajs:watch
+```
+
+#### Put Scala code into assets directory
+
+Just put *.scala files under `WEB-INF/assets/scala`:
 
 You can access the latest transformed JS file at `http://localhost:8080/assets/js/application.js`.
+
+Or when using only `scalajs:watch`, it's also possible to acces `src/main/webapp/assets/js/application-*.js` directly.
 
 
 <hr/>
