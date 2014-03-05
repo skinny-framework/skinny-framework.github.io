@@ -79,6 +79,13 @@ val members: List[Member] = Member.findAllBy(sqls.in(m.id, Seq(123, 234, 345)))
 
 val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
 
+// will return 345, 234, 123 in order
+val m = Member.defaultAlias
+val members: List[Member] = 
+  Member.where('id -> Seq(123, 234, 345))
+    .orderBy(m.id.desc).offset(0).limit(5)
+    .apply()
+
 // ------------
 // find by condition
 
@@ -656,9 +663,7 @@ Don't worry. Skinny-ORM does well at resolving associations even if you use cust
 By default, this trait expects two columns on the table - `created_at timestamp not null` and `updated_at timestamp`. If you need customizing, override *FieldName methods as follows.
 
 ```java
-class Member(id: Long, name: String,
-  createdAt: DateTime,
-  updatedAt: Option[DateTime] = None)
+class Member(id: Long, name: String, createdAt: DateTime, updatedAt: DateTime)
 
 object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
 
