@@ -34,24 +34,26 @@ Scaffold command's parameters are ...
 - {paramType}: `skinny.ParamType`. see also: [skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
 - {columnType}: (optional) Database column type. This will be embedded into DB migration file.
 
+It's also possible to specify namespace for the resource:
+
+```
+./skinny g scaffold:{template} {namespace} {resources} {resource} {attributes}...
+```
+
+- {namespace}: prefix for the resource (e.g. admin.foo.bar)
+
+
 <hr/>
 #### Example Usage
 <hr/>
 
-Let's create a CRUD pages for project members!
+Let's create CRUD pages to manage project members!
 
 <hr/>
 
 ```
 $ ./skinny g scaffold:jade projectMembers projectMember name:String "nickname:Option[String]:varchar(32)" joinedAt:DateTime leaveAt:Option[DateTime]
 
-[info] Loading global plugins from /Users/seratch/.sbt/0.13/plugins
-[info] Updating {file:/Users/seratch/.sbt/0.13/plugins/}global-plugins...
-[info] Resolving org.fusesource.jansi#jansi;1.4 ...
-[info] Done updating.
-[info] Loading project definition from /home/project
-[info] Set current project to dev (in build file:/home/)
-[info] Generating /home/task/target/scala-2.10/resource_managed/main/rebel.xml.
 [info] Running TaskRunner generate:scaffold:jade projectMembers projectMember name:String nickname:Option[String]:varchar(32) joinedAt:DateTime leaveAt:Option[DateTime]
 
  *** Skinny Generator Task ***
@@ -74,31 +76,40 @@ $ ./skinny g scaffold:jade projectMembers projectMember name:String "nickname:Op
 [success] Total time: 1 s, completed Mar 2, 2014 12:58:53 AM
 ```
 
+With namespace:
+
+```
+$ ./skinny g scaffold:jade admin.foo members member name:String
+
+[info] Running TaskRunner generate:scaffold:jade admin.foo members member name:String
+
+ *** Skinny Generator Task ***
+
+  "src/main/scala/controller/ApplicationController.scala" skipped.
+  "src/main/scala/controller/admin/foo/MembersController.scala" created.
+  "src/main/scala/ScalatraBootstrap.scala" modified.
+  "src/test/scala/controller/admin/foo/MembersControllerSpec.scala" created.
+  "src/test/resources/factories.conf" modified.
+  "src/main/scala/model/admin/foo/Member.scala" created.
+  "src/test/scala/model/admin/foo/MemberSpec.scala" created.
+  "src/main/webapp/WEB-INF/views/admin/foo/members/_form.html.jade" created.
+  "src/main/webapp/WEB-INF/views/admin/foo/members/new.html.jade" created.
+  "src/main/webapp/WEB-INF/views/admin/foo/members/edit.html.jade" created.
+  "src/main/webapp/WEB-INF/views/admin/foo/members/index.html.jade" created.
+  "src/main/webapp/WEB-INF/views/admin/foo/members/show.html.jade" created.
+  "src/main/resources/messages.conf" modified.
+  "src/main/resources/db/migration/V20140307003617__Create_members_table.sql" created.
+
+[success] Total time: 2 s, completed Mar 7, 2014 12:36:17 AM
+```
+
+
 <hr/>
 After that, do DB migration.
 <hr/>
 
 ```
 $ ./skinny db:migrate
-
-[info] Loading global plugins from /Users/seratch/.sbt/0.13/plugins
-[info] Loading project definition from /home/project
-[info] Set current project to dev (in build file:/home/)
-[info] Generating /home/task/target/scala-2.10/resource_managed/main/rebel.xml.
-[info] Running TaskRunner db:migrate
-2014-03-02 01:01:00,305 DEBUG [run-main-0] s.ConnectionPool$ [Log.scala:45] Registered connection pool : ConnectionPool(url:jdbc:h2:file:db/development, user:sa)
-Mar 02, 2014 1:01:00 AM com.googlecode.flyway.core.command.DbMigrate migrate
-INFO: Current version of schema "PUBLIC": 20140301231655
-Mar 02, 2014 1:01:00 AM com.googlecode.flyway.core.command.DbMigrate applyMigration
-INFO: Migrating schema "PUBLIC" to version 20140301231759
-Mar 02, 2014 1:01:00 AM com.googlecode.flyway.core.command.DbMigrate applyMigration
-INFO: Migrating schema "PUBLIC" to version 20140302005853
-Mar 02, 2014 1:01:00 AM com.googlecode.flyway.core.command.DbMigrate logSummary
-INFO: Successfully applied 2 migrations to schema "PUBLIC" (execution time 00:00.078s).
-2014-03-02 01:01:01,043 DEBUG [run-main-0] s.ConnectionPool$ [Log.scala:45] Registered connection pool : ConnectionPool(url:jdbc:h2:file:db/development, user:sa)
-2014-03-02 01:01:01,045 DEBUG [Thread-3] s.ConnectionPool$ [Log.scala:45] The old pool destruction started. connection pool : ConnectionPool(url:jdbc:h2:file:db/development, user:sa)
-2014-03-02 01:01:01,067 DEBUG [Thread-3] s.ConnectionPool$ [Log.scala:45] The old pool is successfully closed. connection pool : ConnectionPool(url:jdbc:h2:file:db/development, user:sa)
-[success] Total time: 2 s, completed Mar 2, 2014 1:01:01 AM
 ```
 
 <hr/>
@@ -186,10 +197,6 @@ Default SkinnyEnv is `development`. If you need specifying others, add it as the
 ```
 $ ./skinny g reverse-scaffold:scaml project_members projectMembers projectMember
 
-[info] Loading global plugins from /Users/seratch/.sbt/0.13/plugins
-[info] Loading project definition from /home/project
-[info] Set current project to dev (in build file:/home/)
-[info] Generating /home/task/target/scala-2.10/resource_managed/main/rebel.xml.
 [info] Running TaskRunner generate:reverse-scaffold:scaml project_members projectMembers projectMember
 
  *** Skinny Reverse Engineering Task ***
