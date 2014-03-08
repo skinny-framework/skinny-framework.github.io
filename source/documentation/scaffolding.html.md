@@ -152,13 +152,13 @@ object ProjectMembersController extends SkinnyResource with ApplicationControlle
   override def resourcesBasePath = s"/${toSnakeCase(resourcesName)}"
   override def useSnakeCasedParamKeys = true
 
+  override def createParams = Params(params).withDateTime("joined_at").withDateTime("leave_at")
   override def createForm = validation(createParams,
     paramKey("name") is required & maxLength(512),
     paramKey("nickname") is maxLength(512),
     paramKey("joined_at") is required & dateTimeFormat,
     paramKey("leave_at") is dateTimeFormat
   )
-  override def createParams = Params(params).withDateTime("joined_at").withDateTime("leave_at")
   override def createFormStrongParameters = Seq(
     "name" -> ParamType.String,
     "nickname" -> ParamType.String,
@@ -190,9 +190,7 @@ create table project_members (
 
 Run the `reverse-scaffold` command like this.
 
-This command uses DB settings in the `src/main/resources/application.conf`.
-
-Default SkinnyEnv is `development`. If you need specifying others, add it as the fourth parameter.
+This command uses DB settings in the `src/main/resources/application.conf`. SkinnyEnv is set as `development`. 
 
 ```
 $ ./skinny g reverse-scaffold:scaml project_members projectMembers projectMember
@@ -242,12 +240,19 @@ Just run `./skinny run` and access `http://localhost:8080/project_members` from 
 Scaffold command's parameters are ...
 
 ```
-./skinny g reverse-scaffold:{template} {tableName} {resources} {resource} {skinnyEnv}"
+./skinny g reverse-scaffold:{template} {tableName} {resources} {resource}
 ```
 
 - {template}: "ssp" / "scaml" / "jade" (Scalate template name)
 - {tableName}: Target table name in the existing database
 - {resources}: Resource name in the plural (camelCase)
 - {resource}: Resource name (camelCase)
-- {skinnyEnv}: (optional) default value is "development"
+
+```
+./skinny g reverse-scaffold:{template} {namespace} {tableName} {resources} {resource}
+```
+
+- {namespace}: prefix for the resource (e.g. admin.foo.bar)
+
+
 

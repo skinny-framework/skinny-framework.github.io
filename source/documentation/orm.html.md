@@ -45,6 +45,11 @@ https://groups.google.com/forum/#!forum/skinny-framework
 Skinny-ORM is very powerful, so you don't need to write much code. Your first model class and companion are here.
 
 ```java
+import skinny._
+import skinny.orm._
+import scalikejdbc._, SQLInterpolation._
+import org.joda.time._
+
 case class Member(id: Long, name: String, createdAt: DateTime)
 
 object Member extends SkinnyCRUDMapper[Member] {
@@ -95,6 +100,11 @@ val members: List[Member] = Member.findAllBy(
 val members: List[Member] = Member.where(
   'groupName -> "scalajp", 'deleted -> false).apply()
 
+// use Pagination instead. Easier to understand than limit/offset
+val members = Member.where(sqls.eq(m.groupId, 123))
+  .paginate(Pagination.page(1).per(20))
+  .orderBy(m.id.desc).apply()
+
 // ------------
 // count
 
@@ -125,6 +135,9 @@ val id = Member.createWithPermittedAttributes(params.permit("name" -> ParamType.
 // ------------
 // create with unsafe parameters
 
+val m = Member.defaultAlias
+val id = Member.createWithNamedValues(m.name -> "Alice")
+
 Member.createWithAttributes(
   'id -> 123,
   'name -> "Chris",
@@ -133,6 +146,7 @@ Member.createWithAttributes(
 
 // ------------
 // update with strong parameters
+
 Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType.String))
 
 // ------------

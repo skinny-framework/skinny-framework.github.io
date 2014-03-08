@@ -175,22 +175,22 @@ object MembersController extends SkinnyResource {
   override def resourceName = "member"
 
   // parameters & validations for creation
+  override def createParams = Params(params).withDate("birthday")
   override def createForm = validation(createParams,
     paramKey("name") is required & maxLength(512),
     paramKey("birthday") is required & dateFormat
   )
-  override def createParams = Params(params).withDate("birthday")
   override def createFormStrongParameters = Seq(
     "name" -> ParamType.String,
     "birthday" -> ParamType.LocalDate
   )
 
   // parameters & validations for modification
+  override def updateParams = Params(params).withDate("birthday")
   override def updateForm = validation(updateParams,
     paramKey("name") is required & maxLength(512),
     paramKey("birthday") is required & dateFormat
   )
-  override def updateParams = Params(params).withDate("birthday")
   override def updateFormStrongParameters = Seq(
     "name" -> ParamType.String,
     "birthday" -> ParamType.LocalDate
@@ -218,14 +218,24 @@ In this case, SkinnyResource provides the following URLs by default.
 - GET /members.json
 - GET /members/new
 - POST /members
+- POST /members.xml
+- POST /members.json
 - POST /members/
 - GET /members/{id}
 - GET /members/{id}.xml
 - GET /members/{id}.json
 - GET /members/{id}/edit
+- POST /members/{id}.xml
+- POST /members/{id}.json
 - POST /members/{id}
+- PUT /members/{id}.xml
+- PUT /members/{id}.json
 - PUT /members/{id}
+- PATCH /members/{id}.xml
+- PATCH /members/{id}.json
 - PATCH /members/{id}
+- DELETE /members/{id}.xml
+- DELETE /members/{id}.json
 - DELETE /members/{id}
 
 <hr/>
