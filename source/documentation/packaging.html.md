@@ -78,7 +78,7 @@ Hosting your Skinny app on Heroku is pretty simple.
 First, make sure that you have the correct DB driver for the production environment. Since you're using Heroku, most likely you are using PostgreSQL. In that case, you will need to add a dependency that looks like this.
 
 ```
-org.postgresql"          % "postgresql"          % "9.3-1100-jdbc41" 
+"org.postgresql"          % "postgresql"          % "9.3-1100-jdbc41" 
 ```
 
 <hr/>
