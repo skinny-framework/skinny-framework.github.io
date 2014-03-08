@@ -90,7 +90,7 @@ Prerequisites: we assume you have a Heroku account and the Heroku toolbelt is in
 In the root directory of your Skinny app, run the following command.
 
 ```
-$ heroku apps:create heroku [application name]
+$ heroku apps:create {app-name}
 ```
 
 <hr/>
@@ -100,10 +100,33 @@ $ heroku apps:create heroku [application name]
 Just push your app to git, and Heroku will stage and deploy it.
 
 ```
+$ git init
+$ git add . -v
+$ git commit
+$ git remote add heroku git@heroku.com:{app-name}.git
 $ git push heroku master
 ```
  
 Note that this will take a long time, as Heroku has to download the world every time it stages the app.
+
+```
+$ git push heroku master
+Initializing repository, done.
+Counting objects: 80, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (54/54), done.
+Writing objects: 100% (80/80), 973.96 KiB | 223.00 KiB/s, done.
+Total 80 (delta 1), reused 0 (delta 0)
+
+-----> Scala app detected
+-----> Installing OpenJDK 1.7...done
+-----> Downloading SBT...done
+-----> Running: sbt compile stage
+       Getting org.scala-sbt sbt 0.13.0 ...
+       downloading http://s3pository.heroku.com/ivy-typesafe-releases/org.scala-sbt/sbt/0.13.0/jars/sbt.jar ...
+        [SUCCESSFUL ] org.scala-sbt#sbt;0.13.0!sbt.jar (511ms)
+
+```
 
 When the deployment completes, your app should be available to view in a web browser.
 
