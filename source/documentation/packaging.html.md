@@ -69,4 +69,62 @@ You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-fram
 
 This value is only for stand alone apps. Default value is 8080. You can customize the port number on which the stand alone app server listens.
 
+<hr/>
+### Deployment on Heroku
+<hr/>
 
+Hosting your Skinny app on Heroku is pretty simple.
+
+First, make sure that you have the correct DB driver for the production environment. Since you're using Heroku, most likely you are using PostgreSQL. In that case, you will need to add a dependency that looks like this.
+
+```
+org.postgresql"          % "postgresql"          % "9.3-1100-jdbc41" 
+```
+
+<hr/>
+#### Setting up a Heroku app
+<hr/>
+
+Prerequisites: we assume you have a Heroku account and the Heroku toolbelt is installed. See the [Heroku documentation](https://devcenter.heroku.com/articles/quickstart) for more details on getting started with Heroku.
+
+In the root directory of your Skinny app, run the following command.
+
+```
+$ heroku apps:create heroku [application name]
+```
+
+<hr/>
+#### Deploying
+<hr/>
+
+Just push your app to git, and Heroku will stage and deploy it.
+
+```
+$ git push heroku master
+```
+ 
+Note that this will take a long time, as Heroku has to download the world every time it stages the app.
+
+When the deployment completes, your app should be available to view in a web browser.
+
+<hr/>
+#### Running skinny commands
+<hr/>
+
+From the root directory of your Skinny app, execute the `heroku run` command.
+
+```
+$ heroku run heroku/skinny [args...]
+```
+
+For example, to perform a DB migration, you would run
+
+```
+$ heroku run heroku/skinny db:migrate production
+```
+
+<hr/>
+#### Troubleshooting
+<hr/>
+
+If you have a file called `package.json` in the root directory, Heroku will get confused and try to deploy your app as a Node.js server. As a workaround, just delete or rename the `package.json` file.
