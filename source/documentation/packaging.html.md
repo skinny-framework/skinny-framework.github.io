@@ -56,10 +56,13 @@ java -jar -Dskinny.port=9000 -Dskinny.env=production \
 The following options are available to configure your Skinny applications. You can pass the following values from environment variables or system properties.
 
 <hr/>
-#### skinny.env or SKINNY_ENV
+#### skinny.env or app.env or SKINNY_ENV or APP_ENV
 <hr/>
 
-Default value is "development". If skinny.env is "production", application load the "production" settings from "src/main/resources/application.conf".
+Default value is "development". If `skinny.env` system property is "production", application load the "production" settings from "src/main/resources/application.conf".
+
+- sys.props.get("skinny.env") or sys.props.get("app.env")
+- sys.env.get("SKINNY_ENV") or sys.env.get("APP_ENV")
 
 You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/SkinnyEnv.scala) in application.
 
