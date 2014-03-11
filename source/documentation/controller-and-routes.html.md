@@ -361,6 +361,7 @@ trait TxPerRequestFilter extends SkinnyFilter with Logging {
     db.begin()
   }
 
+  // will handle exceptions occurred in controllers
   addErrorFilter { case e: Throwable =>
     Option(ThreadLocalDB.load()).foreach { db =>
       if (db != null && !db.isTxNotActive) using(db)(_.rollbackIfActive())
@@ -548,7 +549,7 @@ create table servlet_sessions (
 create table skinny_session_attributes (
   skinny_session_id bigint not null,
   attribute_name varchar(128) not null,
-  attribute_value varbinary(10485760),
+  attribute_value bytea,
   foreign key(skinny_session_id) references skinny_sessions(id)
 );
 alter table skinny_session_attributes add constraint
