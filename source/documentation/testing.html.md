@@ -37,10 +37,14 @@ If you need a code coverage report, use `scoverage:test` instead.
 https://github.com/scoverage/sbt-scoverage
 
 ```
-./skinny scoverage:test
+./skinny test:coverage
 ```
 
 WARNING: There is a known issue that scoverage doesn't work perfectly with Skinny ORM.
+
+Now we're working on this issue with Scoverage team.
+
+https://github.com/skinny-framework/skinny-framework/issues/97
 
 
 <hr/>
