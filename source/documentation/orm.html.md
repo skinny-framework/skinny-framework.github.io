@@ -420,9 +420,8 @@ object Member extends SkinnyCRUDMapper[Member] {
     // eager loading operation for this one-to-one relation
     .includes[Company](
       merge = (members, companies) => members.map { m =>
-        companies.find { c => m.company
-          .exists(_.id == c.id))
-          .map(v => m.copy(company = Some(v)))
+        companies.find(c => m.company.exists(_.id == c.id))
+          .map(c => m.copy(company = Some(c)))
           .getOrElse(m)
       })
   }
