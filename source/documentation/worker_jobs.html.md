@@ -23,7 +23,7 @@ class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) { 
 
     val worker = new SkinnyWorker {
-      def exceute = {
+      def execute = {
         println("Hello World!")
       }
     }
