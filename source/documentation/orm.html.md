@@ -741,3 +741,65 @@ An easy-to-use fixture tool named FactoryGirl makes testing easy.
 
 See in detail here: [FactoryGirl](factory-girl.html)
 
+<hr/>
+## FAQ
+
+<hr/>
+### UnexpectedNullValueException
+
+If you see the following exception, your application code using Skinny ORM has a bug. This is not a framework bug.
+
+```
+Caused by: scalikejdbc.UnexpectedNullValueException: null
+  at scalikejdbc.TypeBinder$.scalikejdbc$TypeBinder$$throwExceptionIfNull(TypeBinder.scala:140) ~[scalikejdbc_2.10-1.7.4.jar:1.7.4]
+  at scalikejdbc.TypeBinder$$anonfun$38.apply(TypeBinder.scala:82) ~[scalikejdbc_2.10-1.7.4.jar:1.7.4]
+  at scalikejdbc.TypeBinder$$anonfun$38.apply(TypeBinder.scala:82) ~[scalikejdbc_2.10-1.7.4.jar:1.7.4]
+...
+```
+
+#### Typical Example
+
+Typically, the following code will throw UnexpectedNullValueException when the `groupId` is null.
+
+```
+create table member (
+  id serial primary key,
+  name varchar(256) not null,
+  groupId integer
+  created_at timestamp not null
+  updated_at timestamp not null
+);
+```
+
+```java
+case class Member(
+  id: Long,
+  name: String,
+  groupId: Int,
+  createdAt: DateTime,
+  updatedAT: DateTime)
+
+object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
+  override def defaultAlias = createAlias("m")
+
+  override def extract(rs: WrappedResultSet, n: ResultName[Member]) = new Member(
+    id = rs.long(n.id), 
+    name = rs.string(n.name),
+    groupId = rs.int(n.groupId), // nullable but scala.Int is not nullable!!!
+    createdAt = rs.dateTime(n.name),
+    updatedAt = rs.dateTime(n.name),
+  )
+}
+```
+
+You must update `Member` class as follows:
+
+```java
+case class Member(
+  id: Long,
+  name: String,
+  //groupId: Int,
+  groupId: Option[Int],
+  createdAt: DateTime,
+  updatedAT: DateTime)
+```

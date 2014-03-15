@@ -94,10 +94,11 @@ After preparing the Scalatra app, just add the following dependency to your `pro
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-assets"    % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-framework" % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-task"      % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-test"      % "<%= @skinny_version %>" % "test"
+  "org.skinny-framework" %% "skinny-assets"       % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-framework"    % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-task"         % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-test"         % "<%= @skinny_version %>" % "test",
+  "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny_version %>" % "test"
 )
 ```
 
@@ -105,10 +106,11 @@ If you need only Skinny-ORM or Skinny-Validator, you can use only what you need.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-orm"        % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-mailer"     % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-standalone" % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-validator"  % "<%= @skinny_version %>"
+  "org.skinny-framework" %% "skinny-orm"          % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-mailer"       % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-standalone"   % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-validator"    % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny_version %>" % "test"
 )
 ```
 
