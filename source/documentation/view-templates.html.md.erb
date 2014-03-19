@@ -85,6 +85,16 @@ Scaffolding will be the easiest way to understand. Try it now!
 ./skinny run
 ```
 
+`./skinny run` evaluates Scalate templates on runtime and that makes your Skinny app developmeent so interactive. 
+
+When you edit a template file a little, just reload the page without waiting for Scala code compilation and Jetty restart due to Scala compilation detection.
+
+However, in some cases, error messages may be difficult to investigate the reason or page response may be slow when it's the first request to the page. If you'd like to use Scalate precompilation in development, just append `-precompile` option as follows.
+
+```sh
+./skinny run -precompile
+```
+
 For instance, if you use Jade instead, the above code will look like this. Scaml is very similar.
 
 ```
