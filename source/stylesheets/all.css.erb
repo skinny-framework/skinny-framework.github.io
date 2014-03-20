@@ -1,5 +1,4 @@
 body {
-  background-color: #6E6E6E;
   padding-top: 20px;
 }
 .content {
@@ -12,7 +11,7 @@ body {
 <%= Rouge::Themes::ThankfulEyes.render(:scope => '.highlight') %>
 
 code {
-  color: #61380B;
+  color: #DF3A01;
 }
 
 /* move special fonts to HTML head for better performance */
@@ -138,5 +137,13 @@ small.text-muted {
   font-family:courier,courier-new,monospace;
 }
 
-
+.subtitle {
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
 
