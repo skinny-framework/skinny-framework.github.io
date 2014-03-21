@@ -165,15 +165,3 @@ The following tree shows the directories and files in skinny-blank-app project. 
                 └── TaskRunner.scala # if you add new tasks, modify this 
 ```
 
-<hr/>
-### Tips for Developers
-
-<hr/>
-#### Avoiding sbt's frequent OOMError 
-
-Skinny Framework uses xsbt-web-plugin. `skinny run` with sbt plugin invokes Jetty and detects source code changes and re-compiles and restarts Jetty server. Eventually, you will see OutOfMemoryError (PermGen) after refreshing several times. To reduce this pain, specify sbt options like this:
-
-```
-SBT_OPTS="-XX:+CMSClassUnloadingEnabled -Xmx2048M -XX:MaxPermSize=512M"
-```
-
