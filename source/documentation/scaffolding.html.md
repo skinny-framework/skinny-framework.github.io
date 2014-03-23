@@ -60,8 +60,9 @@ $ ./skinny g scaffold:jade projectMembers projectMember name:String "nickname:Op
 
   "src/main/scala/controller/ApplicationController.scala" skipped.
   "src/main/scala/controller/ProjectMembersController.scala" created.
-  "src/main/scala/ScalatraBootstrap.scala" modified.
+  "src/main/scala/controller/Controllers.scala" modified.
   "src/test/scala/controller/ProjectMembersControllerSpec.scala" created.
+  "src/test/scala/integrationtest/ProjectMembersController_IntegrationTestSpec.scala" created.
   "src/test/resources/factories.conf" modified.
   "src/main/scala/model/ProjectMember.scala" created.
   "src/test/scala/model/ProjectMemberSpec.scala" created.
@@ -71,7 +72,7 @@ $ ./skinny g scaffold:jade projectMembers projectMember name:String "nickname:Op
   "src/main/webapp/WEB-INF/views/projectMembers/index.html.jade" created.
   "src/main/webapp/WEB-INF/views/projectMembers/show.html.jade" created.
   "src/main/resources/messages.conf" modified.
-  "src/main/resources/db/migration/V20140302005853__Create_projectMembers_table.sql" created.
+  "src/main/resources/db/migration/V20140324003741__Create_projectMembers_table.sql" created.
 
 [success] Total time: 1 s, completed Mar 2, 2014 12:58:53 AM
 ```
@@ -87,8 +88,9 @@ $ ./skinny g scaffold:jade admin.foo members member name:String
 
   "src/main/scala/controller/ApplicationController.scala" skipped.
   "src/main/scala/controller/admin/foo/MembersController.scala" created.
-  "src/main/scala/ScalatraBootstrap.scala" modified.
+  "src/main/scala/controller/Controllers.scala" modified.
   "src/test/scala/controller/admin/foo/MembersControllerSpec.scala" created.
+  "src/test/scala/integrationtest/admin/foo/MembersController_IntegrationTestSpec.scala" created.
   "src/test/resources/factories.conf" modified.
   "src/main/scala/model/admin/foo/Member.scala" created.
   "src/test/scala/model/admin/foo/MemberSpec.scala" created.
@@ -98,7 +100,7 @@ $ ./skinny g scaffold:jade admin.foo members member name:String
   "src/main/webapp/WEB-INF/views/admin/foo/members/index.html.jade" created.
   "src/main/webapp/WEB-INF/views/admin/foo/members/show.html.jade" created.
   "src/main/resources/messages.conf" modified.
-  "src/main/resources/db/migration/V20140307003617__Create_members_table.sql" created.
+  "src/main/resources/db/migration/V20140324003819__Create_members_table.sql" created.
 
 [success] Total time: 2 s, completed Mar 7, 2014 12:36:17 AM
 ```
@@ -214,8 +216,9 @@ $ ./skinny g reverse-scaffold:scaml project_members projectMembers projectMember
 
   "src/main/scala/controller/ApplicationController.scala" skipped.
   "src/main/scala/controller/ProjectMembersController.scala" created.
-  "src/main/scala/ScalatraBootstrap.scala" modified.
+  "src/main/scala/controller/Controllers.scala" modified.
   "src/test/scala/controller/ProjectMembersControllerSpec.scala" created.
+  "src/test/scala/integrationtest/ProjectMembersController_IntegrationTestSpec.scala" created.
   "src/test/resources/factories.conf" modified.
   "src/main/scala/model/ProjectMember.scala" created.
   "src/test/scala/model/ProjectMemberSpec.scala" created.
