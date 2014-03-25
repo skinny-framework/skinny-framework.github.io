@@ -91,77 +91,91 @@ The following tree shows the directories and files in skinny-blank-app project. 
 
 ```sh
 .
+├── Procfile # for Heroku deployment
 ├── README.md
 ├── bin
 │   └── sbt-launch.jar # global sbt script in PATH is given priority over this
-├── build              # packaging war file uses this directory
 ├── build.sbt
+├── heroku # for Heroku deployment
+│   ├── common.sh
+│   ├── run
+│   ├── skinny
+│   └── stage
 ├── project
 │   ├── Build.scala
 │   ├── build.properties
 │   └── plugins.sbt
-├── sbt        # global sbt script in PATH is given priority over this
-├── sbt.bat    # global sbt script in PATH is given priority over this
-├── skinny     # skinny command for Mac/Linux users
-├── skinny.bat # skinny command for Windows users
+├── sbt      # Skinny uses this sbt command
+├── sbt.bat  # Skinny uses this sbt command
+├── skinny     # skinny command for Mac OS X, Linux
+├── skinny.bat # skinny command for Windows
 ├── src
 │   ├── main
 │   │   ├── resources
-│   │   │   ├── application.conf # app configuration
-│   │   │   ├── logback.xml      # logging configuration
-│   │   │   └── messages.conf    # error messages, i18n
+│   │   │   ├── application.conf
+│   │   │   ├── logback.xml
+│   │   │   └── messages.conf
 │   │   ├── scala
-│   │   │   ├── ScalatraBootstrap.scala   # should be here and should be this name for Scalatra
-│   │   │   ├── controller                # this package can be changed
+│   │   │   ├── ScalatraBootstrap.scala # Scalatra convention
+│   │   │   ├── controller
 │   │   │   │   ├── ApplicationController.scala
-│   │   │   │   ├── Controllers.scala     # a preferred way to collect controllers with routes
+│   │   │   │   ├── Controllers.scala
 │   │   │   │   └── RootController.scala
-│   │   │   ├── lib   # same as Rails's lib directory
-│   │   │   ├── model # Skinny ORM models or other models
+│   │   │   ├── lib
+│   │   │   ├── model
+│   │   │   │   └── package.scala
 │   │   │   └── templates
-│   │   │       └── ScalatePackage.scala # should be here and should this name for Scalate
+│   │   │       └── ScalatePackage.scala # Scalate convention
 │   │   └── webapp
-│   │       ├── WEB-INF
-│   │       │   ├── assets
-│   │       │   │   ├── coffee
-│   │       │   │   jsx
-│   │       │   │   less
-│   │       │   │   scss
-│   │       │   ├── layouts
-│   │       │   │   └── default.jade # layout file (ssp, scaml and mustache are also OK)
-│   │       │   ├── views
-│   │       │   │   ├── error
-│   │       │   │   │   ├── 403.html.jade
-│   │       │   │   │   ├── 403.html.scaml
-│   │       │   │   │   ├── 403.html.ssp
-│   │       │   │   │   ├── 404.html.jade
-│   │       │   │   │   ├── 404.html.scaml
-│   │       │   │   │   ├── 404.html.ssp
-│   │       │   │   │   ├── 406.html.jade
-│   │       │   │   │   ├── 406.html.scaml
-│   │       │   │   │   ├── 406.html.ssp
-│   │       │   │   │   ├── 500.html.jade
-│   │       │   │   │   ├── 500.html.scaml
-│   │       │   │   │   ├── 500.html.ssp
-│   │       │   │   │   ├── 503.html.jade
-│   │       │   │   │   ├── 503.html.scaml
-│   │       │   │   │   └── 503.html.ssp
-│   │       │   │   └── root
-│   │       │   │       └── index.html.ssp # render("/root/index") expects this file
-│   │       │   └── web.xml
-│   │       └── assets
-│   │           └── js
+│   │       └── WEB-INF
+│   │           ├── assets
+│   │           │   ├── build.sbt
+│   │           │   ├── coffee # Put coffee scripts here
+│   │           │   ├── jsx    # Put React JSX templates here
+│   │           │   ├── less   # Put LESS files here
+│   │           │   ├── scala  # Put Scala.js code here
+│   │           │   └── scss   # Put sass/scss files here
+│   │           ├── layouts
+│   │           │   └── default.ssp # layout template
+│   │           ├── views
+│   │           │   ├── error
+│   │           │   │   ├── 403.html.jade
+│   │           │   │   ├── 403.html.mustache
+│   │           │   │   ├── 403.html.scaml
+│   │           │   │   ├── 403.html.ssp
+│   │           │   │   ├── 404.html.jade
+│   │           │   │   ├── 404.html.mustache
+│   │           │   │   ├── 404.html.scaml
+│   │           │   │   ├── 404.html.ssp
+│   │           │   │   ├── 406.html.jade
+│   │           │   │   ├── 406.html.mustache
+│   │           │   │   ├── 406.html.scaml
+│   │           │   │   ├── 406.html.ssp
+│   │           │   │   ├── 500.html.jade
+│   │           │   │   ├── 500.html.mustache
+│   │           │   │   ├── 500.html.scaml
+│   │           │   │   ├── 500.html.ssp
+│   │           │   │   ├── 503.html.jade
+│   │           │   │   ├── 503.html.mustache
+│   │           │   │   ├── 503.html.scaml
+│   │           │   │   └── 503.html.ssp
+│   │           │   └── root
+│   │           │       └── index.html.ssp # default top page
+│   │           └── web.xml # because this is on the Servlet
 │   └── test
 │       ├── resources
-│       │   ├── factories.conf # FactoryGirl's configuration
-│       │   └── logback.xml    # logging in Test
+│       │   ├── factories.conf # for FactoryGirl
+│       │   └── logback.xml
 │       └── scala
-│           └── controller
-│               └── RootControllerSpec.scala
+│           ├── controller
+│           │   └── RootControllerSpec.scala # testing with MockController
+│           └── integrationtest
+│               └── RootController_IntegrationTestSpec.scala # testing with embedded Jetty (scalatra-test)
+├── system.properties # for Heroku deployment
 └── task
     └── src
         └── main
             └── scala
-                └── TaskRunner.scala # if you add new tasks, modify this 
+                └── TaskRunner.scala # when you add new tasks, modify this code
 ```
 
