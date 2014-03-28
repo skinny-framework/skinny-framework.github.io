@@ -45,7 +45,7 @@ java -jar standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.
 You can pass configuration via system properties. Otherwise, it's also possible to use environment variables.
 
 ```
-java -jar -Dskinny.port=9000 -Dskinny.env=production \
+java -jar -Dskinny.port=9000 -Dskinny.env=production -Dskinny.prefix=/foo/ \
   standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
 ```
 
@@ -71,6 +71,12 @@ You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-fram
 <hr/>
 
 This value is only for stand alone apps. Default value is 8080. You can customize the port number on which the stand alone app server listens.
+
+<hr/>
+#### skinny.prefix or SKINNY_PREFIX
+<hr/>
+
+This value is only for stand alone apps. Default value is "/". You can customize the context path for the servlet app.
 
 <hr/>
 ### Deployment on Heroku
