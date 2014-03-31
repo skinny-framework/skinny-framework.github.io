@@ -139,7 +139,7 @@ class MyController extends SkinnyController {
 
     get("/bar") {
         // Alternatively, you can pass the layout as a template attribute like this
-        render("bar", "layout" -> "/WEB-INF/layouts/custom")
+        render("bar", "layout" -> "/WEB-INF/layouts/custom.ssp")
     }
 
 }
