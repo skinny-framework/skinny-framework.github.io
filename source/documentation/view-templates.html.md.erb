@@ -119,6 +119,31 @@ table(class="table table-bordered")
         a(data-method="delete" data-confirm="Are you sure?" href={s"/members/${member.id}"} class="btn btn-danger") Delete
 ```
 
+<hr/>
+#### Layouts
+<hr/>
+
+To avoid unnecessary repetition and ease maintenance, you may want to extract common parts of your Scalate templates into 'layouts'. See the [Scalate documentation](http://scalate.fusesource.org/documentation/user-guide.html#layouts) for more details.
+
+If you do not specify which layout to use, Skinny will look for a 'default' layout at `WEB-INF/layouts/default.{extension}`. (Note that the layout does not necessarily have to use the same template language as the template.)
+
+If you want to use a custom layout for a particular action, use the `layout` method in your controller:
+
+```
+class MyController extends SkinnyController {
+
+    get("/foo") {
+        layout("custom.ssp")
+        render("foo") // Renders WEB-INF/views/foo.html.ssp using layout WEB-INF/layouts/custom.ssp
+    }
+
+    get("/bar") {
+        // Alternatively, you can pass the layout as a template attribute like this
+        render("bar", "layout" -> "/WEB-INF/layouts/custom")
+    }
+
+}
+```
 
 <hr/>
 ### FreeMarker
@@ -181,5 +206,4 @@ class MembersController extends SkinnyController
 ```
 
 And then, use `src/main/webapp/WEB-INF/views/members/index.html` instead.
-
 
