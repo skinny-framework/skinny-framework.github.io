@@ -113,7 +113,7 @@ In views:
 
 ```
 // Jade example
-a(href={url(Controllers.members.showUrl, "id" -> member.id.toString)}) Show detail
+a(href={s.url(Controllers.members.showUrl, "id" -> member.id)}) Show detail
 
 ```
 

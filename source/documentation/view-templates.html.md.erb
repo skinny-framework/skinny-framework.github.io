@@ -28,6 +28,7 @@ class MembersController extends SkinnyController {
 The render method expects that `src/main/webapp/WEB-INF/views/members/index.html.ssp` exists.
 
 ```
+<%%@val s: skinny.Skinny %>
 <%%@val members: Seq[model.Member] %>
 <h3>Members</h3>
 <hr/>
@@ -46,10 +47,10 @@ The render method expects that `src/main/webapp/WEB-INF/views/members/index.html
     <td>${member.name}</td>
     <td>
       <!-- Using Scalatra reverse routes is recommended -->
-      <a href="${url(MembersController.editUrl, "id" -> member.id.toString)}" 
+      <a href="${s.url(MembersController.editUrl, "id" -> member.id)}" 
          class="btn btn-info">Edit</a>
       <a data-method="delete" data-confirm="Are you sure?" 
-         href="${url(MembersControlller.deleteUrl, "id" -> member.id.toString)}" 
+         href="${s.url(MembersControlller.deleteUrl, "id" -> member.id)}" 
          class="btn btn-danger">Delete</a>
 
       <!-- Primitive HTML coding is also possible -->
@@ -98,6 +99,7 @@ However, in some cases, error messages may be difficult to investigate the reaso
 For instance, if you use Jade instead, the above code will look like this. Scaml is very similar.
 
 ```
+-@val s: skinny.Skinny
 -@val members: Seq[model.Member] 
 h3 Members
 hr
@@ -113,8 +115,8 @@ table(class="table table-bordered")
       td #{member.id}
       td #{member.name}
       td
-        a(href={url(MembersController.editUrl, "id" -> member.id.toString)} class="btn btn-info") Edit
-        a(data-method="delete" data-confirm="Are you sure?" href={url(MembersControlller.deleteUrl, "id" -> member.id.toString)} class="btn btn-danger") Delete
+        a(href={s.url(MembersController.editUrl, "id" -> member.id)} class="btn btn-info") Edit
+        a(data-method="delete" data-confirm="Are you sure?" href={s.url(MembersControlller.deleteUrl, "id" -> member.id)} class="btn btn-danger") Delete
         a(href={s"/members/${member.id}/edit"} class="btn btn-info") Edit
         a(data-method="delete" data-confirm="Are you sure?" href={s"/members/${member.id}"} class="btn btn-danger") Delete
 ```
