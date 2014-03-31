@@ -134,16 +134,10 @@ If you want to use a custom layout for a particular action, use the `layout` met
 ```
 class MyController extends SkinnyController {
 
-    get("/foo") {
-        layout("custom.ssp")
-        render("foo") // Renders WEB-INF/views/foo.html.ssp using layout WEB-INF/layouts/custom.ssp
-    }
-
-    get("/bar") {
-        // Alternatively, you can pass the layout as a template attribute like this
-        render("bar", "layout" -> "/WEB-INF/layouts/custom.ssp")
-    }
-
+  def foo = {
+    layout("custom.ssp")
+    render("foo") // Renders WEB-INF/views/foo.html.ssp using layout WEB-INF/layouts/custom.ssp
+  }
 }
 ```
 
