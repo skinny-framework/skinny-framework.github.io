@@ -10,6 +10,12 @@ title: Scaffolding - Skinny Framework
 
 Skinny has a powerful scaffold generator. Usage is very simple.
 
+<p class="alert alert-warning">
+<b>WARNING:</b> If you're going try with "users", use "accounts" or "members" instead. 
+<br/>
+"users" also exists in H2 information_schema. This may become a pitfall if you aren't conscious.
+</p>
+
 ```
 ./skinny g scaffold members member name:String "nickname:String:varchar(64)" birthday:Option[LocalDate]
 ./skinny db:migrate
