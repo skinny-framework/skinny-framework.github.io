@@ -45,7 +45,6 @@ https://groups.google.com/forum/#!forum/skinny-framework
 Skinny-ORM is very powerful, so you don't need to write much code. Your first model class and companion are here.
 
 ```java
-import skinny._
 import skinny.orm._
 import scalikejdbc._, SQLInterpolation._
 import org.joda.time._
