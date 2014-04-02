@@ -256,7 +256,7 @@ http://guides.rubyonrails.org/association_basics.html#the-has-one-association
 We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
 ```java
-case class Name(first: String, last: String)
+case class Name(first: String, last: String, memberId: Long)
 case class Member(id: Long, name: Option[Name] = None)
 
 object Member extends SkinnyCRUDMapper[Member] {
