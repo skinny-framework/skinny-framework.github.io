@@ -265,7 +265,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 
   val name = hasOne[Name](
     right = Name, 
-    merge = (member, name) => m.copy(name = name)
+    merge = (member, name) => member.copy(name = name)
   ).byDefault
 }
 ```
