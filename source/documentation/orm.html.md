@@ -217,7 +217,7 @@ object Member extends SkinnyCRUDMapper[Member] {
  
   // when you cannot use defaultAlias, use this instead
   val mentorAlais = createAlias("mentor")
-  val mentor = belongToWithAlias(
+  val mentor = belongsToWithAlias(
     // in this case, "mentor" alias will be used in join query
     right = Member -> mentorAlias,
     merge = (member, mentor) => member.copy(mentor = mentor))
