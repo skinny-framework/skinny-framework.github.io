@@ -17,6 +17,7 @@ Skinny has a powerful scaffold generator. Usage is very simple.
 </p>
 
 ```
+# If you're a zsh user, try "noglob ./skinny g scaffold ..."
 ./skinny g scaffold members member name:String "nickname:String:varchar(64)" birthday:Option[LocalDate]
 ./skinny db:migrate
 ./skinny run

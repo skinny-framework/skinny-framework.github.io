@@ -34,6 +34,7 @@ Let's create our first Skinny app by using the scaffold generator.
 </small>
 
 ```sh
+# If you're a zsh user, try "noglob ./skinny g scaffold ..."
 ./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]
 ./skinny db:migrate
 ./skinny run
@@ -69,6 +70,15 @@ Finally, let's create a war file to deploy.
 ```sh
 ./skinny package
 ```
+
+<hr/>
+### Simple Example
+<hr/>
+
+You can see a simple example application here.
+
+https://github.com/skinny-framework/skinny-framework-example
+
 
 <hr/>
 ### Yeoman generator
