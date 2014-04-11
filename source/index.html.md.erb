@@ -51,6 +51,8 @@ Let's create our first Skinny app by using the scaffold generator.
 # If you're a zsh user, try "noglob ./skinny g scaffold ..."
 ./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]
 ./skinny db:migrate
+
+# When you use IDE's debugger, use "./skinny debug" instead. (default JDWP port is 5005)
 ./skinny run
 ```
 
@@ -293,7 +295,7 @@ See in detail: [View Templates](documentation/view-templates.html)
 SkinnyMailer makes sending emails pretty easy.
 
 ```java
-val config = SkinnyMailerConfig.default.copy(
+val config = SkinnyMailerConfigdefault.copy(
   debug = true
 )
 val mailer = SkinnyMailer(config)
