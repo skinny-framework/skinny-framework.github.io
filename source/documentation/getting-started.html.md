@@ -5,14 +5,14 @@ title: Getting Started - Skinny Framework
 ## Getting Started
 
 <hr/>
-### Downloading skinny-blank-app.zip
+### Downloading skinny-blank-app(-with-deps).zip
 <hr/>
 
 We highly recommend using skinny-blank-app for your first Skinny app.
 
 [github.com/skinny-framework/skinny-framework/releases](https://github.com/skinny-framework/skinny-framework/releases)
 
-Download latest `skinny-blank-app.zip` and unzip it, then just run ./skinny command on your terminal. That's all!
+Download latest `skinny-blank-app(-with-deps).zip` and unzip it, then just run ./skinny command on your terminal. That's all!
 
 If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 
