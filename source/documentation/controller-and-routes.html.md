@@ -588,8 +588,16 @@ val stream: InputStream = request.inputStream // raw HTTP POST data
 #### File Upload
 <hr/>
 
+<div class="alert alert-warning small">
+<b>WARNING:</b> Extend not SkinnyController but SkinnyServlet. You cannot use FileUploadFeature with SkinnyController.
+</div>
+
 ```java
-class FilesController extends SkinnyController with FileUploadSupport {
+import skinny.SkinnyServlet
+import skinny.controller.feature.FileUploadFeature
+
+// SkinnySerlvet!!!
+class FilesController extends SkinnyServlet with FileUploadFeature {
 
   def upload = fileParams.get("file") match {
     case Some(file) =>
