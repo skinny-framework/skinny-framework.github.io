@@ -41,13 +41,17 @@ https://github.com/skinny-framework/skinny-framework/tree/develop/orm/src/test/s
 ```java
 package model
 
+import skinny._
 import skinny.test._
 import org.scalatest.fixture.FunSpec
 import scalikejdbc._, SQLInterpolation._
 import scalikejdbc.scalatest._
 import org.joda.time._
+import org.scalatest._
+import org.scalatest.matchers.ShouldMatchers
 
-class MemberSpec extends FunSpec with AutoRollback {
+
+class MemberSpec extends FunSpec with AutoRollback with ShouldMatchers with DBSettings {
 
   override def fixture(implicit session: DBSession) {
     // do fixtures stuff
@@ -78,9 +82,10 @@ class RootController extends ApplicationController {
 
 import org.scalatest._
 import org.scalatest.matchers.ShouldMatchers
+import skinny.DBSettings
 import skinny.test.MockController
 
-class RootControllerSpec extends FunSpec with ShouldMatchers {
+class RootControllerSpec extends FunSpec with ShouldMatchers with DBSettings {
 
   describe("RootController") {
     it("shows top page") {
@@ -117,10 +122,13 @@ Below is an integration test example with scalatra-test.
 package integrationtest
 
 import org.scalatra.test.scalatest._
+import skinny.DBSettings 
 import skinny.test.SkinnyTestSupport
 import _root_.controller.Controllers
+import org.scalatest._
+import org.scalatest.matchers.ShouldMatchers
 
-class IntegrationTestSpec extends ScalatraFlatSpec with SkinnyTestSupport {
+class IntegrationTestSpec extends ScalatraFlatSpec with ShouldMatchers with SkinnyTestSupport with  DBSettings {
   addFilter(Controllers.members, "/*")
 
   it should "show index page" in {
