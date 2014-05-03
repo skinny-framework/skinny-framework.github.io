@@ -176,7 +176,7 @@ object Controllers {
   }
 }
 // src/main/scala/ScalatraBootstrap.scala
-class ScalatraBootstrap exntends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     Controllers.members.mount(ctx)
   }
@@ -359,7 +359,7 @@ And then, add `AssetsController` to routes. Now you can easily use CoffeeScript,
 
 ```java
 // src/main/scala/ScalatraBootstrap.scala
-class ScalatraBootstrap exntends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     AssetsController.mount(ctx)
   }
