@@ -23,7 +23,7 @@ libraryDependencies ++= Seq(
 
 And then, add `AssetsController` to routes. Now you can easily use CoffeeScript, LESS and Sass.
 
-```java
+```scala
 // src/main/scala/ScalatraBootstrap.scala
 class ScalatraBootstrap exntends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
@@ -181,7 +181,7 @@ If you need other script support, you can add compilers to AssetsController.
 
 AssetsController: [assets/src/main/scala/skinny/controller/AssetsController.scala](https://github.com/skinny-framework/skinny-framework/blob/master/assets/src/main/scala/skinny/controller/AssetsController.scala)
 
-```java
+```scala
 object TypeScriptAssetCompiler extends AssetCompiler {
   private[this] val compiler = TypeScriptCompiler()
   def dir(basePath: String) = s"${basePath}/ts"

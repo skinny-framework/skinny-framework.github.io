@@ -44,7 +44,7 @@ https://groups.google.com/forum/#!forum/skinny-framework
 
 Skinny-ORM is very powerful, so you don't need to write much code. Your first model class and companion are here.
 
-```java
+```scala
 import skinny.orm._
 import scalikejdbc._, SQLInterpolation._
 import org.joda.time._
@@ -64,7 +64,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 
 That's all! Now you can use the following APIs.
 
-```java
+```scala
 val m = Member.defaultAlias
 
 // ------------
@@ -194,7 +194,7 @@ http://guides.rubyonrails.org/association_basics.html#the-belongs-to-association
 We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
 
-```java
+```scala
 case class Company(id: Long, name: String)
 class Member(id: Long, name: String,
   mentorId: Long, mentor: Option[Member] = None,
@@ -255,7 +255,7 @@ http://guides.rubyonrails.org/association_basics.html#the-has-one-association
 
 We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
-```java
+```scala
 case class Name(first: String, last: String, memberId: Long)
 case class Member(id: Long, name: Option[Name] = None)
 
@@ -291,7 +291,7 @@ http://guides.rubyonrails.org/association_basics.html#the-has-many-association
 
 We need to specify some types, so definitions are not as simple as ActiveRecord, but it's easy to understand and simple enough.
 
-```java
+```scala
 case class Company(id: Long, name: String, members: Seq[Member] = Nil)
 case class Member(id: Long, 
   companyId: Option[Long] = None, company: Option[Company] = None,
@@ -379,7 +379,7 @@ Basically using case classes for entities is recommended. As you know, Scala (un
 
 In this case, entities should be defined like this (Skinny 0.9.21 or ScalikeJDBC 1.7.3 is required):
 
-```java
+```scala
 class LegacyData(val id: Long, val c2: String, val c3: Int, ..., val c23: Int)
   extends scalikejdbc.EntityEquality {
   // override val entityIdentity = id
@@ -405,7 +405,7 @@ Note: eager loading of nested entities is not supported yet.
 
 Indeed, it's not incredibly simple. But we believe that what it does is so clear that you can easily write the definition.
 
-```java
+```scala
 object Member extends SkinnyCRUDMapper[Member] {
 
   // Unfortunately the combination of Scala macros and type-dynamic sometimes doesn't work as expected
@@ -431,7 +431,7 @@ Member.includes(companyOpt).findAll()
 
 Yet another example:
 
-```java
+```scala
 object Member extends SkinnyCRUDMapper[Member] {
   val skills =
     hasManyThrough[Skill](
@@ -456,7 +456,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 
 Skinny ORM provides the folllowing settings to overwrite.
 
-```java
+```scala
 object GroupMember extends SkinnyCRUDMapper[Member] {
 
   // default: 'default
@@ -520,7 +520,7 @@ object GroupMember extends SkinnyCRUDMapper[Member] {
 
 `#withTableName` enables using another table name only for the current query.
 
-```java
+```scala
 object Order extends SkinnyCRUDMapper[Order] {
   override def defaultAlias = createAlias("o")
   override def tableName = "orders"
@@ -542,7 +542,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 
 If you need to add methods, just write methods that use `#findBy`, `#countBy` or ScalikeJDBC's APIs directly.
 
-```java
+```scala
 object Member extends SkinnyCRUDMapper[Member] {
   private[this] val m = defaultAlias
 
@@ -555,7 +555,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 If you're using Skinny-ORM with Skinny Framework,
 [skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applciations.
 
-```java
+```scala
 // src/main/scala/ScalatraBootstrap.scala
 class ScalatraBootstrap exntends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
@@ -566,7 +566,7 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 
 And then your ORM models can retrieve the current DB session as a thread-local value per request, so you don't need to pass `DBSession` value as an implicit parameter in each method. 
 
-```java
+```scala
 def findAllByGroupId(groupId: Long): List[Member] = findAllBy(sqls.eq(m.groupId, groupId)
 ```
 
@@ -583,7 +583,7 @@ If your application uses a non-numerical primary key for some reason, use `****W
 
 If you need to use a complex object (e.g. `MemberId` class) as a primary key, it's also easy to implement.
 
-```java
+```scala
 case class MemberId(value: Long)
 case class Member(id: MemberId, name: String)
 
@@ -602,7 +602,7 @@ object Member extends SkinnyCRUDMapperWithId[MemberId, Member] {
 
 And your SkinnyResource will be like this:
 
-```java
+```scala
 package controller
 import skinny._
 import skinny.validator._
@@ -639,7 +639,7 @@ object CompaniesController extends SkinnyResourceWithId[CompanyId] with Applicat
 
 If you use an alternative Id generator instead of the RDB's auto-incremental value, set `useExternalIdGenerator` as true and implement the `generateId` method.
 
-```java
+```scala
 case class Member(uuid: UUID, name: String)
 
 object Member extends SkinnyCRUDMapperWithId[UUID, Member] 
@@ -674,7 +674,7 @@ Don't worry. Skinny-ORM does well at resolving associations even if you use cust
 
 By default, this trait expects two columns on the table - `created_at timestamp not null` and `updated_at timestamp`. If you need customizing, override *FieldName methods as follows.
 
-```java
+```scala
 class Member(id: Long, name: String, createdAt: DateTime, updatedAt: DateTime)
 
 object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
@@ -697,7 +697,7 @@ Soft delete support is also available.
 
 By default, `deleted_at timestamp` column or `is_deleted boolean not null` is expected.
 
-```java
+```scala
 object Member extends SkinnyCRUDMapper[Member]
   with SoftDeleteWithTimestampFeature[Member] {
 
@@ -720,7 +720,7 @@ Furthermore, optimistic lock is also available.
 
 By default, `lock_version bigint not null` or `lock_timestamp timestamp` is expected
 
-```java
+```scala
 object Member extends SkinnyCRUDMapper[Member]
   with OptimisticLockWithVersionFeature[Member]
 // lock_version bigint
@@ -770,7 +770,7 @@ create table member (
 );
 ```
 
-```java
+```scala
 case class Member(
   id: Long,
   name: String,
@@ -793,7 +793,7 @@ object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
 
 You must update `Member` class as follows:
 
-```java
+```scala
 case class Member(
   id: Long,
   name: String,

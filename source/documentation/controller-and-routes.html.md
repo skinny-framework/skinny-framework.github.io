@@ -13,7 +13,7 @@ Skinny's extensions provide you with much simpler and richer syntax. Of course, 
 
 `SkinnyController` is a trait which extends `ScalatraFilter` and includes various useful components out-of-the-box.
 
-```java
+```scala
 // src/main/scala/controller/MembersController.scala
 class MembersController extends SkinnyController {
   protectFromForgery() // CSRF protection enabled
@@ -96,7 +96,7 @@ http://www.scalatra.org/2.2/guides/http/reverse-routes.html
 
 In controllers:
 
-```java
+```scala
 class MembersController extends SkinnyController {
   def oldPage = redirect(url(Controllers.members.indexUrl))
 }
@@ -160,7 +160,7 @@ Then you get the following code. If you need to customize, override some parts o
 
 [framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
 
-```java
+```scala
 package controller
 
 import skinny._
@@ -285,7 +285,7 @@ So if you need filters that are similar to Rails filters, just use Skinny filter
 
 [/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
 
-```java
+```scala
 class MembersController extends SkinnyController with Routes {
 
   // Scalatra filters
@@ -323,7 +323,7 @@ Contrary to your expectations, Scalatra doesn't run all the handlers for after a
 
 For instance, in skinny-blank-app, ErrrorPageFilter is applied to ApplicationController. 
 
-```java
+```scala
 trait ApplicationController extends SkinnyController
   with ErrorPageFilter {
 
@@ -332,7 +332,7 @@ trait ApplicationController extends SkinnyController
 
 ErrorPageFilter is as follows. It's pretty easy to customize such a filter (e.g. adding error notification) as follows.
 
-```java
+```scala
 trait ErrorPageFilter extends SkinnyRenderingFilter {
   // appends error filter in order
   addRenderingErrorFilter {
@@ -352,7 +352,7 @@ It just outputs error logging, set status as 500 and renders "/error/500.html.ss
 
 The second example is `TxPerRequestFilter` which enables you to apply the open-session-in-view pattern to your apps.
 
-```java
+```scala
 trait TxPerRequestFilter extends SkinnyFilter with Logging {
   def cp: ConnectionPool = ConnectionPool.get()
 
@@ -396,7 +396,7 @@ Basically, you will use Scalatra's DSL.
 
 #### params
 
-```java
+```scala
 val name: Option[String] = params.get("id")
 val id: Option[Int] = params.getAs[Int]("id")
 val id: Long = params.getAsOrElse[Long]("id", -1L)
@@ -413,7 +413,7 @@ val ids: Option[Seq[Int]] = multiParams.getAs[Int]("ids")
 <hr/>
 #### multiParams("splat")
 
-```java
+```scala
 get("/say/*/to/*") {
   // Matches "GET /say/hello/to/world"
   multiParams("splat") // == Seq("hello", "world")
@@ -432,7 +432,7 @@ get("/download/*.*") {
 <hr/>
 #### multiParams("captures")
 
-```java
+```scala
 get("""^\/f(.*)/b(.*)""".r) {
   // Matches "GET /foo/bar"
   multiParams("captures") // == Seq("oo", "ar")
@@ -447,7 +447,7 @@ get("""^\/f(.*)/b(.*)""".r) {
 #### Cookies
 <hr/>
 
-```java
+```scala
 def hello = {
   cookies += "name" -> "value"
   cookies -= "name"
@@ -468,13 +468,13 @@ def helloWithOptions = {
 #### Request/Response Headers
 <hr/>
 
-```java
+```scala
 val v: Option[String] = request.header(name)
 ```
 
 [/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichRequest)
 
-```java
+```scala
 response.headers += "name" -> "value"
 response.headers -= "name"
 ```
@@ -485,7 +485,7 @@ response.headers -= "name"
 #### Session
 <hr/>
 
-```java
+```scala
 val v: Any = session("name") // or session('name)
 session += "name" -> "value"
 session -= "name"
@@ -501,7 +501,7 @@ When you enable SkinnySession, these features also start using SkinnySession ins
 
 ScalatraBootstrap.scala:
 
-```java
+```scala
 import scalikejdbc._
 import skinny.session.SkinnySessionInitializer
 class ScalatraBootstrap extends SkinnyLifeCycle {
@@ -520,7 +520,7 @@ class ScalatraBootstrap extends SkinnyLifeCycle {
 
 controller/RootController.scala:
 
-```java
+```scala
 class RootController extends ApplicationController with SkinnySessionFilter {
 
   def index = {
@@ -563,7 +563,7 @@ alter table skinny_session_attributes add constraint
 
 Notice: Flash uses servlet sessions by default. Be aware of sticky session mode.
 
-```java
+```scala
 flash(name) = value
 flash += (name -> value)
 flash.now += (name -> value)
@@ -577,7 +577,7 @@ flash.now += (name -> value)
 #### Request Body
 <hr/>
 
-```java
+```scala
 val body: String = request.body
 val stream: InputStream = request.inputStream // raw HTTP POST data
 ```
@@ -592,7 +592,7 @@ val stream: InputStream = request.inputStream // raw HTTP POST data
 <b>WARNING:</b> Extend not SkinnyController but SkinnyServlet. You cannot use FileUploadFeature with SkinnyController.
 </div>
 
-```java
+```scala
 import skinny.SkinnyServlet
 import skinny.controller.feature.FileUploadFeature
 
@@ -623,7 +623,7 @@ class FilesController extends SkinnyServlet with FileUploadFeature {
 #### Response handling
 <hr/>
 
-```java
+```scala
 halt(404)
 halt(status = 400, headers = Map("foo" -> "bar"), reason = "why")
 
@@ -649,7 +649,7 @@ Notice: Scalatra CSRF protection implementation uses servlet sessions by default
 
 Define `protectFromForgery` in controller/RootController.scala:
 
-```java
+```scala
 class RootController extends ApplicationController {
   protectFromForgery()
 

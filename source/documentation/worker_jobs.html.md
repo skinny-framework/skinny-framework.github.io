@@ -12,7 +12,7 @@ Skinny's WorkerService is a simple wrapper of Java built-in `ExecutorService` an
 
 You can access it as `skinnyWorkerService` in `ScalatraBootstrap.scala` and just call scheduling methods.
 
-```java
+```scala
 import skinny._
 import skinny.worker._
 import skinny.controller._
@@ -52,7 +52,7 @@ class ScalatraBootstrap extends SkinnyLifeCycle {
 
 And developers just implement the abstract `def execute(): Unit` method.
 
-```java
+```scala
 import skinny.worker._
 import model._
 

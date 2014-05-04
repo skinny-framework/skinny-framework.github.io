@@ -18,7 +18,7 @@ It's also available as a standalone library, so you can use skinny-mailer for an
 
 To understand how to use SkinnyMailer, try the following code on the Scala REPL (`./skinny console`)
 
-```java
+```scala
 // https://support.google.com/accounts/answer/185833
 val yourGmail = "*****@gmail.com"
 val yourPassword = "*****"

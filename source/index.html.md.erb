@@ -161,7 +161,7 @@ Skinny's routing mechanism and controller layer on MVC architecture can be thoug
 
 `SkinnyController` is a trait which extends `ScalatraFilter` and includes various useful components out-of-the-box. 
 
-```java
+```scala
 // src/main/scala/controller/MembersController.scala
 class MembersController extends SkinnyController {
   def index = {
@@ -185,7 +185,7 @@ class ScalatraBootstrap extends SkinnyLifeCycle {
 
 `SkinnyResource`, which is similar to Rails ActiveResource, is also available. It's a pretty DRY way to define RESTful resources.
 
-```java
+```scala
 object CompaniesController extends SkinnyResource {
   protectFromForgery()
 
@@ -211,7 +211,7 @@ Skinny provides you Skinny-ORM as the default O/R mapper, which is built with [S
 
 Skinny-ORM does a lot of work under the hood, so you don't need to write much code. Your first model class and companion are here.
 
-```java
+```scala
 case class Member(id: Long, name: String, createdAt: DateTime)
 
 object Member extends SkinnyCRUDMapper[Member] {
@@ -226,7 +226,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 
 That's all! Now you can use the following APIs.
 
-```java
+```scala
 // find by primary key
 val member: Option[Member] = Member.findById(123)
 val member: Option[Member] = Member.where('id -> 123).apply().headOption
@@ -280,7 +280,7 @@ Template paths should be of the form `{path}.{format}.{extension}`. Expected {fo
 
 For instance, assuming your controller code looks like this:
 
-```java
+```scala
 class MembersController extends SkinnyController {
   def index = {
     set("members", Member.findAll())
@@ -309,7 +309,7 @@ See in detail: [View Templates](documentation/view-templates.html)
 
 SkinnyMailer makes sending emails pretty easy.
 
-```java
+```scala
 val config = SkinnyMailerConfigdefault.copy(
   debug = true
 )
@@ -357,7 +357,7 @@ libraryDependencies ++= Seq(
 
 And then, add `AssetsController` to routes. Now you can easily use CoffeeScript, LESS and Sass.
 
-```java
+```scala
 // src/main/scala/ScalatraBootstrap.scala
 class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
@@ -378,7 +378,7 @@ See in detail: [Assets Support](documentation/assets.html)
 
 You can use Scalatra's great test support. Some extra optional features are provided by the skinny-test library.
 
-```java
+```scala
 class ControllerSpec extends ScalatraFlatSpec with SkinnyTestSupport {
   addFilter(MembersController, "/*")
 
@@ -398,7 +398,7 @@ See in detail: [Testing](documentation/testing.html)
 
 Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module will be quite useful when testing your apps.
 
-```java
+```scala
 case class Company(id: Long, name: String)
 object Company extends SkinnyCRUDMapper[Company] {
   def extract ...

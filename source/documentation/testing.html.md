@@ -38,7 +38,7 @@ Here is some examples:
 
 https://github.com/skinny-framework/skinny-framework/tree/develop/orm/src/test/scala/blog
 
-```java
+```scala
 package model
 
 import skinny._
@@ -73,7 +73,7 @@ NOTICE: `AllRollback` feature is supported by ScalikeJDBC. And this trait is inc
 
 Skinny provides `MockController` trait for light-weight controller tests.
 
-```java
+```scala
 package controller
 
 class RootController extends ApplicationController {
@@ -118,7 +118,7 @@ Scalatra provides a great test toolkit with embedded Jetty server and easy-to-us
 
 Below is an integration test example with scalatra-test.
 
-```java
+```scala
 package integrationtest
 
 import org.scalatra.test.scalatest._

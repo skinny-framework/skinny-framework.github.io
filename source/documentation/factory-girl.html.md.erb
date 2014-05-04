@@ -27,7 +27,7 @@ FactoryGirl's usage is very simple.
 
 #### Example code
 
-```java
+```scala
 import skinny.orm._
 
 case class Company(id: Long, name: String)
@@ -103,7 +103,7 @@ Attributes passed to this method will be used for replacing variables such as "#
 
 #### factories.conf
 
-```java
+```scala
 member {
   name="Alice"
   countryId="#{cntId}"
@@ -112,7 +112,7 @@ member {
 
 #### FooSpec.scala
 
-```java
+```scala
 val countryId = FactoryGirl(Country).create().id
 FactoryGirl(Member).withVariables('cntId -> countryId).create()
 
@@ -135,7 +135,7 @@ member {
 
 #### SomeSpec.scala
 
-```java
+```scala
 FactoryGirl(Member).withAttributes('country -> "Japan").create()
 // will use name: Alice, country: Japan
 

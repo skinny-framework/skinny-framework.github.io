@@ -16,7 +16,7 @@ Template paths should be of the form `{path}.{format}.{extension}`. Expected {fo
 
 For instance, assuming your controller code looks like this:
 
-```java
+```scala
 class MembersController extends SkinnyController {
   def index = {
     set("members", Member.findAll())
@@ -157,7 +157,7 @@ libraryDependencies += "org.skinny-framework" %% "skinny-freemarker" % skinnyVer
 
 Mixin `FreeMarkerTemplateEngineFeature` to your controllers.
 
-```java
+```scala
 import skinny.controller.feature.FreeMarkerTemplateEngineFeature
 
 class MembersController extends SkinnyController
@@ -188,7 +188,7 @@ libraryDependencies += "org.skinny-framework" %% "skinny-thymeleaf" % skinnyVers
 
 Mixin `ThymeleafTemplateEngineFeature` to your controllers.
 
-```java
+```scala
 import skinny.controller.feature.ThymeleafTemplateEngineFeature
 
 class MembersController extends SkinnyController

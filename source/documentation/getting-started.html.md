@@ -72,6 +72,59 @@ Finally, let's create a war file to deploy.
 ```
 
 <hr/>
+### What should I do first?
+<hr/>
+
+Skinny app development is very simple. When you create new pages, all the things you should do is below:
+
+<hr/>
+#### Create new `SkinnyController` under `conroller` package
+
+You can create a controller by hand or by using generator.
+
+```
+% ./skinny g controller help
+
+ *** Skinny Generator Task ***
+
+  "src/main/scala/controller/ApplicationController.scala" skipped.
+  "src/main/scala/controller/HelpController.scala" created.
+  "src/main/scala/controller/Controllers.scala" modified.
+  "src/test/scala/controller/HelpControllerSpec.scala" created.
+
+```
+
+<hr/>
+#### Add routing definition to `controller.Controllers`
+
+When you use generator, this will be done by generator. 
+
+
+```scala
+package controller
+import skinny._
+object Controllers {
+
+  object root extends RootController with Routes {
+    val indexUrl = get("/")(index).as('index)
+  }
+
+  def mount(ctx: ServletContext): Unit = {
+    root.mount(ctx)
+  }
+}
+```
+
+<hr/>
+#### Add view templates for `render` methods
+
+Add Scalate (ssp, scaml, jade, mustache) or FreeMarker, Thymeleaf templates under `src/main/webapp/WEB-INF/views`.
+
+The above `HelpController` expects `src/main/webapp/WEB-INF/views/help/index.html.ssp`.
+
+When you forgot creating view templates, Skinny Framework will create template file for you when accessing the URL for the first time.
+
+<hr/>
 ### Simple Example
 <hr/>
 

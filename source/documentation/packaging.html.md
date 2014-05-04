@@ -38,13 +38,13 @@ What's more, you can easily create a stand alone jar file by just running the fo
 
 After a while, you will get a standalone jar file. 
 
-```
+```sh
 java -jar standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
 ```
 
 You can pass configuration via system properties. Otherwise, it's also possible to use environment variables.
 
-```
+```sh
 java -jar -Dskinny.port=9000 -Dskinny.env=production -Dskinny.prefix=/foo/ \
   standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
 ```

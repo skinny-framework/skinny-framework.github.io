@@ -27,7 +27,7 @@ That's all.
 
 The following is an example from the built-in validations.
 
-```java
+```scala
 import skinny.validator._
 
 object required extends required(true)
@@ -42,7 +42,7 @@ case class required(trim: Boolean = true) extends ValidationRule {
 ```
 Then you can use it like this:
 
-```java
+```scala
 val validator = Validator(
   param("name" -> null) is required
 )
@@ -56,7 +56,7 @@ error.messageParmas // -> List("name")
 
 A validation rule which accepts value when using such as `minLength(6)` is like this:
 
-```java
+```scala
 case class minLength(min: Int) extends ValidationRule {
   def name = "minLength"
   override def messageParams = Seq(min.toString)
@@ -93,7 +93,7 @@ skinny-validator provides `Validator` and `MapValidator`. You already see `Valid
 
 `MapValidator` is another one which accepts `Map[String, Any]` object as parameters. Usually `MapValidator` is more useful in web applications.
 
-```java
+```scala
 val params = Map("name" -> "Alice", "age" -> 20)
 
 val validator = MapValidator(params)(
@@ -108,7 +108,7 @@ val validator = MapValidator(params)(
 
 skinny-validator's `Error` looks like this:
 
-```java
+```scala
 val error = validator.errors.head
 error.name // -> required
 error.messageParmas // -> List("name")
@@ -127,7 +127,7 @@ error {
 
 Now `Messages` can load error messages for validation errors named "required" or "minLength". The name comes from `ValidationRule#name`.
 
-```java
+```scala
 val messages = Messages.loadFromConfig()
 // val messages = Messages.loadFromConfig("messages2") // loads messages2.conf
 // val messages = Messages.loadFromProperties() // loads messages.properties
@@ -150,7 +150,7 @@ You can easily understand how skinny-valdiator works in Skinny apps.
 
 The following is an example with Skinny Framework:
 
-```java
+```scala
 // withDate joins birthdayYear, birthdayMonth and birthdayDay into single birthday
 def createParams = Params(params).withDate("birthday")
 

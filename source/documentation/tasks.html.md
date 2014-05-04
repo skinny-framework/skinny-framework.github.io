@@ -17,7 +17,7 @@ skinny-blank-app prepares the easy-to-use `TaskRunner`.
 [task/src/main/scala/TaskRunner.scala](https://github.com/skinny-framework/skinny-framework/blob/master/yeoman-generator-skinny/app/templates/task/src/main/scala/TaskRunner.scala)
 
 
-```java
+```scala
 object TaskRunner extends skinny.task.TaskLauncher {
 
   // def register(name: String, runner: (List[String]) => Unit)
@@ -34,7 +34,7 @@ object TaskRunner extends skinny.task.TaskLauncher {
 
 Creating tasks is pretty easy. You just need to define a function `(List[String]) => Unit`.
 
-```java
+```scala
 register("echo", (params) => params foreach println)
 ```
 
