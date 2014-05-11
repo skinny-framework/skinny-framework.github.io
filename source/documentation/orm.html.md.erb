@@ -21,43 +21,290 @@ Furthermore, the `#byDefault` option allows you to resolve assocations anytime. 
 On the other hand, it's impossible to resolve all the nested attributes' relationships by a single join query. If you need to resolve nested relationships, you can retrieve them with eager loading by using `#includes` method.
 
 <hr/>
-#### The Best way to learn
+#### Minimum Setup
 
-The best way to learn is by reading the following examamples. 
+Even if you're not familiar with Skinny apps, don't worry. 
 
-Table definitions: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala
+Skinny ORM is an independent library from Skinny environment. So you can use only Skinny ORM with the following settings. 
 
-Model examples: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala
+Let's prepare right now!
 
-Usage: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
+<hr/>
+##### ${PROJECT_ROOT}/build.sbt
+
+```scala
+libraryDependencies ++= Seq(
+  "org.skinny-framework" %% "skinny-orm"      % "<%= skinny_version %>",
+  "com.h2database"       %  "h2"              % "1.4.178",
+  "ch.qos.logback"       %  "logback-classic" % "1.1.2"
+)
+
+// will be executed when invoking sbt console
+initialCommands := """
+import scalikejdbc._, SQLInterpolation._
+import skinny.orm._, feature._
+import org.joda.time._
+skinny.DBSettings.initialize()
+implicit val session = AutoSession
+"""
+```
+
+<hr/>
+##### ${PROJECT_ROOT}/src/main/resources/application.conf
+
+```
+development {
+  db {
+    default {
+      driver="org.h2.Driver"
+      url="jdbc:h2:file:./db/development;MODE=PostgreSQL;AUTO_SERVER=TRUE"
+      user="sa"
+      password="sa"
+      poolInitialSize=2
+      poolMaxSize=10
+    }
+  }
+}
+```
+
+Now you can try the following example code on `sbt console` (the Scala REPL).
+
+<hr/>
+### Understanding Basic Mapper Traits
+<hr/>
+
+Skinny ORM users should choose one of the following traits to implement mapper for table.
+
+You can find examples here: 
+
+- [DDL](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala)
+- [Model Definitions](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala)
+- [Model usages](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
 
 If you have any questions or feedback, feel free to ask the Skinny team or users in the mailing list.
 
 https://groups.google.com/forum/#!forum/skinny-framework
 
+<hr/>
+#### [SkinnyMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyMapper.scala)
+<hr/>
+
+This is the most basic trait to implement Skinny ORM mapper.
+
+- Primary key should be single and long numeric
+- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
+- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
+
+Entity case class and mapper companion object should be like this:
+
+```scala
+// create member table
+sql"create table member (id serial, name varchar(64), created_at timestamp)".execute.apply()
+
+// When you're trying on the Scala REPL, use :paste mode
+case class Member(id: Long, name: Option[String], createdAt: DateTime)
+object Member extends SkinnyMapper[Member] {
+  override val defaultAlias = createAlias("m")
+  override def extract(rs: WrappedResultSet, n: ResultName[Member]): Member = new Member(
+    id        = rs.get(n.id),
+    name      = rs.get(n.name),
+    createdAt = rs.get(n.createdAt))
+}
+```
+
+And you can use Findre and Querying as follows:
+
+```scala
+val member: Option[Member] = Member.findById(123)
+val members: Seq[Member] = Member.where('name -> "Alice").apply()
+```
 
 <hr/>
-### Your First Mapper
+#### [SkinnyCRUDMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyCRUDMapper.scala)
+<hr/>
+
+- Primary key should be single and long numeric
+- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
+- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
+- [CRUD Operation APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+
+The difference from SkinnyMapper is that insert/update/delete operations are available.
+
+```scala
+case class Member(id: Long, name: Option[String], createdAt: DateTime)
+object Member extends SkinnyCRUDMapper[Member] {
+  ...
+}
+```
+
+The usage is like this:
+
+```scala
+// create
+Member.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
+// update
+Member.findById(123).withAttributes('name -> "Bob")
+Member.findBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
+// delete
+Member.deleteById(123)
+Member.deleteBy(sqls.eq(Member.column.name, "Alice"))
+```
 
 <hr/>
-#### Easy to use and powerful
+#### [SkinnyCRUDMapperWithId](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyCRUDMapperWithId.scala)
+<hr/>
+
+SkinnyMapper expects a Long (bigint) value named `id` for primary key column by default (`id` can be changed by overriding `primaryKeyFieldName` in mapper).
+
+When your table has a non-numeric primary key or you'd like to make numeric primary key typed such as `case class MemberId(value: Long)`, use `Skinny(CRUD)MapperWithId` traits instead. In this case, you must implement `idToRawValue` and `rawValueToId` methods.
+
+If you need to use a complex object (e.g. `MemberId` class) as a primary key, it's also easy to implement.
+
+```scala
+case class MemberId(value: Long)
+case class Member2(id: MemberId, name: Option[String], createdAt: DateTime)
+
+object Member2 extends SkinnyCRUDMapperWithId[MemberId, Member2] {
+  override val tableName = "member"
+  override val defaultAlias = createAlias("m")
+  override def idToRawValue(id: MemberId) = id.value
+  override def rawValueToId(value: Any) = MemberId(value.toString.toLong)
+
+  override def extract(rs: WrappedResultSet, n: ResultName[Member2]): Member2 = new Member2(
+    id        = MemberId(rs.get(n.id)),
+    name      = rs.get(n.name),
+    createdAt = rs.get(n.createdAt))
+}
+```
+
+The usage is like this:
+
+```scala
+// create
+Member2.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
+// update
+Member2.findById(MemberId(123)).withAttributes('name -> "Bob")
+Member2.findBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
+// delete
+Member2.deleteById(MemberId(123))
+Member2.deleteBy(sqls.eq(Member.column.name, "Alice"))
+```
+
+And your SkinnyResource will be like this:
+
+```scala
+package controller
+import skinny._
+import skinny.validator._
+import model._
+
+object MembersController extends SkinnyResourceWithId[MemberId] with ApplicationController {
+  protectFromForgery()
+
+  implicit override val scalatraParamsIdTypeConverter = new TypeConverter[String, MemberId] {
+    def apply(s: String): Option[MemberId] = Option(s).map(model.rawValueToId)
+  }
+
+  override def model = Member2
+  override def resourcesName = "members"
+  override def resourceName = "member"
+
+  // ...
+}
+```
+
+
+<hr/>
+#### [SkinnyNoIdMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyNoIdMapper.scala), [SkinnyNoIdCRUDMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyNoIdCRUDMapper.scala)
+<hr/>
+
+This trait doesn't expect single and numeric primary key. 
+
+These traits will be useful when you deal with tables that have no primary key(!) or compound primary keys or any cases.
+
+- This trait doesn't mind the table has no primary key or compound primary keys
+- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
+- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
+- [CRUD Operation APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+
+```scala
+sql"create table useless_data(a varchar(16) not null, b bigint, created_timestamp timestamp not null)".execute.apply()
+
+case class UselessData(a: String, b: Option[Long], createdTimestamp: DateTime)
+object UselessData extends SkinnyNoIdCRUDMapper[UselessData] {
+  override def defaultAlias = createAlias("ud")
+  override def extract(rs: WrappedResultSet, n: ResultName[UselessData]) = new UselessData(
+    a = rs.get(n.a), b = rs.get(n.b), createdTimestamp = rs.get(n.createdTimestamp))
+}
+```
+
+The usage is like this:
+
+```scala
+UselessData.createWithAttributes('a -> "foo", 'b -> Some(123), 'createdTimestamp -> DateTime.now)
+UselessData.findAll()
+```
+
+<hr/>
+#### [SkinnyJoinTable](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyJoinTable.scala)
+<hr/>
+
+"join table" is used for representing relationship between tables. Here is a simple examples:
+
+```scala
+sql"create table account (id serial, name varchar(128) not null)".execute.apply()
+sql"create table email (id serial, email varchar(256) not null)".execute.apply()
+sql"create table account_email (account_id bigint not null, email_id bigint not null)".execute.apply()
+
+// use :paste on the REPL
+
+case class Email(id: Long, email: String)
+object Email extends SkinnyCRUDMapper[Email] {
+  override def defaultAlias = createAlias("e")
+  override def extract(rs: WrappedResultSet, n: ResultName[Email]) = new Email(id = rs.get(n.id), email = rs.get(n.email))
+}
+
+case class Account(id: Long, name: String, emails: Seq[Email] = Nil)
+object Account extends SkinnyCRUDMapper[Account] {
+  override def defaultAlias = createAlias("a")
+  override def extract(rs: WrappedResultSet, n: ResultName[Account]) = new Account(id = rs.get(n.id), name = rs.get(n.name))
+
+  hasManyThrough[Email](
+    through = AccountEmail, 
+    many = Email, 
+    merge = (a, emails) => a.copy(emails = emails)).byDefault
+}
+
+// def extract is not needed 
+case class AccountEmail(accountId: Long, emailId: Long)
+object AccountEmail extends SkinnyJoinTable[AccountEmail] {
+  override def defaultAlias = createAlias("ae")
+} 
+```
+
+The usage is like this:
+
+```scala
+Email.createWithAttributes('email -> "alice@example.com")
+Account.createWithAttributes('name -> "Alice")
+AccountEmail.createWithAttributes('accountId -> 1, 'emailId -> 1)
+Account.findAll() // with emails
+```
+
+<hr/>
+### Useful APIs by Skinny ORM
+<hr/>
 
 Skinny-ORM is very powerful, so you don't need to write much code. Your first model class and companion are here.
 
 ```scala
-import skinny.orm._
-import scalikejdbc._, SQLInterpolation._
-import org.joda.time._
-
 case class Member(id: Long, name: String, createdAt: DateTime)
-
 object Member extends SkinnyCRUDMapper[Member] {
   override def defaultAlias = createAlias("m")
-
   override def extract(rs: WrappedResultSet, n: ResultName[Member]) = new Member(
-    id = rs.long(n.id),
-    name = rs.string(n.name),
-    createdAt = rs.dateTime(n.createdAt)
+    id        = rs.get(n.id),
+    name      = rs.get(n.name),
+    createdAt = rs.get(n.createdAt)
   )
 }
 ```
@@ -573,69 +820,6 @@ def findAllByGroupId(groupId: Long): List[Member] = findAllBy(sqls.eq(m.groupId,
 On the other hand, if you work with multiple threads for single HTTP request, you should be aware that the thread-local DB session won't be shared.
 
 
-<hr/>
-### Using Non-Numerical or Typed Primary Key
-<hr/>
-
-SkinnyMapper expects a Long (bigint) value named `id` for primary key column.
-
-If your application uses a non-numerical primary key for some reason, use `****WithId` traits instead. In this case, you must implement `idToRawValue` and `rawValueToId` methods.
-
-If you need to use a complex object (e.g. `MemberId` class) as a primary key, it's also easy to implement.
-
-```scala
-case class MemberId(value: Long)
-case class Member(id: MemberId, name: String)
-
-object Member extends SkinnyCRUDMapperWithId[MemberId, Member] {
-  override def defaultAlias = createAlias("m")
-
-  override def idToRawValue(id: MemberId) = id.value
-  override def rawValueToId(v: Any) = MemberId(v.toString.toLong)
-
-  def extract(rs: WrappedResultSet, m: ResultName[Member]) = new Member(
-    id = rawValueToId(rs.string(m.id)),
-    name = rs.string(m.name)
-  )
-}
-```
-
-And your SkinnyResource will be like this:
-
-```scala
-package controller
-import skinny._
-import skinny.validator._
-import model._
-
-object CompaniesController extends SkinnyResourceWithId[CompanyId] with ApplicationController {
-  protectFromForgery()
-
-  implicit override val scalatraParamsIdTypeConverter = new TypeConverter[String, CompanyId] {
-    def apply(s: String): Option[CompanyId] = Option(s).map(model.rawValueToId)
-  }
-
-  override def model = Company
-  override def resourcesName = "companies"
-  override def resourceName = "company"
-
-  override def createParams = Params(params).withDateTime("updatedAt")
-  override def createForm = validation(createParams,
-    paramKey("name") is required & maxLength(64),
-    paramKey("url") is maxLength(128)
-  )
-  override def createFormStrongParameters = Seq(
-    "name" -> ParamType.String, "url" -> ParamType.String)
-
-  override def updateParams = Params(params).withDateTime("updatedAt")
-  override def updateForm = validation(updateParams,
-    paramKey("name") is required & maxLength(64),
-    paramKey("url") is maxLength(128)
-  )
-  override def updateFormStrongParameters = Seq(
-    "name" -> ParamType.String, "url" -> ParamType.String)
-}
-```
 
 If you use an alternative Id generator instead of the RDB's auto-incremental value, set `useExternalIdGenerator` as true and implement the `generateId` method.
 
