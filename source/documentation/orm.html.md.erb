@@ -21,7 +21,8 @@ Furthermore, the `#byDefault` option allows you to resolve assocations anytime. 
 On the other hand, it's impossible to resolve all the nested attributes' relationships by a single join query. If you need to resolve nested relationships, you can retrieve them with eager loading by using `#includes` method.
 
 <hr/>
-#### Minimum Setup
+### Minimum Setup
+<hr/>
 
 Even if you're not familiar with Skinny apps, don't worry. 
 
@@ -30,7 +31,7 @@ Skinny ORM is an independent library from Skinny environment. So you can use onl
 Let's prepare right now!
 
 <hr/>
-##### ${PROJECT_ROOT}/build.sbt
+#### build.sbt
 
 ```scala
 libraryDependencies ++= Seq(
@@ -49,8 +50,7 @@ implicit val session = AutoSession
 """
 ```
 
-<hr/>
-##### ${PROJECT_ROOT}/src/main/resources/application.conf
+#### src/main/resources/application.conf
 
 ```
 development {
@@ -433,6 +433,7 @@ http://scalikejdbc.org/documentation/one-to-x.html
 
 <hr/>
 #### BelongsTo
+<hr/>
 
 Same as ActiveRecord's `belongs_to` assocation:
 
@@ -495,6 +496,7 @@ Find more here: https://github.com/skinny-framework/skinny-framework/blob/develo
 
 <hr/>
 #### HasOne
+<hr/>
 
 Same as ActiveRecord's `has_one` assocation:
 
@@ -531,6 +533,7 @@ create table names (
 
 <hr/>
 #### HasMany
+<hr/>
 
 Same as ActiveRecord's `has_many` assocation:
 
@@ -606,21 +609,8 @@ create table members_skills (
 ```
 
 <hr/>
-#### What's more
-
-You can find more examples here:
-
-Table definitions:
-https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala
-
-Model examples:
-https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala
-
-Usage:
-https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala
-
+### Entity Equality
 <hr/>
-#### Entity Equality
 
 Basically using case classes for entities is recommended. As you know, Scala (until 2.11) has 22 limitation, so you may need to use normal classes for entities to treat tables that have more than 22 columns.
 
@@ -925,10 +915,11 @@ An easy-to-use fixture tool named FactoryGirl makes testing easy.
 See in detail here: [FactoryGirl](factory-girl.html)
 
 <hr/>
-## FAQ
+### FAQ
 
 <hr/>
-### UnexpectedNullValueException
+#### UnexpectedNullValueException
+<hr/>
 
 If you see the following exception, your application code using Skinny ORM has a bug. This is not a framework bug.
 
