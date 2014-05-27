@@ -670,3 +670,46 @@ Use `Skinny.csrfMetaTags` in /WEB-INF/layouts/default.jade:
     =unescape(body)
     %script(type="text/javascript" src={uri("/assets/js/skinny.js")})
 ```
+
+<hr/>
+#### Check execution time
+<hr/>
+
+```scala
+val result = warnElapsedTime(1) {
+  Thread.sleep(10)
+}
+// will output "[SLOW EXECUTION DETECTED] Elapsed time: 10 millis"
+```
+
+In controllers, you can add request info:
+
+```scala
+val result = warnElapsedTimeWithRequest(1) {
+  Thread.sleep(10)
+}
+```
+
+<hr/>
+#### Read your own configuration values
+<hr/>
+
+```
+development {
+  defaultLabel="foo"
+  timeout {
+    connect=1000
+    read=3000
+  }
+  memcached=["server1:11211", "server2:11211"]
+}
+```
+
+Read the server names like this:
+
+```scala
+val label: Option[String] = SkinnyConfig.stringConfigValue("defaultLabel")
+val connectTimeout: Option[Int] = SkinnyConfig.intConfigValue("timeout.connect")
+val memcachedServers: Option[Seq[String]] = SkinnyConfig.stringSeqConfigValue("memcached")
+```
+
