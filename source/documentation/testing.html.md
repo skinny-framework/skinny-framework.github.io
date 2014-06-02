@@ -164,7 +164,7 @@ https://github.com/scoverage/sbt-scoverage
 ```
 
 <hr/>
-### More Exampels
+### More Examples
 <hr/>
 
 It's the fastest way to learn is seeing generated tests by scaffold commmand. 
