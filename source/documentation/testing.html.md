@@ -8,7 +8,7 @@ title: Testing - Skinny Framework
 ### Testability is very important
 <hr/>
 
-Skinny Framework puts emphaiss on testable application development and provides toolkit for testing.
+Skinny Framework puts emphasis on testable application development and provides toolkit for testing.
 
 <hr/>
 ### How to run tests
@@ -26,7 +26,7 @@ Simply use skinny command or sbt directly.
 # run only failed tests
 ./skinny testQuick
 
-# run mutiple tests under controller package when changes are detected
+# run multiple tests under controller package when changes are detected
 ./skinny ~testOnly controller.*Spec
 ```
 
@@ -104,7 +104,7 @@ Be aware of following points when you use `MockController`:
 <hr/>
 #### MockController cannot handle org.scalatra.HaltException
 
-HaltExcpetion is very exceptional operation by Scalatra. HaltException is not an Exception but a Throwbale. Furthermore, it mutes all the stack traces.
+HaltExcpetion is very exceptional operation by Scalatra. HaltException is not an Exception but a Throwable. Furthermore, it mutes all the stack traces.
 
 When you call `halt` method or `redirect` method, HaltException will be thrown.
 
@@ -167,7 +167,7 @@ https://github.com/scoverage/sbt-scoverage
 ### More Examples
 <hr/>
 
-It's the fastest way to learn is seeing generated tests by scaffold commmand. 
+It's the fastest way to learn is seeing generated tests by scaffold command.
 
 And also some examples here may be helpful for you:
 
