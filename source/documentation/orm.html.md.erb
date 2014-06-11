@@ -804,7 +804,7 @@ class ScalatraBootstrap exntends SkinnyLifeCycle {
 And then your ORM models can retrieve the current DB session as a thread-local value per request, so you don't need to pass `DBSession` value as an implicit parameter in each method. 
 
 ```scala
-def findAllByGroupId(groupId: Long): List[Member] = findAllBy(sqls.eq(m.groupId, groupId)
+def findAllByGroupId(groupId: Long): List[Member] = findAllBy(sqls.eq(m.groupId, groupId))
 ```
 
 On the other hand, if you work with multiple threads for single HTTP request, you should be aware that the thread-local DB session won't be shared.
