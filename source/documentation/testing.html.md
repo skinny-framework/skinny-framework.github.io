@@ -36,7 +36,7 @@ Simply use skinny command or sbt directly.
 
 Here is some examples:
 
-https://github.com/skinny-framework/skinny-framework/tree/develop/orm/src/test/scala/blog
+https://github.com/skinny-framework/skinny-framework/tree/1.1.x/orm/src/test/scala/blog
 
 ```scala
 package model

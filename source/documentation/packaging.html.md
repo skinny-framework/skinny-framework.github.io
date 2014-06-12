@@ -64,7 +64,7 @@ Default value is "development". If `skinny.env` system property is "production",
 - sys.props.get("skinny.env") or sys.props.get("app.env")
 - sys.env.get("SKINNY_ENV") or sys.env.get("APP_ENV")
 
-You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/SkinnyEnv.scala) in application.
+You can access the value via [`skinny.SkinnyEnv`](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/SkinnyEnv.scala) in application.
 
 <hr/>
 #### skinny.port or SKINNY_PORT

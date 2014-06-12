@@ -77,23 +77,23 @@ Skinny ORM users should choose one of the following traits to implement mapper f
 
 You can find examples here: 
 
-- [DDL](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/CreateTables.scala)
-- [Model Definitions](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala)
-- [Model usages](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
+- [DDL](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/test/scala/skinny/orm/CreateTables.scala)
+- [Model Definitions](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/test/scala/skinny/orm/models.scala)
+- [Model usages](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/test/scala/skinny/orm/SkinnyORMSpec.scala)
 
 If you have any questions or feedback, feel free to ask the Skinny team or users in the mailing list.
 
 https://groups.google.com/forum/#!forum/skinny-framework
 
 <hr/>
-#### [SkinnyMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyMapper.scala)
+#### [SkinnyMapper](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyMapper.scala)
 <hr/>
 
 This is the most basic trait to implement Skinny ORM mapper.
 
 - Primary key should be single and long numeric
-- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
-- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
+- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
+- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
 
 Entity case class and mapper companion object should be like this:
 
@@ -120,13 +120,13 @@ val members: Seq[Member] = Member.where('name -> "Alice").apply()
 ```
 
 <hr/>
-#### [SkinnyCRUDMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyCRUDMapper.scala)
+#### [SkinnyCRUDMapper](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyCRUDMapper.scala)
 <hr/>
 
 - Primary key should be single and long numeric
-- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
-- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
-- [CRUD Operation APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
+- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
+- [CRUD Operation APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
 
 The difference from SkinnyMapper is that insert/update/delete operations are available.
 
@@ -151,7 +151,7 @@ Member.deleteBy(sqls.eq(Member.column.name, "Alice"))
 ```
 
 <hr/>
-#### [SkinnyCRUDMapperWithId](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyCRUDMapperWithId.scala)
+#### [SkinnyCRUDMapperWithId](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyCRUDMapperWithId.scala)
 <hr/>
 
 SkinnyMapper expects a Long (bigint) value named `id` for primary key column by default (`id` can be changed by overriding `primaryKeyFieldName` in mapper).
@@ -215,7 +215,7 @@ object MembersController extends SkinnyResourceWithId[MemberId] with Application
 
 
 <hr/>
-#### [SkinnyNoIdMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyNoIdMapper.scala), [SkinnyNoIdCRUDMapper](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyNoIdCRUDMapper.scala)
+#### [SkinnyNoIdMapper](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyNoIdMapper.scala), [SkinnyNoIdCRUDMapper](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyNoIdCRUDMapper.scala)
 <hr/>
 
 This trait doesn't expect single and numeric primary key. 
@@ -223,9 +223,9 @@ This trait doesn't expect single and numeric primary key.
 These traits will be useful when you deal with tables that have no primary key(!) or compound primary keys or any cases.
 
 - This trait doesn't mind the table has no primary key or compound primary keys
-- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
-- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
-- [CRUD Operation APIs](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
+- [Finder APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/FinderFeature.scala)
+- [Querying APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/QueryingFeature.scala)
+- [CRUD Operation APIs](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
 
 ```scala
 sql"create table useless_data(a varchar(16) not null, b bigint, created_timestamp timestamp not null)".execute.apply()
@@ -246,7 +246,7 @@ UselessData.findAll()
 ```
 
 <hr/>
-#### [SkinnyJoinTable](https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/SkinnyJoinTable.scala)
+#### [SkinnyJoinTable](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyJoinTable.scala)
 <hr/>
 
 "join table" is used for representing relationship between tables. Here is a simple examples:
@@ -421,7 +421,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 If you need to join other tables, just add `belongsTo`, `hasOne` or `hasMany(Through)` to the companion. 
 
 Examples: 
-https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/test/scala/skinny/orm/models.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/test/scala/skinny/orm/models.scala
 
 Be aware of Skinny ORM's concept that basically joins tables to resolve associations to reduce N+1 queries. We recommend enabling query logging for development.
 
@@ -492,7 +492,7 @@ create table companies (
 );
 ```
 
-Find more here: https://github.com/skinny-framework/skinny-framework/blob/develop/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala
+Find more here: https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala
 
 <hr/>
 #### HasOne

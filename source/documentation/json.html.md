@@ -15,7 +15,7 @@ title: Working with JSON - Skinny Framework
 - def toPrettyJSONString(v: Any, underscoreKeys: Boolean = true): String
 - def fromJSONString\[A\](json: String)(implicit mf: Manifest\[A\]): Option\[A\] 
 
-[framework/src/main/scala/skinny/util/JSONStringOps.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/util/JSONStringOps.scala)
+[framework/src/main/scala/skinny/util/JSONStringOps.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/util/JSONStringOps.scala)
 
 The following methods come from `JSONFeature` trait.
 

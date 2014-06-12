@@ -637,7 +637,7 @@ redirect303("/complete") // 303
 
 [/index.html#org.scalatra.ActionResult](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ActionResult)
 
-[/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala)
+[/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala)
 
 [/core/src/main/scala/org/scalatra/ActionResult.scala](https://github.com/scalatra/scalatra/blob/2.2.x_2.10/core/src/main/scala/org/scalatra/ActionResult.scala)
 

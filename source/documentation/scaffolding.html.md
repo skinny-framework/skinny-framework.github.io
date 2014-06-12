@@ -38,7 +38,7 @@ Scaffold command's parameters are ...
 - {resources}: Resource name in the plural (camelCase)
 - {resource}: Resource name (camelCase)
 - {fieldName}: Field name in the resource (camelCase)
-- {paramType}: `skinny.ParamType`. see also: [skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
+- {paramType}: `skinny.ParamType`. see also: [skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/ParamType.scala)
 - {columnType}: (optional) Database column type. This will be embedded into DB migration file.
 
 It's also possible to specify namespace for the resource:
