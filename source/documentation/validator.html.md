@@ -80,9 +80,9 @@ Basic usage involves combining validation rules with `&`. If a failure is found,
 
 The built-in validators are good enough to cover most common cases.
 
-[validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/master/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
+[validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
 
-[validator/src/test/scala/skinny/validator](https://github.com/skinny-framework/skinny-framework/tree/master/validator/src/test/scala/skinny/validator)
+[validator/src/test/scala/skinny/validator](https://github.com/skinny-framework/skinny-framework/tree/1.1.x/validator/src/test/scala/skinny/validator)
 
 
 <hr/>

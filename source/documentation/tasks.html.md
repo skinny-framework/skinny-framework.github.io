@@ -10,11 +10,11 @@ title: Tasks - Skinny Framework
 
 skinny-task is a mechanism to run tasks easily. By default, the following tasks are already registered.
 
-[task/src/main/scala/skinny/task/TaskLauncher.scala](https://github.com/skinny-framework/skinny-framework/blob/master/task/src/main/scala/skinny/task/TaskLauncher.scala)
+[task/src/main/scala/skinny/task/TaskLauncher.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/task/src/main/scala/skinny/task/TaskLauncher.scala)
 
 skinny-blank-app prepares the easy-to-use `TaskRunner`.
 
-[task/src/main/scala/TaskRunner.scala](https://github.com/skinny-framework/skinny-framework/blob/master/yeoman-generator-skinny/app/templates/task/src/main/scala/TaskRunner.scala)
+[task/src/main/scala/TaskRunner.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/yeoman-generator-skinny/app/templates/task/src/main/scala/TaskRunner.scala)
 
 
 ```scala

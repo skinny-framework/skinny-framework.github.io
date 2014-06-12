@@ -145,7 +145,7 @@ SkinnyResource is a useful base trait for RESTful web services. SkinnyResource i
 
 SkinnyResource is also useful as a controller sample. If you're a Skinny beginner, take a look at its code.
 
-[framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
+[framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
 
 SkinnyResourceActions has action methods for the resource and SkinnyResourceRoutes defines routings for the resource.
 If you'd like to customize routings (e.g. use only creation and deletion), just mixin only SkinnyResourceActions and define routings by yourself.
@@ -158,7 +158,7 @@ You can see a SkinnyResource example using the scaffolding generator.
 
 Then you get the following code. If you need to customize, override some parts of SkinnyResource:
 
-[framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
+[framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
 
 ```scala
 package controller
@@ -248,7 +248,7 @@ skinny.Skinny provides getters for basic elements in view templates.
 <%@val s: skinny.Skinny %>
 ```
 
-[framework/src/main/scala/skinny/Skinny.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/Skinny.scala)
+[framework/src/main/scala/skinny/Skinny.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/Skinny.scala)
 
 - params: Params
 - multiParams: MultiParams
@@ -283,7 +283,7 @@ So if you need filters that are similar to Rails filters, just use Skinny filter
 
 ##### Skinny's beforeAction/afterAction filters
 
-[/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
+[/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
 
 ```scala
 class MembersController extends SkinnyController with Routes {

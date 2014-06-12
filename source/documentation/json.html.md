@@ -21,7 +21,7 @@ The following methods come from `JSONFeature` trait.
 
 - def responseAsJSON(entity: Any, charset: Option[String] = Some("utf-8"), prettify: Boolean = false): String
 
-[framework/src/main/scala/skinny/controller/feature/JSONFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/JSONFeature.scala)
+[framework/src/main/scala/skinny/controller/feature/JSONFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/feature/JSONFeature.scala)
 
 
 ```java
@@ -52,7 +52,7 @@ val userResponse: Option[UserResponse] = fromJSONString[UserResponse](jsonString
 val jsonString2 = userResponse.map(r => toJSONString(r))
 ```
 
-See also: [framework/src/test/scala/skinny/util/JSONStringOpsSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/test/scala/skinny/util/JSONStringOpsSpec.scala)
+See also: [framework/src/test/scala/skinny/util/JSONStringOpsSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/test/scala/skinny/util/JSONStringOpsSpec.scala)
 
 If you need more complex operations, use [json4s](https://github.com/json4s/json4s) directly.
 

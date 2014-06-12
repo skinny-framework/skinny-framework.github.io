@@ -412,7 +412,7 @@ Member.deleteBy(sqls.eq(m.groupId, 123))
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala
 
 <hr/>
 ### Associations
@@ -684,7 +684,7 @@ Member.includes(Member.skills).findById(123) // with skills
 Note: when your entities have the same associations (e.g. Company has Employee, Country and Employee have Country), avoiding using the default alias for the associations is recommended because that may cause invalid join query generation when you use eager loading. We plan to provide more useful error messages for such cases in version 1.0.0.
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala
 
 
 <hr/>
@@ -771,7 +771,7 @@ Order.withTableName("orders_2012").count()
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala
 
 <hr/>
 ### Adding Methods
@@ -790,7 +790,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 ```
 
 If you're using Skinny-ORM with Skinny Framework,
-[skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applciations.
+[skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applciations.
 
 ```scala
 // src/main/scala/ScalatraBootstrap.scala
@@ -861,7 +861,7 @@ object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala
 
 <hr/>
 ### Soft Deletion
@@ -881,10 +881,10 @@ object Member extends SkinnyCRUDMapper[Member]
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala
 
 <hr/>
 ### Optimistic Lock
@@ -901,10 +901,10 @@ object Member extends SkinnyCRUDMapper[Member]
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala
 
 <hr/>
 ### FactoryGirl
