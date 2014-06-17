@@ -156,7 +156,7 @@ Skinny 1.1 APIs are basically compatible with Skinny 1.0 though the release incl
 If your app depends on the dependencies directly (not via Skinny APIs), you may need to update your code.
 
 - All the components run on Scala 2.11 or Scala 2.10 (Skinny 1.0: Scala 2.10)
-- Web framework Runs on Java 7 or higher (Skinny 1.0: Java 6 or higher) 
+- Web framework runs on Java 7 or higher (Skinny 1.0: Java 6 or higher) 
 - Web framework is compatible with Servlet API 3.1 (Skinny 1.0: Servlet 3.0)
 - Web framework depends on Scalatra 2.3 (Skinny 1.0: Scalatra 2.2)
 - ORM depends on ScalikeJDBC 2.0 (Skinny 1.0: ScalikeJDBC 1.8)
@@ -175,11 +175,22 @@ https://github.com/skinny-framework/skinny-framework/issues
 Use "org.scalatest.Matchers" instead. Sorry to say this.
 
 <hr/>
-#### importing "scalikejdbc.SQLInterpolation._" is deprecated
+#### Importing "scalikejdbc.SQLInterpolation._" is deprecated
 
 Just import only "scalikejdbc._".
 
 See also: https://github.com/skinny-framework/skinny-framework/commit/1e44f60e5c5d0f53ab0102697a00413ad7a696d0
+
+<hr/>
+#### Renamed joda-time APIs due to JSR-310
+
+`WrappedResultSet#dateTime`, `#localDate`, `#localTime` and `#localDateTime` are deprecated and `#jodaDateTime` and #jodaXXX are added.
+
+See also the issue: https://github.com/scalikejdbc/scalikejdbc/issues/222
+
+Other changes in ScalikeJDBC 2.0:
+
+https://github.com/scalikejdbc/scalikejdbc/blob/develop/notes/2.0.0.markdown
 
 <hr/>
 #### skinny package's Scalate precompilation error
