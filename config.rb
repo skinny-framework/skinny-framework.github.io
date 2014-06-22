@@ -59,7 +59,8 @@ I18n.enforce_available_locales = false
 # Latest Skinny Framework version
 @skinny_version = "1.1.0"
 set :skinny_version, @skinny_version
-@skinny_blank_app_version = @skinny_version
+#@skinny_blank_app_version = @skinny_version
+@skinny_blank_app_version = "1.1.0-1"
 set :skinny_blank_app_version, @skinny_blank_app_version
 
 # Build-specific configuration
