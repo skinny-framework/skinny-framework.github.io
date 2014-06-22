@@ -60,7 +60,7 @@ I18n.enforce_available_locales = false
 @skinny_version = "1.1.0"
 set :skinny_version, @skinny_version
 #@skinny_blank_app_version = @skinny_version
-@skinny_blank_app_version = "1.1.0-1"
+@skinny_blank_app_version = "1.1.0-2"
 set :skinny_blank_app_version, @skinny_blank_app_version
 
 # Build-specific configuration
