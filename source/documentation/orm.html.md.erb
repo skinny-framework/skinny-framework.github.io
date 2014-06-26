@@ -676,7 +676,7 @@ object Member extends SkinnyCRUDMapper[Member] {
     hasManyThrough[Skill](
       MemberSkill, Skill, (m, skills) => m.copy(skills = skills)
     ).includes[Skill]((ms, skills) => ms.map { m =>
-      m.copy(kills = skills.filter(_.memberId.exists(_ == m.id)))
+      m.copy(skills = skills.filter(_.memberId.exists(_ == m.id)))
     })
 }
 
@@ -696,7 +696,13 @@ https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/sca
 Skinny ORM provides the folllowing settings to overwrite.
 
 ```scala
-object GroupMember extends SkinnyCRUDMapper[Member] {
+object GroupMember 
+  extends SkinnyCRUDMapper[Member]
+  with TimestampsFeature[Member]
+  with OptimisticLockWithTimestampFeature[Member] 
+  with OptimisticLockWithVersionFeature[Member]
+  with SoftDeleteWithBooleanFeature[Member]
+  with SoftDeleteWithTimestampFeature[Member] {
 
   // default: 'default
   override def connectionPoolName = 'legacydb
@@ -716,39 +722,39 @@ object GroupMember extends SkinnyCRUDMapper[Member] {
   // default: "id"
   override def primaryKeyFieldName = "uid" 
 
-  // with SkinnyCRUDMapper[GroupMember]
+  // with SkinnyCRUDMapper[Member]
   // createWithAttributes will try to return generated id if true
   // default: true
   override def useAutoIncrementPrimaryKey = false
 
-  // with SkinnyCRUDMapper[GroupMember]
+  // with SkinnyCRUDMapper[Member]
   // default scope for update operations
   // default: None
   override def defaultScopeForUpdateOperations = Some(sqls.isNull(column.deletedAt))
 
-  // with TimestampsFeature[GroupMember]
+  // with TimestampsFeature[Member]
   // default: "createdAt"
   override def createdAtFieldName = "createdTimestamp"
 
-  // with TimestampsFeature[GroupMember]
+  // with TimestampsFeature[Member]
   // default: "updatedAt"
   override def updatedAtFieldName = "updatedTimestamp"
 
-  // with OptimisticLockWithTimestampFeature[GroupMember] 
+  // with OptimisticLockWithTimestampFeature[Member] 
   // default: "lockTimestamp"
-  override val lockTimestampFieldName = "lockedAt"
+  override def lockTimestampFieldName = "lockedAt"
 
-  // with OptimisticLockWithVersionFeature[GroupMember]
+  // with OptimisticLockWithVersionFeature[Member]
   // default: "lockVersion"
-  override val lockVersionFieldName = "ver"
+  override def lockVersionFieldName = "ver"
 
-  // with SoftDeleteWithBooleanFeature[GroupMember]
+  // with SoftDeleteWithBooleanFeature[Member]
   // default: "isDeleted"
-  override val isDeletedFieldName = "deleted"
+  override def isDeletedFieldName = "deleted"
 
-  // with SoftDeleteWithTimestampFeature[GroupMember]
+  // with SoftDeleteWithTimestampFeature[Member]
   // default: "deletedAt"
-  override val deletedAtFieldName = "deletedTimestamp"
+  override def deletedAtFieldName = "deletedTimestamp"
 
 }
 ```
