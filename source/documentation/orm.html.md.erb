@@ -665,7 +665,7 @@ object Member extends SkinnyCRUDMapper[Member] {
   }
 }
 
-Member.includes(companyOpt).findAll()
+Member.includes(Member.companyOpt).findAll()
 ```
 
 Yet another example:
