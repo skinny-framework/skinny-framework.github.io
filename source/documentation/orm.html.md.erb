@@ -36,8 +36,8 @@ Let's prepare right now!
 ```scala
 libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-orm"      % "<%= skinny_version %>",
-  "com.h2database"       %  "h2"              % "1.4.178",
-  "ch.qos.logback"       %  "logback-classic" % "1.1.2"
+  "com.h2database"       %  "h2"              % "1.4.+",
+  "ch.qos.logback"       %  "logback-classic" % "1.1.+"
 )
 
 // will be executed when invoking sbt console
@@ -913,6 +913,32 @@ https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/sca
 
 Source code: 
 https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala
+
+<hr/>
+### SkinnyRecord
+<hr/>
+
+`SkinnyRecord` is a trait which extends entity classes. When an entity is a `SkinnyRecord`, it acts like a Rails ActiveRecord object.
+
+```scala
+class Member(id: Long, name: String, createdAt: DateTime, updatedAt: DateTime) 
+  extends SkinnyRecord[Member] {
+
+  def skinnyCRUDMapper = Member
+}
+
+object Member extends SkinnyCRUDMapper[Member] {
+  ...
+}
+
+Member.findById(id).map { member =>
+  member.copy(name = "Kaz").save()
+  member.destory()
+}
+```
+
+Source code: 
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/orm/src/main/scala/skinny/orm/SkinnyRecordBaseWithId.scala
 
 <hr/>
 ### FactoryGirl
