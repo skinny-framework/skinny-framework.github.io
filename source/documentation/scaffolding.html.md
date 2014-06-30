@@ -179,6 +179,31 @@ object ProjectMembersController extends SkinnyResource with ApplicationControlle
 ```
 
 <hr/>
+#### Using your favorite ORM with SkinnyResource
+<hr/>
+
+Skinny ORM'S CRUDMappper implements `skinny.SkinnyModel`'s methods. If you'd like to use other ORM or DB library, you can do that by implementing `SkinnyModel` trait.
+
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/SkinnyModel.scala
+
+```scala
+object MembersController extends SkinnyResource with ApplicationController {
+  protectFromForgery()
+
+  override def model = SlickBackendMapper
+
+...
+```
+
+<hr/>
+#### SkinnyResource's paginaation for Oracle, MS SQLServer
+<hr/>
+
+Skinny ORM doesn't support Oracle DB or MS SQLServer's pagenation. You should override `SkinnyModel#findModels(pageSize: Int, pageNo: Int): List[Model]` method for your RDBMS. 
+
+https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/SkinnyModel.scala
+
+<hr/>
 ### Reverse Scaffold Generator
 <hr/>
 
