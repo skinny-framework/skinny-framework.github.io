@@ -491,7 +491,7 @@ session += "name" -> "value"
 session -= "name"
 ```
 
-[/api/index.html#org.scalatra.RichSession](http://www.scalatra.org/2.2/api/index.html#org.scalatra.RichSession)
+[/api/index.html#org.scalatra.servlet.RichSession](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichSession)
 
 Even if you don't use sessions in your application code, Scalatra's Flash and CSRF protection features are using servlet sessions.
 So your apps are not naturally stateless when using vanilla Scalatra.
