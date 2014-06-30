@@ -145,8 +145,8 @@ The usage is like this:
 // create
 Member.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
 // update
-Member.findById(123).withAttributes('name -> "Bob")
-Member.findBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
+Member.updateById(123).withAttributes('name -> "Bob")
+Member.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
 // delete
 Member.deleteById(123)
 Member.deleteBy(sqls.eq(Member.column.name, "Alice"))
@@ -185,8 +185,8 @@ The usage is like this:
 // create
 Member2.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
 // update
-Member2.findById(MemberId(123)).withAttributes('name -> "Bob")
-Member2.findBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
+Member2.updateById(MemberId(123)).withAttributes('name -> "Bob")
+Member2.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
 // delete
 Member2.deleteById(MemberId(123))
 Member2.deleteBy(sqls.eq(Member.column.name, "Alice"))
