@@ -41,17 +41,15 @@ https://github.com/skinny-framework/skinny-framework/tree/1.1.x/orm/src/test/sca
 ```scala
 package model
 
-import skinny._
-import skinny.test._
-import org.scalatest.fixture.FunSpec
-import scalikejdbc._, SQLInterpolation._
-import scalikejdbc.scalatest._
 import org.joda.time._
 import org.scalatest._
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.fixture.FunSpec
+import skinny._
+import skinny.test._
+import scalikejdbc._
+import scalikejdbc.scalatest._
 
-
-class MemberSpec extends FunSpec with AutoRollback with ShouldMatchers with DBSettings {
+class MemberSpec extends FunSpec with AutoRollback with Matchers with DBSettings {
 
   override def fixture(implicit session: DBSession) {
     // do fixtures stuff
@@ -81,11 +79,10 @@ class RootController extends ApplicationController {
 }
 
 import org.scalatest._
-import org.scalatest.matchers.ShouldMatchers
 import skinny.DBSettings
 import skinny.test.MockController
 
-class RootControllerSpec extends FunSpec with ShouldMatchers with DBSettings {
+class RootControllerSpec extends FunSpec with Matchers with DBSettings {
 
   describe("RootController") {
     it("shows top page") {
@@ -126,9 +123,8 @@ import skinny.DBSettings
 import skinny.test.SkinnyTestSupport
 import _root_.controller.Controllers
 import org.scalatest._
-import org.scalatest.matchers.ShouldMatchers
 
-class IntegrationTestSpec extends ScalatraFlatSpec with ShouldMatchers with SkinnyTestSupport with  DBSettings {
+class IntegrationTestSpec extends ScalatraFlatSpec with Matchers with SkinnyTestSupport with  DBSettings {
   addFilter(Controllers.members, "/*")
 
   it should "show index page" in {
