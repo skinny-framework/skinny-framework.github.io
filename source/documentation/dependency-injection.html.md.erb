@@ -114,7 +114,7 @@ trait ApplicationController extends SkinnyController
 
   // this modules will be used instead of loaded one from application.conf
   // you can use singleton objects
-  def scaldiModules = Seq(new ServicesModule, LocaleModule)
+  override def scaldiModules = Seq(new ServicesModule, LocaleModule)
 }
 ```
 
