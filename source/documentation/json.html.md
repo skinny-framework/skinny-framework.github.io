@@ -24,7 +24,7 @@ The following methods come from `JSONFeature` trait.
 [framework/src/main/scala/skinny/controller/feature/JSONFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/feature/JSONFeature.scala)
 
 
-```java
+```scala
 import skinny.util.JSONStringOps._
 
 case class UserResponse(user: User)
