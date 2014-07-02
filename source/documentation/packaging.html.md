@@ -90,6 +90,12 @@ First, make sure that you have the correct DB driver for the production environm
 "org.postgresql"          % "postgresql"          % "9.3-1100-jdbc41" 
 ```
 
+And then, let's prepare some files for Heroku.
+
+```
+./skinny heroku:init
+```
+
 <hr/>
 #### Setting up a Heroku app
 <hr/>

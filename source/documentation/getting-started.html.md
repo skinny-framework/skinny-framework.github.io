@@ -159,7 +159,6 @@ The following tree shows the directories and files in skinny-blank-app project. 
 
 ```sh
 .
-├── Procfile # for Heroku deployment
 ├── README.md
 ├── bin
 │   └── sbt-launch.jar # global sbt script in PATH is given priority over this
@@ -239,7 +238,6 @@ The following tree shows the directories and files in skinny-blank-app project. 
 │           │   └── RootControllerSpec.scala # testing with MockController
 │           └── integrationtest
 │               └── RootController_IntegrationTestSpec.scala # testing with embedded Jetty (scalatra-test)
-├── system.properties # for Heroku deployment
 └── task
     └── src
         └── main

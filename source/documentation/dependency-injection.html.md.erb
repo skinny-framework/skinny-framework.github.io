@@ -31,14 +31,18 @@ libraryDependencies += "org.skinny-framework" %% "skinny-scaldi" % "<%= @skinny_
 This is a simple module which injects service objects to controllers or else.
 
 ```scala
+package service
 trait EchoService {
   def echo(msg: String): String
 }
 class EchoServiceImpl extends EchoService {
   override def echo(msg: String) = msg
 }
+```
 
-object ServicesModule extends scaldi.Module {
+```scala
+package module
+class ServicesModule extends scaldi.Module {
   bind[EchoService] to new EchoServiceImpl
 }
 ```
@@ -49,7 +53,12 @@ object ServicesModule extends scaldi.Module {
 The following is another module example.
 
 ```scala
+package model
 case class AppName(value: String)
+```
+
+```scala
+package module
 class AppModule extends scaldi.Module {
   bind[AppName] to AppName("My First Skinny App")
 }
@@ -58,15 +67,54 @@ class AppModule extends scaldi.Module {
 <hr/>
 #### Integrating Scaldi modules to Skinny controllers
 
-`skinny-scaldi`'s Scaldi integration is prety simple. Just override `scaldiModules: Seq[scaldi.Module]`.
+`skinny-scaldi`'s Scaldi integration is prety simple. Just prepare configuration and add `ScaldiFeature` trait to controllers.
+
+And add modules to `src/main/resources/application.conf` like this. 
+
+Be aware that module in `applicationc.conf` should be not an object but a class.
+
+```
+development {
+  scaldi {
+    modules: ["module.ServicesModule", "module.AppModule"]
+  }
+}
+test {
+  scaldi {
+    modules: ["module.ServicesModule", "module.AppModule"]
+  }
+}
+```
+
+The following is the base controller.
 
 ```scala
 import skinny._
 import skinny.controller.feature.ScaldiFeature
 
-trait ApplicationController extends SkinnyController with ScaldiFeature {
-  def scaldiModules = Seq(ServicesModule, new AppModule)
+trait ApplicationController extends SkinnyController 
+  with ScaldiFeature {
+}
+```
 
+If you'd like to replace modules after loading from application.conf, just override `scaldiModules: Seq[scaldi.Module]`.
+
+```scala
+package model
+case class Locale(value: String)
+object LocaleModule extends scaldi.Module {
+  bind[Locale] to new Locale("ja")
+}
+```
+
+```scala
+package controller
+trait ApplicationController extends SkinnyController 
+  with ScaldiFeature {
+
+  // this modules will be used instead of loaded one from application.conf
+  // you can use singleton objects
+  def scaldiModules = Seq(new ServicesModule, LocaleModule)
 }
 ```
 
