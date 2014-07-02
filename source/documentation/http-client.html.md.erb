@@ -30,9 +30,9 @@ val response: Response = HTTP.get("http://example.com/api?foo=bar")
 
 case class Response(
   status: Int,
-  headers: mutable.Map[String, String],
-  headerFields: mutable.Map[String, Seq[String]],
-  rawCookies: mutable.Map[String, String],
+  headers: Map[String, String],
+  headerFields: Map[String, Seq[String]],
+  rawCookies: Map[String, String],
   charset: Option[String],
   body: Array[Byte]) {
 
