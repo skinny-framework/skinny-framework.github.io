@@ -84,6 +84,8 @@ class InjectedController extends ApplicationController {
 
   def appName = inject[AppName].value // "My First Skinny App"
 
+  // SkinnyEnv and SkinnyConfig are available by default 
+  // though you can do the same thing by using companion objects
   def env = inject[SkinnyEnv].getOrElse("xxx") // "development"
 }
 ```
