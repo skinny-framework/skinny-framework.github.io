@@ -1,0 +1,91 @@
+---
+title: Dependency Injection - Skinny Framework
+---
+
+## Dependency Injection
+<hr/>
+
+If you'd like to introduce dependency injection pattern in Skinny apps, we recommend using [Scaldi](http://scaldi.org/) which is a pretty cool library to inject deps.
+
+http://scaldi.org/
+
+An optional module `skinny-scaldi` is an easy-to-use Scaldi adaptor module which is developed by Skinny Framework team.
+
+
+<hr/>
+### Setup
+<hr/>
+
+`skinny-scaldi` is an optional module (= not to be enabled by default). Add it to your libraryDependencies.
+
+```scala
+libraryDependencies += "org.skinny-framework" %% "skinny-scaldi" % "<%= @skinny_version %>"
+```
+
+<hr/>
+### Simple Usage
+<hr/>
+
+#### A module which injects services
+
+This is a simple module which injects service objects to controllers or else.
+
+```scala
+trait EchoService {
+  def echo(msg: String): String
+}
+class EchoServiceImpl extends EchoService {
+  override def echo(msg: String) = msg
+}
+
+object ServicesModule extends scaldi.Module {
+  bind[EchoService] to new EchoServiceImpl
+}
+```
+
+<hr/>
+#### Yet another module
+
+The following is another module example.
+
+```scala
+case class AppName(value: String)
+class AppModule extends scaldi.Module {
+  bind[AppName] to AppName("My First Skinny App")
+}
+```
+
+<hr/>
+#### Integrating Scaldi modules to Skinny controllers
+
+`skinny-scaldi`'s Scaldi integration is prety simple. Just override `scaldiModules: Seq[scaldi.Module]`.
+
+```scala
+import skinny._
+import skinny.controller.feature.ScaldiFeature
+
+trait ApplicationController extends SkinnyController with ScaldiFeature {
+  def scaldiModules = Seq(ServicesModule, new AppModule)
+
+}
+```
+
+<hr/>
+#### Using Scaldi APIs
+
+Now you can use Scaldi APIs like `inject[A]`.
+
+```scala
+class InjectedController extends ApplicationController {
+  def index = {
+    val service: EchoService = inject[EchoService]
+    service.echo(params.getAs[String]("echo").getOrElse(""))
+  }
+
+  def appName = inject[AppName].value // "My First Skinny App"
+
+  def env = inject[SkinnyEnv].getOrElse("xxx") // "development"
+}
+```
+
+
