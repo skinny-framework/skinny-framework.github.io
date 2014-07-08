@@ -42,7 +42,7 @@ libraryDependencies ++= Seq(
 
 // will be executed when invoking sbt console
 initialCommands := """
-import scalikejdbc._, SQLInterpolation._
+import scalikejdbc._
 import skinny.orm._, feature._
 import org.joda.time._
 skinny.DBSettings.initialize()
@@ -448,6 +448,8 @@ We need to specify some types, so definitions are not as simple as ActiveRecord,
 case class Company(id: Long, name: String)
 class Member(id: Long, name: String,
   mentorId: Long, mentor: Option[Member] = None,
+  // Naming convention: {className}+{primaryKeyFieldName}
+  // If the name of ID is "no", fk should be "companyNo" instead.
   companyId: Long, company: Option[Company] = None)
 
 object Member extends SkinnyCRUDMapper[Member] {
@@ -469,10 +471,12 @@ object Member extends SkinnyCRUDMapper[Member] {
   val mentorAlais = createAlias("mentor")
   val mentor = belongsToWithAlias(
     // in this case, "mentor" alias will be used in join query
+    // the fk's name will be {aliasName} + {primaryKeyFieldName}
     right = Member -> mentorAlias,
-    merge = (member, mentor) => member.copy(mentor = mentor))
-    // mentor will be resolved only when calling #joins 
-    /*.byDefault */ 
+    merge = (member, mentor) => member.copy(mentor = mentor)
+  )
+  // mentor will be resolved only when calling #joins 
+  /*.byDefault */ 
 }
 
 Member.findById(123) // without mentor
