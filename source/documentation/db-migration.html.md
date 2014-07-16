@@ -107,3 +107,21 @@ When your migration failed, Run `db:repair` command and fix migration files.
 ./skinny db:migrate
 ```
 
+<hr/>
+### FAQ
+<hr/>
+
+#### How to access schema_version table?
+
+Flyway creates a table named `"schema_version"` for H2 database. 
+
+```scala
+sql"""select "version" from "schema_version" """.map(_.string(1)).list.apply()
+```
+
+FYI:
+
+http://stackoverflow.com/questions/13850499/flyway-and-h2-why-are-the-schema-version-table-and-columns-lower-case-and-case
+
+
+
