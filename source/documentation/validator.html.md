@@ -12,7 +12,7 @@ skinny-validator is portable, so you can use skinny-validator with Play2, Scalat
 
 You can see simple usage of skinny-validator here:
 
-[validator/src/test/scala/UsageSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/validator/src/test/scala/UsageSpec.scala)
+[validator/src/test/scala/UsageSpec.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/validator/src/test/scala/UsageSpec.scala)
 
 <hr/>
 ### Creating New Validation Rule
@@ -80,9 +80,9 @@ Basic usage involves combining validation rules with `&`. If a failure is found,
 
 The built-in validators are good enough to cover most common cases.
 
-[validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
+[validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala)
 
-[validator/src/test/scala/skinny/validator](https://github.com/skinny-framework/skinny-framework/tree/1.1.x/validator/src/test/scala/skinny/validator)
+[validator/src/test/scala/skinny/validator](https://github.com/skinny-framework/skinny-framework/tree/develop/validator/src/test/scala/skinny/validator)
 
 
 <hr/>
@@ -146,7 +146,7 @@ messages.get("minLength", Seq("password", 6))
 
 You can easily understand how skinny-valdiator works in Skinny apps.
 
-[framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala)
+[framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala)
 
 The following is an example with Skinny Framework:
 
@@ -180,8 +180,8 @@ def create = {
 
 See also:
 
-[common/src/main/scala/skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/ParamType.scala)
+[common/src/main/scala/skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
 
-[common/src/main/scala/skinny/StrongParameters.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/StrongParameters.scala)
+[common/src/main/scala/skinny/StrongParameters.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/StrongParameters.scala)
 
 

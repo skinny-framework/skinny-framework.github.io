@@ -38,7 +38,7 @@ Scaffold command's parameters are ...
 - {resources}: Resource name in the plural (camelCase)
 - {resource}: Resource name (camelCase)
 - {fieldName}: Field name in the resource (camelCase)
-- {paramType}: `skinny.ParamType`. see also: [skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/ParamType.scala)
+- {paramType}: `skinny.ParamType`. see also: [skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
 - {columnType}: (optional) Database column type. This will be embedded into DB migration file.
 
 It's also possible to specify namespace for the resource:
@@ -184,7 +184,7 @@ object ProjectMembersController extends SkinnyResource with ApplicationControlle
 
 Skinny ORM'S CRUDMappper implements `skinny.SkinnyModel`'s methods. If you'd like to use other ORM or DB library, you can do that by implementing `SkinnyModel` trait.
 
-https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/SkinnyModel.scala
+https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/SkinnyModel.scala
 
 ```scala
 object MembersController extends SkinnyResource with ApplicationController {
@@ -201,7 +201,7 @@ object MembersController extends SkinnyResource with ApplicationController {
 
 Skinny ORM doesn't support Oracle DB or MS SQLServer's pagenation. You should override `SkinnyModel#findModels(pageSize: Int, pageNo: Int): List[Model]` method for your RDBMS. 
 
-https://github.com/skinny-framework/skinny-framework/blob/1.1.x/common/src/main/scala/skinny/SkinnyModel.scala
+https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/SkinnyModel.scala
 
 <hr/>
 ### Reverse Scaffold Generator
