@@ -45,7 +45,7 @@ class ProgrammersController extends SkinnyApiResource with AngularXHRServerFeatu
   override def resourcesName = "programmers"
   override def resourceName = "programmer"
 
-  override def resourcesBasePath = s"/angular/${resourcesName}"
+  override def resourcesBasePath = s"/api/${resourcesName}"
 
   override def createParams = Params(params +
     ("hashedPassword" -> params.getAs[PlainPassword]("plainTextPassword").map(_.hash("dummy salt")))
