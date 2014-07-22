@@ -150,6 +150,20 @@ libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny_version %>" % "test"
 )
 ```
+
+<hr/>
+### 1.2 Migration Guide for 1.1.x Users
+<hr/>
+
+APIs are basically compatible. If you don't have some extensions that depend on `LocaleFeature`, `RequestScopeFeature` and `SkinnySessionFilter` methods, 
+your app will work fine without changing your code.
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/1.2.0
+
+Though we believe migration is not difficult, please tell us here if you find something wrong.
+
+https://github.com/skinny-framework/skinny-framework/issues
+
 <hr/>
 ### 1.1 Migration Guide for 1.0.x Users
 <hr/>
