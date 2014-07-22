@@ -443,6 +443,36 @@ However, precompiling the assets is highly recommended in production (`./skinny 
 See in detail: [Assets Support](documentation/assets.html)
 
 <hr/>
+### Angular.js Friendly Server Side
+<hr/>
+
+![Angular Logo](images/angularjs.png)
+
+By using `AngularXHRServerFeature` trait, your controllers will be Angular.js friendly JSON API provider.
+
+```scala
+class ArticlesController extends SkinnyApiResource with AngularXHRServerFeature {
+  // Enable Angular's XSRF protection
+  protectFromForgery()
+
+  // JSON request body will be merged into Scalatra params automatically
+  // ...
+
+}
+```
+
+And your ngResource is like this:
+
+
+```javascript
+app.factory('Article', ['$resource', function($resource) {
+  return $resource('/api/articles/:id.json', {}, {});
+}]);
+```
+
+See in detail: [Angular Support](documentation/angular.html)
+
+<hr/>
 ### Testing Support
 <hr/>
 

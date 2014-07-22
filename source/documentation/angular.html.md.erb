@@ -1,0 +1,395 @@
+---
+title: Angular.js Support - Skinny Framework
+---
+
+## Angular.js
+
+<hr/>
+### Angular Friendly Server Side
+<hr/>
+
+![Angular Logo](images/angularjs.png)
+
+Skinny Framework provides Angular.js server side API feature.
+
+We also follow Angular's progmatic practices such as ngResource APIs, XSRF and JSON vulnerability protection.
+
+<hr/>
+### Example
+<hr/>
+
+#### src/main/scala/controller/api/ProgrammersController.scala
+<hr/>
+
+This is an Angular flavored JSON API controller. 
+
+`AngularXHRServerFeature` trait provides you all the basic features which is required to be Angular compatible JSON APIs.
+
+```scala
+package controller.api
+
+import org.json4s._
+import skinny._
+import skinny.controller.SkinnyApiResource
+import skinny.controller.feature.AngularXHRServerFeature
+import skinny.validator._
+import model._
+
+class ProgrammersController extends SkinnyApiResource with AngularXHRServerFeature {
+  // ----
+  // XSRF protection
+  // https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection
+  protectFromForgery()
+
+  override def model = Programmer
+  override def resourcesName = "programmers"
+  override def resourceName = "programmer"
+
+  override def resourcesBasePath = s"/angular/${resourcesName}"
+
+  override def createParams = Params(params +
+    ("hashedPassword" -> params.getAs[PlainPassword]("plainTextPassword").map(_.hash("dummy salt")))
+  )
+  override def createForm = validation(createParams,
+    paramKey("name") is required & maxLength(64),
+    paramKey("favoriteNumber") is required & numeric,
+    paramKey("plainTextPassword") is required & minLength(8)
+  )
+  override def createFormStrongParameters = Seq(
+    "name" -> ParamType.String,
+    "favoriteNumber" -> ParamType.Long,
+    "hashedPassword" -> ProgrammerParamType.HashedPassword
+  )
+
+  override def updateParams = Params(params).withDate("birthday")
+  override def updateForm = validation(updateParams,
+    paramKey("id") is required,
+    paramKey("name") is required & maxLength(64),
+    paramKey("favoriteNumber") is required & numeric
+  )
+  override def updateFormStrongParameters = Seq(
+    "name" -> ParamType.String,
+    "favoriteNumber" -> ParamType.Long)
+
+  private object ProgrammerParamType {
+    val HashedPassword = ParamType { case v: HashedPassword => v.value }
+  }
+
+}
+```
+
+<hr/>
+#### src/main/scala/controller/Controllers.scala
+<hr/>
+
+```scala
+object Controllers {
+  def mount(ctx: ServletContext): Unit = {
+    apiProgrammers.mount(ctx)
+  }
+
+  object apiProgrammers extends controller.api.ProgrammersController with Routes {
+  }
+}
+```
+
+<hr/>
+#### src/main/webapp/WEB-INF/views/programmers/index.html.ssp
+<hr/>
+
+This is the first content to be accessed. 
+
+This Scalate template will returns a simple HTML which includes Angular and application JS files.
+
+For simplicity, this example contains controllers, directives and so on in the index HTML file. 
+
+Of course, it's not a best practice. Separating JS files is preferred.
+
+```html
+<div ng-app="myApp">
+<hr/>
+<div ng-view>Loading....</div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-resource.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.min.js"></script>
+
+<script>
+'use strict';
+
+// -----------
+// Angular app for this resource CRUD
+
+var app = angular.module('myApp', ['ngRoute', 'ngResource']);
+
+// routes
+app.config(function($routeProvider) {
+  $routeProvider.when('/',         {templateUrl: 'partials/list.html', controller: 'ListController'});
+  $routeProvider.when('/new',      {templateUrl: 'partials/new.html',  controller: 'NewController'});
+  $routeProvider.when('/:id',      {templateUrl: 'partials/show.html', controller: 'ShowController'});
+  $routeProvider.when('/:id/edit', {templateUrl: 'partials/edit.html', controller: 'EditController'});
+  $routeProvider.otherwise({redirectTo: '/'});
+});
+
+// form params instead of JSON request body
+// Skinny's Angular support basically works with both of them
+app.config(['$httpProvider', function($httpProvider) {
+  $httpProvider.defaults.transformRequest =  function(data) {
+    if (data === undefined) { return data; }
+    var params = '', delim = '';
+    for (var key in data) {
+      if (key.substr(0, 1) === '$') { continue; }
+      if (data.hasOwnProperty(key)) {
+        var val = data[key];
+        params += delim + encodeURIComponent(key) + '=' + encodeURIComponent(val);
+        delim = '&';
+      }
+    }
+    return params;
+  };
+  $httpProvider.defaults.headers.post = {'Content-Type': 'application/x-www-form-urlencoded'};
+}]);
+
+// -----------
+// resource
+
+app.factory('Resource', ['$resource', function($resource) {
+  return $resource('/api/programmers/:id.json', {}, {});
+}]);
+
+// -----------
+// controllers
+
+app.controller('ListController', function($scope, Resource) {
+  $scope.load = function() {
+    var items = Resource.query(function () {
+      $scope.items = items;
+    });
+  };
+  $scope.$on('refreshList', $scope.load);
+});
+
+app.controller('NewController', function($scope) {
+});
+
+app.controller('ShowController', function($scope, $routeParams, Resource) {
+  $scope.load = function() {
+    var item = Resource.get({id: $routeParams.id}, function() {
+      $scope.item = item;
+    });
+  };
+});
+
+app.controller('EditController', function($scope, $routeParams, Resource) {
+  $scope.load = function() {
+    var item = Resource.get({id: $routeParams.id}, function() {
+      $scope.item = item;
+    });
+  };
+});
+
+// -----------
+// directives
+
+app.directive('saveItem', function(Resource) {
+  return {
+    restrict: 'A',
+    controller: function($scope, $location) {
+      $scope.submit = function(item) {
+        Resource.save(item,
+          function() { // success
+            $location.path('/');
+          },
+          function(response) { // failure
+            if (response.data) {
+              // validation errors
+              $scope.formErrors = {};
+              for (var name in response.data) {
+                $scope.formErrors[name] = response.data[name];
+              }
+            } else {
+              window.alert('Failed to access server - ' + JSON.stringify(response));
+            }
+          }
+        );
+      };
+      $scope.cancel = function() {
+        $location.path('/');
+      }
+    }
+  }
+});
+
+app.directive('deleteItem', function(Resource) {
+  return {
+    restrict: 'A',
+    controller: function($scope) {
+      $scope.submit = function(id) {
+        if (window.confirm('Are you sure?')) {
+          Resource.delete({id: id},
+            function (item, headers) {
+              // success
+              $scope.$emit('refreshList');
+            },
+            function(response) {
+              // failure
+            }
+          );
+        }
+      };
+    }
+  }
+});
+</script>
+```
+
+<hr/>
+#### src/main/webapp/programmers/partials/list.html
+<hr/>
+
+```html
+<div ng-app="myApp" ng-controller="ListController" ng-init="load()">
+    <h3>List</h3>
+    <hr/>
+    <table class="table table-bordered">
+        <tr>
+            <th>Name</th>
+            <th>FavoriteNumber</th>
+            <th>HashedPassword</th>
+            <th></th>
+        </tr>
+        <tr ng-repeat="item in items">
+            <td>{{item.name}}</td>
+            <td>{{item.favoriteNumber}}</td>
+            <td>{{item.hashedPassword.value}}</td>
+            <td>
+                <a href="#/{{item.id}}" class="btn btn-default">Detail</a>
+                <a href="#/{{item.id}}/edit" class="btn btn-info">Edit</a>
+                <button delete-item ng-click="submit(item.id)" class="btn btn-danger">Delete</button>
+            </td>
+        </tr>
+    </table>
+
+    <p><a href="#/new" class="btn btn-primary">New</a></p>
+</div>
+```
+
+<hr/>
+#### src/main/webapp/programmers/partials/_form.html
+<hr/>
+
+```html
+<form>
+<div class="form-group">
+    <label class="control-label">
+        Name
+    </label>
+    <div class="controls row">
+        <div class="col-xs-12">
+            <div ng-class="formErrors['name'].length > 0 ? 'has-error' : ''">
+                <input type="text" name="name" class="form-control" ng-model="item.name" />
+                <span ng-show="formErrors['name']">
+                    <p class="help-block" ng-repeat="error in formErrors['name']">{{error}}</p>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="control-label">
+        Plain Text Password
+    </label>
+    <div class="controls row">
+        <div class="col-xs-12">
+            <div ng-class="formErrors['plainTextPassword'].length > 0 ? 'has-error' : ''">
+                <input type="text" name="plainTextPassword" class="form-control" ng-model="item.plainTextPassword" />
+                <span ng-show="formErrors['plainTextPassword']">
+                    <p class="help-block" ng-repeat="error in formErrors['plainTextPassword']">{{error}}</p>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label class="control-label">
+        Favorite Number
+    </label>
+    <div class="controls row">
+        <div class="col-xs-12">
+            <div ng-class="formErrors['favoriteNumber'].length > 0 ? 'has-error' : ''">
+                <input type="text" name="favoriteNumber" class="form-control" ng-model="item.favoriteNumber" />
+                <span ng-show="formErrors['favoriteNumber']">
+                    <p class="help-block" ng-repeat="error in formErrors['favoriteNumber']">{{error}}</p>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-actions">
+    <button class="btn btn-primary" save-item ng-click="submit(item)">Submit</button>
+    <button class="btn btn-default" save-item ng-click="cancel()">Cancel</button>
+</div>
+</form>
+```
+
+<hr/>
+#### src/main/webapp/programmers/partials/new.html
+<hr/>
+
+```html
+<div ng-app="myApp" ng-controller="NewController" ng-init="load()">
+    <h3>New</h3>
+    <hr/>
+    <div ng-include="'partials/_form.html'"></div>
+    <hr/>
+</div>
+```
+
+<hr/>
+#### src/main/webapp/programmers/partials/edit.html
+<hr/>
+
+```html
+<div ng-app="myApp" ng-controller="EditController" ng-init="load()">
+    <h3>Edit</h3>
+    <hr/>
+    <div ng-include="'partials/_form.html'"></div>
+    <hr/>
+</div>
+```
+
+<hr/>
+#### src/main/webapp/programmers/partials/show.html
+<hr/>
+
+```html
+<div ng-app="myApp" ng-controller="ShowController" ng-init="load()">
+    <h3>Detail</h3>
+    <hr/>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <td>{{item.id}}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{item.name}}</td>
+        </tr>
+        <tr>
+            <th>Favorite Number</th>
+            <td>{{item.favoriteNumber}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <hr/>
+
+    <div class="form-actions">
+        <a href="#/{{item.id}}/edit" class="btn btn-info">Edit</a>
+        <button delete-item ng-click="submit(item.id)" class="btn btn-danger">Delete</button>
+        <a href="#/" class="btn btn-default">Back to list</a>
+    </div>
+</div>
+```
+

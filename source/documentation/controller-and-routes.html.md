@@ -713,3 +713,71 @@ val connectTimeout: Option[Int] = SkinnyConfig.intConfigValue("timeout.connect")
 val memcachedServers: Option[Seq[String]] = SkinnyConfig.stringSeqConfigValue("memcached")
 ```
 
+<hr/>
+#### Awaiting several Futures within action method
+<hr/>
+
+The following is a simple dashboard application which collects serveral futures within the `index` method.
+
+Since Skinny 1.2.0, you can easily access request and requestScope from Futures by using futureWithRequest block.
+
+```scala
+package controller
+
+import org.joda.time._
+import service._
+import scala.concurrent._
+import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
+import javax.servlet.http.HttpServletRequest
+
+case class DashboardOps(controller: DashboardController) {
+  def setCurrentUser(implicit req: HttpServletRequest) = {
+    // implicit request is not ambiguous here
+    val userId = controller.currentUserId.getOrElse(controller.halt(401))
+    controller.set("currentUser" -> controller.adminUserService.getCurrentUser(userId))
+  }
+}
+
+class DashboardController extends ApplicationController {
+
+  val adminUserService = new AdminUserService
+  val accessService = new AccessLogService
+  val alertService = new AlertService
+  val ops = DashboardOps(this)
+
+  def index = {
+    val scope: scala.collection.concurrent.Map[String, Any] = requestScope()
+
+    awaitFutures(5.seconds)(
+      // simply define operation inside of this controller
+      futureWithRequest { implicit req =>
+        //set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
+        set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))(req)
+
+        // [error] example/src/main/scala/controller/DashboardController.scala:43: ambiguous implicit values:
+        // [error]  both value req of type javax.servlet.http.HttpServletRequest
+        // [error]  and method request in class DashboardController of type => javax.servlet.http.HttpServletRequest
+        // [error]  match expected type javax.servlet.http.HttpServletRequest
+        // [error]         set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
+        // [error]            ^
+        // [error] one error found
+      },
+
+      // separate operation to outside of this controller
+      futureWithRequest(req => ops.setCurrentUser(req)),
+
+      // just use Future directly
+      Future {
+        // When using Future directly, you must be aware of Scalatra's DynamicScope's thread local request.
+        // In this case, you cannot use request here. requestScope, session and so on 
+        // should be captured outside of this Future block.
+        scope.update("alerts", alertService.findAll())
+      }
+    )
+    render("/dashboard/index")
+  }
+
+  private[controller] def currentUserId(implicit req: HttpServletRequest): Option[Long] = session(req).getAs[Long]("userId")
+}
+```
