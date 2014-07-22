@@ -61,7 +61,7 @@ class ProgrammersController extends SkinnyApiResource with AngularXHRServerFeatu
     "hashedPassword" -> ProgrammerParamType.HashedPassword
   )
 
-  override def updateParams = Params(params).withDate("birthday")
+  override def updateParams = Params(params)
   override def updateForm = validation(updateParams,
     paramKey("id") is required,
     paramKey("name") is required & maxLength(64),
