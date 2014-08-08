@@ -20,7 +20,22 @@ If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 ./skinny run
 ```
 
-And then, access `http://localhost:8080/` and the app should return 200 OK.
+<hr/>
+### Homebrew (brew tap)
+<hr/>
+
+If you're a MacOS X user, try our Homebrew formula out.
+
+https://github.com/skinny-framework/homebrew-alt
+
+```sh
+brew tap skinny-framework/alt
+brew install skinny
+
+skinny new skinny-blank-app
+cd skinny-blank-app
+skinny run
+```
 
 <hr/>
 ### Using generator
