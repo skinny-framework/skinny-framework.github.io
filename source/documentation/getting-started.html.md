@@ -37,6 +37,8 @@ cd skinny-blank-app
 skinny run
 ```
 
+<script type="text/javascript" src="https://asciinema.org/a/11426.js" id="asciicast-11426" async></script>
+
 <hr/>
 ### Using generator
 <hr/>
