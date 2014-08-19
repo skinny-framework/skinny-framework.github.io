@@ -142,6 +142,7 @@ app.config(['$httpProvider', function($httpProvider) {
       if (key.substr(0, 1) === '$') { continue; }
       if (data.hasOwnProperty(key)) {
         var val = data[key];
+        val = (val === null || val === undefined) ? '' : val;
         params += delim + encodeURIComponent(key) + '=' + encodeURIComponent(val);
         delim = '&';
       }
