@@ -142,15 +142,6 @@ class IntegrationTestSpec extends ScalatraFlatSpec with Matchers with SkinnyTest
 ### Coverage Report
 <hr/>
 
-<p class="alert alert-warning">
-<b>WARNING:</b> There is a known issue that scoverage doesn't work perfectly with Skinny ORM.
-Now we're working on this issue with Scoverage team.
-<br/>
-<a href="https://github.com/skinny-framework/skinny-framework/issues/97">
-https://github.com/skinny-framework/skinny-framework/issues/97
-</a>
-</p>
-
 If you need a code coverage report, use `scoverage:test` instead. 
 
 https://github.com/scoverage/sbt-scoverage

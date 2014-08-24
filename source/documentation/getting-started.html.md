@@ -45,11 +45,6 @@ skinny run
 
 Let's create our first Skinny app by using the scaffold generator.
 
-<small>
-<b>WARNING:</b> If you're going try with "users", use "accounts" or "members" instead.
-"users" also exists in H2 information_schema. This may become a pitfall if you aren't conscious.
-</small>
-
 ```sh
 # If you're a zsh user, try "noglob ./skinny g scaffold ..."
 ./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]

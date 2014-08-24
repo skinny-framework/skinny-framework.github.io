@@ -47,7 +47,7 @@ If you're already familiar with Scala and your `sbt.ivy.home` directory has lots
 </small>
 
 <hr/>
-#### 1) skinny-blank-app-with-deps.zip (100MB)
+#### 1) skinny-blank-app-with-deps.zip (85MB)
 
 For begineers, this one is highly recommended because you don't need to wait download dependencies.
 
@@ -78,11 +78,6 @@ cd skinny-blank-app
 <hr/>
 
 After unzipping blank-app.zip, Let's create our first Skinny app by using the scaffold generator.
-
-<small>
-<b>WARNING:</b> If you're going try with "users", use "accounts" or "members" instead.
-"users" also exists in H2 information_schema. This may become a pitfall if you aren't conscious.
-</small>
 
 ```sh
 # If you're a zsh user, try "noglob ./skinny g scaffold ..."
@@ -150,12 +145,14 @@ After preparing the Scalatra app, just add the following dependency to your `pro
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-assets"       % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-framework"    % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-task"         % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-scaldi"       % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-test"         % "<%= @skinny_version %>" % "test",
-  "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny_version %>" % "test"
+  "org.skinny-framework" %% "skinny-assets"             % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-framework"          % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-task"               % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-scaldi"             % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-oauth2-controller"  % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-twitter-controller" % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-test"               % "<%= @skinny_version %>" % "test",
+  "org.skinny-framework" %% "skinny-factory-girl"       % "<%= @skinny_version %>" % "test"
 )
 ```
 
@@ -171,6 +168,14 @@ libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny_version %>" % "test"
 )
 ```
+
+<hr/>
+### 1.3 Migration Guide for 1.2.x Users
+<hr/>
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/1.3.0
+
+Deprecated joda-time methods in WrappedResultSet are removed. If you you're using `rs.dateTime(...)`, just rename it to `rs.jodaDateTime(...)`.
 
 <hr/>
 ### 1.2 Migration Guide for 1.1.x Users
