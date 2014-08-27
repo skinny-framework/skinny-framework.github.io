@@ -106,7 +106,7 @@ sql"create table member (id serial, name varchar(64), created_at timestamp)".exe
 // When you're trying on the Scala REPL, use :paste mode
 case class Member(id: Long, name: Option[String], createdAt: DateTime)
 object Member extends SkinnyMapper[Member] {
-  override val defaultAlias = createAlias("m")
+  override lazy val defaultAlias = createAlias("m")
   override def extract(rs: WrappedResultSet, n: ResultName[Member]): Member = new Member(
     id        = rs.get(n.id),
     name      = rs.get(n.name),
@@ -167,8 +167,8 @@ case class MemberId(value: Long)
 case class Member2(id: MemberId, name: Option[String], createdAt: DateTime)
 
 object Member2 extends SkinnyCRUDMapperWithId[MemberId, Member2] {
-  override val tableName = "member"
-  override val defaultAlias = createAlias("m")
+  override lazy val tableName = "member"
+  override lazy val defaultAlias = createAlias("m")
   override def idToRawValue(id: MemberId) = id.value
   override def rawValueToId(value: Any) = MemberId(value.toString.toLong)
 
@@ -468,8 +468,8 @@ object Member extends SkinnyCRUDMapper[Member] {
   ).byDefault
  
   // when you cannot use defaultAlias, use this instead
-  val mentorAlais = createAlias("mentor")
-  val mentor = belongsToWithAlias(
+  lazy val mentorAlais = createAlias("mentor")
+  lazy val mentor = belongsToWithAlias(
     // in this case, "mentor" alias will be used in join query
     // the fk's name will be {aliasName} + {primaryKeyFieldName}
     right = Member -> mentorAlias,
@@ -517,7 +517,7 @@ case class Member(id: Long, name: Option[Name] = None)
 object Member extends SkinnyCRUDMapper[Member] {
   // basic settings ...
 
-  val name = hasOne[Name](
+  lazy val name = hasOne[Name](
     right = Name, 
     merge = (member, name) => member.copy(name = name)
   ).byDefault
@@ -560,7 +560,7 @@ case class Skill(id: Long, name: String)
 object Company extends SkinnyCRUDMapper[Company] {
   // basic settings ...
 
-  val membersRef = hasMany[Member](
+  lazy val membersRef = hasMany[Member](
     // association's SkinnyMapper and alias
     many = Member -> Member.membersAlias,
     // defines join condition by using aliases
@@ -577,14 +577,14 @@ Company.joins(Company.membersRef).findById(123) // with members
 // join table definition
 case class MemberSkill(memberId: Long, skillId: Long)
 object MemberSkill extends SkinnyJoinTable[MemberSkill] {
-  override val tableName = "members_skills"
-  override val defaultAlias = createAlias("ms")
+  override lazy val tableName = "members_skills"
+  override lazy val defaultAlias = createAlias("ms")
 }
 // hasManyThrough
 object Member extends SkinnyCRUDMapper[Member] {
   // basic settings ...
 
-  val skillsRef = hasManyThrough[Skill](
+  lazy val skillsRef = hasManyThrough[Skill](
     through = MemberSkill, 
     many = Skill, 
     merge = (member, skills) => member.copy(skills = skills)
@@ -654,7 +654,7 @@ object Member extends SkinnyCRUDMapper[Member] {
   // Unfortunately the combination of Scala macros and type-dynamic sometimes doesn't work as expected
   // when "val company" is defined in Scala 2.10.x.
   // If you suffer from this issue, use "val companyOpt" "companyRef" and so on instead.
-  val companyOpt = {
+  lazy val companyOpt = {
     // normal belongsTo
     belongsTo[Company](
       right = Company,
@@ -676,7 +676,7 @@ Yet another example:
 
 ```scala
 object Member extends SkinnyCRUDMapper[Member] {
-  val skills =
+  lazy val skills =
     hasManyThrough[Skill](
       MemberSkill, Skill, (m, skills) => m.copy(skills = skills)
     ).includes[Skill]((ms, skills) => ms.map { m =>
@@ -793,7 +793,7 @@ If you need to add methods, just write methods that use `#findBy`, `#countBy` or
 
 ```scala
 object Member extends SkinnyCRUDMapper[Member] {
-  private[this] val m = defaultAlias
+  private[this] lazy val m = defaultAlias
 
   def findAllByGroupId(groupId: Long)(implicit s: DBSession = autoSession): Seq[Member] = {
     findAllBy(sqls.eq(m.groupId, groupId))
