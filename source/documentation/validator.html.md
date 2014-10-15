@@ -51,7 +51,7 @@ validator.hasErrors // true
 val errorsForName: Seq[Error] = validator.errors.get("name")
 val error: Error = errorsForName.head
 error.name // -> "required"
-error.messageParmas // -> List("name")
+error.messageParams // -> List("name")
 ```
 
 A validation rule which accepts value when using such as `minLength(6)` is like this:
@@ -111,7 +111,7 @@ skinny-validator's `Error` looks like this:
 ```scala
 val error = validator.errors.head
 error.name // -> required
-error.messageParmas // -> List("name")
+error.messageParams // -> List("name")
 ```
 
 `skinny.validator.Messages` loads error messages from *.conf or *.properties.
