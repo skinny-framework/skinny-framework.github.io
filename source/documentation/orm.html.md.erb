@@ -937,7 +937,7 @@ object Member extends SkinnyCRUDMapper[Member] {
 
 Member.findById(id).map { member =>
   member.copy(name = "Kaz").save()
-  member.destory()
+  member.destroy()
 }
 ```
 
