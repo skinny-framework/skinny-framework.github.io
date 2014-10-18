@@ -130,7 +130,7 @@ object Controllers {
 <hr/>
 #### Add view templates for `render` methods
 
-Add Scalate (ssp, scaml, jade, mustache) or FreeMarker, Thymeleaf templates under `src/main/webapp/WEB-INF/views`.
+Add Scalate (ssp, scaml, jade, mustache) or FreeMarker, Thymeleaf, Velocity templates under `src/main/webapp/WEB-INF/views`.
 
 The above `HelpController` expects `src/main/webapp/WEB-INF/views/help/index.html.ssp`.
 

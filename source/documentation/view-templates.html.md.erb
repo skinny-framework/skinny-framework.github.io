@@ -203,3 +203,33 @@ class MembersController extends SkinnyController
 
 And then, use `src/main/webapp/WEB-INF/views/members/index.html` instead.
 
+<hr/>
+### Velocity
+<hr/>
+
+If you prefer the Velocity template engine, you can easily use it with Skinny framework.
+
+[http://velocity.apache.org/](http://velocity.apache.org/)
+
+First, add `skinny-velocity` to your library-dependencies.
+
+```
+libraryDependencies += "org.skinny-framework" %% "skinny-velocity" % skinnyVersion
+```
+
+Mixin `VelocityTemplateEngineFeature` to your controllers.
+
+```scala
+import skinny.controller.feature.VelocityTemplateEngineFeature
+
+class MembersController extends SkinnyController
+  with VelocityTemplateEngineFeature {
+
+  def index = {
+    set("members", Member.findAll())
+    render("/members/index")
+  }
+}
+```
+
+And then, use `src/main/webapp/WEB-INF/views/members/index.html.vm` instead.
