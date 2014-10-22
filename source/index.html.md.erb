@@ -59,19 +59,30 @@ If you're a heavy Scala user, this one will be suitable for you.
 
 [![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= @skinny_blank_app_version %>/skinny-blank-app.zip)
 
-#### 3) Homebrew (brew tap)
+#### 3) Homebrew 
 
 If you're a MacOS X user, take a look at our Homebrew formula.
 
-https://github.com/skinny-framework/homebrew-alt
+<hr/>
+### Homebrew
+<hr/>
+
+If you're a MacOS X user, try our Homebrew formula out.
+
+https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb
 
 ```sh
-brew tap skinny-framework/alt
+brew update
 brew install skinny
 
 skinny new skinny-blank-app
 cd skinny-blank-app
+skinny run
 ```
+
+If you sufferred the following error, try `brew uinstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`).
+
+<pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
 
 <script type="text/javascript" src="https://asciinema.org/a/11426.js" id="asciicast-11426" async></script>
 
