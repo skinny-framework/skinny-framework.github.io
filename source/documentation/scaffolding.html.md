@@ -283,5 +283,241 @@ Scaffold command's parameters are ...
 
 - {namespace}: prefix for the resource (e.g. admin.foo.bar)
 
+<hr/>
+#### reverse-*-all commnds
+
+`reverse-scaffold-all/reverse-model-all` commands generate all the code from existing database.
+
+```bash
+./skinny g reverse-model-all
+./skinny g reverse-scaffold-all
+```
+
+Here is an example DDL.
+
+```sql
+create table user_group (
+  id bigserial not null primary key,
+  name varchar(100) not null,
+  url varchar(512)
+);
+create table organization (
+  id bigserial not null primary key,
+  name varchar(100) not null,
+  url varchar(512) not null
+);
+create table developer (
+  id bigserial not null primary key,
+  name varchar(512) not null,
+  nickname varchar(32),
+  user_group_id bigint references user_group(id)
+);
+create table organization_developer (
+  organization_id bigint not null references organization(id),
+  developer_id bigint not null references developer(id)
+);
+```
+
+When you run `reverse-scaffold-all` generator for this dababase schema, skinny command will show you following output.
+
+```
+*** Skinny Reverse Engineering Task ***
+
+  Table     : developer
+  ID        : id:Long
+  Resources : developers
+  Resource  : developer
+
+  Columns:
+   - name:String:varchar(512)
+   - nickname:Option[String]:varchar(32)
+   - userGroupId:Option[Long]
+   - userGroup:Option[UserGroup]
+   - organizationDevelopers:Seq[OrganizationDeveloper]
+
+ *** Skinny Generator Task ***
+
+  "sample/src/main/scala/controller/ApplicationController.scala" skipped.
+  "sample/src/main/scala/controller/DevelopersController.scala" created.
+  "sample/src/main/scala/controller/Controllers.scala" modified.
+  "sample/src/test/scala/controller/DevelopersControllerSpec.scala" created.
+  "sample/src/test/scala/integrationtest/DevelopersController_IntegrationTestSpec.scala" created.
+  "sample/src/test/resources/factories.conf" modified.
+  "sample/src/main/scala/model/Developer.scala" created.
+  "sample/src/test/scala/model/DeveloperSpec.scala" created.
+  "sample/src/main/webapp/WEB-INF/views/developers/_form.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/developers/new.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/developers/edit.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/developers/index.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/developers/show.html.ssp" created.
+  "sample/src/main/resources/messages.conf" modified.
+  "sample/src/main/resources/db/migration/V20141207024947__Create_developers_table.sql" created.
 
 
+ *** Skinny Reverse Engineering Task ***
+
+  Table     : organization
+  ID        : id:Long
+  Resources : organizations
+  Resource  : organization
+
+  Columns:
+   - name:String:varchar(100)
+   - url:String:varchar(512)
+   - organizationDevelopers:Seq[OrganizationDeveloper]
+
+ *** Skinny Generator Task ***
+
+  "sample/src/main/scala/controller/ApplicationController.scala" skipped.
+  "sample/src/main/scala/controller/OrganizationsController.scala" created.
+  "sample/src/main/scala/controller/Controllers.scala" modified.
+  "sample/src/test/scala/controller/OrganizationsControllerSpec.scala" created.
+  "sample/src/test/scala/integrationtest/OrganizationsController_IntegrationTestSpec.scala" created.
+  "sample/src/test/resources/factories.conf" modified.
+  "sample/src/main/scala/model/Organization.scala" created.
+  "sample/src/test/scala/model/OrganizationSpec.scala" created.
+  "sample/src/main/webapp/WEB-INF/views/organizations/_form.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/organizations/new.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/organizations/edit.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/organizations/index.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/organizations/show.html.ssp" created.
+  "sample/src/main/resources/messages.conf" modified.
+  "sample/src/main/resources/db/migration/V20141207024947__Create_organizations_table.sql" created.
+
+
+Since this table (organization_developer) has no primary key, generator created only NoIdCRUDMapper file and skipped creating controller and view files.
+
+ *** Skinny Reverse Engineering Task ***
+
+  Table  : organization_developer
+
+  Columns:
+   - organizationId:Long
+   - developerId:Long
+   - developer:Option[Developer]
+   - organization:Option[Organization]
+
+ *** Skinny Generator Task ***
+
+  "sample/src/main/scala/model/OrganizationDeveloper.scala" created.
+  "sample/src/test/scala/model/OrganizationDeveloperSpec.scala" created.
+  "sample/src/main/resources/db/migration/V20141207024947__Create_organizationDevelopers_table.sql" created.
+
+
+ *** Skinny Reverse Engineering Task ***
+
+  Table     : user_group
+  ID        : id:Long
+  Resources : userGroups
+  Resource  : userGroup
+
+  Columns:
+   - name:String:varchar(100)
+   - url:Option[String]:varchar(512)
+   - developers:Seq[Developer]
+
+ *** Skinny Generator Task ***
+
+  "sample/src/main/scala/controller/ApplicationController.scala" skipped.
+  "sample/src/main/scala/controller/UserGroupsController.scala" created.
+  "sample/src/main/scala/controller/Controllers.scala" modified.
+  "sample/src/test/scala/controller/UserGroupsControllerSpec.scala" created.
+  "sample/src/test/scala/integrationtest/UserGroupsController_IntegrationTestSpec.scala" created.
+  "sample/src/test/resources/factories.conf" modified.
+  "sample/src/main/scala/model/UserGroup.scala" created.
+  "sample/src/test/scala/model/UserGroupSpec.scala" created.
+  "sample/src/main/webapp/WEB-INF/views/userGroups/_form.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/userGroups/new.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/userGroups/edit.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/userGroups/index.html.ssp" created.
+  "sample/src/main/webapp/WEB-INF/views/userGroups/show.html.ssp" created.
+  "sample/src/main/resources/messages.conf" modified.
+  "sample/src/main/resources/db/migration/V20141207024947__Create_userGroups_table.sql" created.
+
+ ```
+
+Generated models include association configurations too (only when tables are referenced with foreign keys).
+
+```scala
+package model
+
+import skinny.orm._, feature._
+import scalikejdbc._
+import org.joda.time._
+
+// If your model has +23 fields, switch this to normal class and mixin scalikejdbc.EntityEquality.
+case class Developer(
+  id: Long,
+  name: String,
+  nickname: Option[String] = None,
+  userGroupId: Option[Long] = None,
+  userGroup: Option[UserGroup] = None,
+  organizations: Seq[Organization] = Nil
+)
+
+object Developer extends SkinnyCRUDMapper[Developer] {
+  override lazy val tableName = "developer"
+  override lazy val defaultAlias = createAlias("d")
+
+  lazy val userGroupRef = belongsTo[UserGroup](UserGroup, (d, ug) => d.copy(userGroup = ug))
+
+  lazy val organizationsRef = hasManyThrough[Organization](
+    through = OrganizationDeveloper,
+    many = Organization,
+    merge = (d, os) => d.copy(organizations = os)
+  )
+
+  override def extract(rs: WrappedResultSet, rn: ResultName[Developer]): Developer = {
+    autoConstruct(rs, rn, "userGroup", "organizations")
+  }
+}
+```
+
+Controllers are created as same as normal scaffold generator.
+
+```scala
+package controller
+
+import skinny._
+import skinny.validator._
+import _root_.controller._
+import model.Developer
+
+class DevelopersController extends SkinnyResource with ApplicationController {
+  protectFromForgery()
+
+  override def model = Developer
+  override def resourcesName = "developers"
+  override def resourceName = "developer"
+
+  override def resourcesBasePath = s"/${toSnakeCase(resourcesName)}"
+  override def useSnakeCasedParamKeys = true
+
+  override def viewsDirectoryPath = s"/${resourcesName}"
+
+  override def createParams = Params(params)
+  override def createForm = validation(createParams,
+    paramKey("name") is required & maxLength(512),
+    paramKey("nickname") is maxLength(32),
+    paramKey("user_group_id") is numeric & longValue
+  )
+  override def createFormStrongParameters = Seq(
+    "name" -> ParamType.String,
+    "nickname" -> ParamType.String,
+    "user_group_id" -> ParamType.Long
+  )
+
+  override def updateParams = Params(params)
+  override def updateForm = validation(updateParams,
+    paramKey("name") is required & maxLength(512),
+    paramKey("nickname") is maxLength(32),
+    paramKey("user_group_id") is numeric & longValue
+  )
+  override def updateFormStrongParameters = Seq(
+    "name" -> ParamType.String,
+    "nickname" -> ParamType.String,
+    "user_group_id" -> ParamType.Long
+  )
+
+}
+```
