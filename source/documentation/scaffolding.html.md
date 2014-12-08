@@ -35,6 +35,66 @@ Scaffold command's parameters are ...
 - {paramType}: `skinny.ParamType`. see also: [skinny/ParamType.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/common/src/main/scala/skinny/ParamType.scala)
 - {columnType}: (optional) Database column type. This will be embedded into DB migration file.
 
+If an attribute's {paramType} is an entity type (all unexpected types), the attribute will be converted to association definition.
+
+```bash
+./skinny g model tweet userId:Long text:String user:Option[User]
+```
+
+This command will generate following code:
+
+```scala
+package model
+
+import skinny.orm._, feature._
+import scalikejdbc._
+import org.joda.time._
+
+// If your model has +23 fields, switch this to normal class and mixin scalikejdbc.EntityEquality.
+case class Tweet(
+  id: Long,
+  userId: Long,
+  text: String,
+  user: Option[User] = None,
+  createdAt: DateTime,
+  updatedAt: DateTime
+)
+
+object Tweet extends SkinnyCRUDMapper[Tweet] with TimestampsFeature[Tweet] {
+
+  override lazy val defaultAlias = createAlias("t")
+
+  lazy val userRef = belongsTo[User](User, (t, u) => t.copy(user = u))
+
+  /*
+   * If you're familiar with ScalikeJDBC/Skinny ORM, using #autoConstruct makes your mapper simpler.
+   * (e.g.)
+   * override def extract(rs: WrappedResultSet, rn: ResultName[Tweet]) = autoConstruct(rs, rn)
+   *
+   * Be aware of excluding associations like this:
+   * (e.g.)
+   * case class Member(id: Long, companyId: Long, company: Option[Company] = None)
+   * object Member extends SkinnyCRUDMapper[Member] {
+   *   override def extract(rs: WrappedResultSet, rn: ResultName[Member]) =
+   *     autoConstruct(rs, rn, "company") // "company" will be skipped
+   * }
+   */
+  override def extract(rs: WrappedResultSet, rn: ResultName[Tweet]): Tweet = new Tweet(
+    id = rs.get(rn.id),
+    userId = rs.get(rn.userId),
+    text = rs.get(rn.text),
+    createdAt = rs.get(rn.createdAt),
+    updatedAt = rs.get(rn.updatedAt)
+  )
+}
+```
+
+Other assocications can be generated with the following convention.
+
+- Option[{Entity}]: belongsTo association
+- Seq[{Entity}]: hasMany association
+- Seq[{Entity1}{Entity2}]: hasManyThrough association
+
 It's also possible to specify namespace for the resource:
 
 ```
