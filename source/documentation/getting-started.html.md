@@ -37,11 +37,20 @@ cd skinny-blank-app
 skinny run
 ```
 
-If you sufferred the following error, try `brew uninstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`).
+If you sufferred the following error, try `brew uninstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`). 
 
 <pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
 
 <script type="text/javascript" src="https://asciinema.org/a/11426.js" id="asciicast-11426" async></script>
+
+If all else fails, try using global Yeoman generator.
+
+```sh
+brew install node --with-npm
+npm install -g yo
+npm install -g generator-skinny
+yo skinny
+```
 
 <hr/>
 ### Using generator
