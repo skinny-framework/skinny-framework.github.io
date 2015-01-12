@@ -28,6 +28,21 @@ If you're a MacOS X user, try our Homebrew formula out.
 
 https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb
 
+####Prequisites
+
+Node
+
+`brew install node`
+
+Yeoman
+
+`npm install -g yo`
+
+Skinny Generator
+
+`npm install -g generator-skinny`
+
+
 ```sh
 brew update
 brew install skinny
