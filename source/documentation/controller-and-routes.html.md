@@ -92,7 +92,7 @@ render("/members/index")
 
 You can use Scalatra's reverse routes.
 
-http://www.scalatra.org/2.2/guides/http/reverse-routes.html
+http://www.scalatra.org/2.3/guides/http/reverse-routes.html
 
 In controllers:
 
@@ -126,8 +126,8 @@ FYI: You can see more examples for SkinnyResource by generating scaffold views.
 
 There are the two controller base traits. SkinnyController is a ScalatraFilter. SkinnyServlet is a ScalatraServlet.
 
-- [org.scalatra.ScalatraFilter]((http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraFilter))
-- [org.scalatra.ScalatraServlet]((http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraServlet))
+- [org.scalatra.ScalatraFilter]((http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraFilter))
+- [org.scalatra.ScalatraServlet]((http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraServlet))
 
 In general SkinnyController is more suitable for Skinny framework based applications.
 
@@ -252,10 +252,6 @@ skinny.Skinny provides getters for basic elements in view templates.
 
 - params: Params
 - multiParams: MultiParams
-- queryParams: Params
-- queryMultiParams: MultiParams
-- formParams: Params
-- formMultiParams: MultiParams
 - flash: Flash
 - errorMessages: Seq[String]
 - keyAndErrorMessages: Map[String, Seq[String]]
@@ -280,7 +276,7 @@ So if you need filters that are similar to Rails filters, just use Skinny filter
 
 ##### Scalatra's before/after filters
 
-[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraBase)
 
 - before(transformers)(action)
 - after(transformers)(action)
@@ -390,9 +386,9 @@ trait TxPerRequestFilter extends SkinnyFilter with Logging {
 
 Basically, you will use Scalatra's DSL.
 
-[http://www.scalatra.org/2.2/guides/](http://www.scalatra.org/2.2/guides/)
+[http://www.scalatra.org/2.3/guides/](http://www.scalatra.org/2.3/guides/)
 
-[http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraBase)
 
 <hr/>
 #### (Query/Form/Path) Parameters
@@ -406,13 +402,23 @@ val id: Option[Int] = params.getAs[Int]("id")
 val id: Long = params.getAsOrElse[Long]("id", -1L)
 
 val ids: Option[Seq[Int]] = multiParams.getAs[Int]("ids")
+
+// additional APIs are provided from Skinny 
+queryParams: Params
+queryMultiParams: MultiParams
+formParams: Params
+formMultiParams: MultiParams
 ```
 
-[/api/index.html#org.scalatra.ScalatraParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParams)
+[/api/index.html#org.scalatra.ScalatraParams](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraParams)
 
-[/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedParams)
+[/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedParams](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedParams)
 
-[/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams)
+[/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraParamsImplicits$TypedMultiParams)
+
+[framework/src/main/scala/skinny/controller/feature/QueryParamsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/QueryParamsFeature.scala)
+
+[framework/src/main/scala/skinny/controller/feature/FormParamsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/FormParamsFeature.scala)
 
 <hr/>
 #### multiParams("splat")
@@ -429,7 +435,7 @@ get("/download/*.*") {
 }
 ```
 
-[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraBase)
 
 [/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
 
@@ -443,7 +449,7 @@ get("""^\/f(.*)/b(.*)""".r) {
 }
 ```
 
-[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraBase)
 
 [/guides/http/routes.html](http://www.scalatra.org/guides/http/routes.html)
 
@@ -464,9 +470,9 @@ def helloWithOptions = {
 }
 ```
 
-[/api/index.html#org.scalatra.SweetCookies](http://www.scalatra.org/2.2/api/index.html#org.scalatra.SweetCookies)
+[/api/index.html#org.scalatra.SweetCookies](http://www.scalatra.org/2.3/api/index.html#org.scalatra.SweetCookies)
 
-[/api/org/scalatra/CookieOptions.html](http://www.scalatra.org/2.2/api/org/scalatra/CookieOptions.html)
+[/api/org/scalatra/CookieOptions.html](http://www.scalatra.org/2.3/api/org/scalatra/CookieOptions.html)
 
 <hr/>
 #### Request/Response Headers
@@ -476,14 +482,14 @@ def helloWithOptions = {
 val v: Option[String] = request.header(name)
 ```
 
-[/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichRequest)
+[/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.3/api/index.html#org.scalatra.servlet.RichRequest)
 
 ```scala
 response.headers += "name" -> "value"
 response.headers -= "name"
 ```
 
-[/api/index.html#org.scalatra.servlet.RichResponse](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichResponse)
+[/api/index.html#org.scalatra.servlet.RichResponse](http://www.scalatra.org/2.3/api/index.html#org.scalatra.servlet.RichResponse)
 
 <hr/>
 #### Session
@@ -495,7 +501,7 @@ session += "name" -> "value"
 session -= "name"
 ```
 
-[/api/index.html#org.scalatra.servlet.RichSession](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichSession)
+[/api/index.html#org.scalatra.servlet.RichSession](http://www.scalatra.org/2.3/api/index.html#org.scalatra.servlet.RichSession)
 
 Even if you don't use sessions in your application code, Scalatra's Flash and CSRF protection features are using servlet sessions.
 So your apps are not naturally stateless when using vanilla Scalatra.
@@ -575,7 +581,7 @@ flash.now += (name -> value)
 
 [/guides/http/flash.html](http://www.scalatra.org/guides/http/flash.html)
 
-[/api/index.html#org.scalatra.FlashMap](http://www.scalatra.org/2.2/api/index.html#org.scalatra.FlashMap)
+[/api/index.html#org.scalatra.FlashMap](http://www.scalatra.org/2.3/api/index.html#org.scalatra.FlashMap)
 
 <hr/>
 #### Request Body
@@ -586,7 +592,7 @@ val body: String = request.body
 val stream: InputStream = request.inputStream // raw HTTP POST data
 ```
 
-[/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.2/api/index.html#org.scalatra.servlet.RichRequest)
+[/api/index.html#org.scalatra.servlet.RichRequest](http://www.scalatra.org/2.3/api/index.html#org.scalatra.servlet.RichRequest)
 
 <hr/>
 #### File Upload
@@ -620,7 +626,7 @@ class FilesController extends SkinnyServlet with FileUploadFeature {
 
 [/guides/formats/upload.html](http://www.scalatra.org/guides/formats/upload.html)
 
-[/api/index.html#org.scalatra.fileupload.FileUploadSupport](http://www.scalatra.org/2.2/api/index.html#org.scalatra.fileupload.FileUploadSupport)
+[/api/index.html#org.scalatra.fileupload.FileUploadSupport](http://www.scalatra.org/2.3/api/index.html#org.scalatra.fileupload.FileUploadSupport)
 
 
 <hr/>
@@ -637,9 +643,9 @@ redirect302("/somewhere") // 302
 redirect303("/complete") // 303
 ```
 
-[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ScalatraBase)
+[/api/index.html#org.scalatra.ScalatraBase](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ScalatraBase)
 
-[/index.html#org.scalatra.ActionResult](http://www.scalatra.org/2.2/api/index.html#org.scalatra.ActionResult)
+[/index.html#org.scalatra.ActionResult](http://www.scalatra.org/2.3/api/index.html#org.scalatra.ActionResult)
 
 [/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/develop/framework/src/main/scala/skinny/controller/feature/ExplicitRedirectFeature.scala)
 
