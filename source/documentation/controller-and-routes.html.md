@@ -252,6 +252,10 @@ skinny.Skinny provides getters for basic elements in view templates.
 
 - params: Params
 - multiParams: MultiParams
+- queryParams: Params
+- queryMultiParams: MultiParams
+- formParams: Params
+- formMultiParams: MultiParams
 - flash: Flash
 - errorMessages: Seq[String]
 - keyAndErrorMessages: Map[String, Seq[String]]
