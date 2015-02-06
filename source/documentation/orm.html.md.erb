@@ -764,6 +764,58 @@ object GroupMember
 ```
 
 <hr/>
+### Callbacks
+<hr/>
+
+Callbacks allow you to trigger logic before or after record creation, modification and deletion.
+
+You can register multiple handlers to same event. Handlers will be executed in order.
+
+```scala
+object Member extends SkinnyCRUDMapper[Member] {
+
+  // ------------------------
+  // before/after creation
+  // ------------------------
+
+  beforeCreate((session: DBSession, namedValues: Seq[(SQLSyntax, Any)]) => {
+    // do something here
+  })
+  // it's possible to register multiple handlers
+  beforeCreate((session: DBSession, namedValues: Seq[(SQLSyntax, Any)]) => {
+    // second one
+  })
+
+  afterCreate((session: DBSession, namedValues: Seq[(SQLSyntax, Any)], generatedId: Option[Long]) => {
+    // do something here
+  })
+
+  // ------------------------
+  // before/after modification
+  // ------------------------
+
+  beforeUpdateBy((s: DBSession, where: SQLSyntax, params: Seq[(SQLSyntax, Any)]) => {
+    // do something here
+  })
+  afterUpdateBy((s: DBSession, where: SQLSyntax, params: Seq[(SQLSyntax, Any)], count: Int) => {
+    // do something here
+  })
+
+  // ------------------------
+  // before/after deletion
+  // ------------------------
+
+  beforeDeleteBy((s: DBSession, where: SQLSyntax) => {
+    // do something here
+  })
+  afterDeleteBy((s: DBSession, where: SQLSyntax, deletedCount: Int) => {
+    // do something here
+  })
+  
+} 
+```
+
+<hr/>
 ### Dynamic Table Name
 <hr/>
 
