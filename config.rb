@@ -59,6 +59,8 @@ I18n.enforce_available_locales = false
 # Latest Skinny Framework version
 @skinny_version = "1.3.12"
 set :skinny_version, @skinny_version
+@scalikejdbc_version = "2.2.3"
+set :scalikejdbc_version, @scalikejdbc_version
 @skinny_blank_app_version = @skinny_version
 set :skinny_blank_app_version, @skinny_blank_app_version
 

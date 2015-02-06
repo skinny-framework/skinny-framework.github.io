@@ -1091,7 +1091,7 @@ case class Member(
 Currently we still keep supporting Java SE 7 users, so the feature is not enabled by default. You can use them with `scalikejdbc-jsr310` dependency. First, add the following dependency to `libraryDependencies`.
 
 ```scala
-libraryDependencies += "org.scalikejdbc" %% "scalikejdbc-jsr310" % "2.1.2"
+libraryDependencies += "org.scalikejdbc" %% "scalikejdbc-jsr310" % "<%= scalikejdbc_version %>"
 ```
 
 And then, `import scalikejdbc.jsr310._` into your mapper classes. That's all.
