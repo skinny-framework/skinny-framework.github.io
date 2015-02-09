@@ -32,6 +32,7 @@ https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb
 brew update
 brew install skinny
 
+# If failed, try `npm install -g yo`
 skinny new skinny-blank-app
 cd skinny-blank-app
 skinny run
