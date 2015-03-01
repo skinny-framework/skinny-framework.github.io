@@ -36,7 +36,7 @@ Simply use skinny command or sbt directly.
 
 Here is some examples:
 
-https://github.com/skinny-framework/skinny-framework/tree/develop/orm/src/test/scala/blog
+https://github.com/skinny-framework/skinny-framework/tree/master/orm/src/test/scala/blog
 
 ```scala
 package model
@@ -142,7 +142,7 @@ class IntegrationTestSpec extends ScalatraFlatSpec with Matchers with SkinnyTest
 ### Coverage Report
 <hr/>
 
-If you need a code coverage report, use `scoverage:test` instead. 
+If you need a code coverage report, use `coverage test` instead. 
 
 https://github.com/scoverage/sbt-scoverage
 
@@ -158,6 +158,6 @@ It's the fastest way to learn is seeing generated tests by scaffold command.
 
 And also some examples here may be helpful for you:
 
-[example/src/test/scala](https://github.com/skinny-framework/skinny-framework/tree/develop/example/src/test/scala)
+[example/src/test/scala](https://github.com/skinny-framework/skinny-framework/tree/master/example/src/test/scala)
 
 See also: [FactoryGirl](factory-girl.html)

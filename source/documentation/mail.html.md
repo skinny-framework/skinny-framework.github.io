@@ -120,8 +120,8 @@ development {
 
 MailController.scala:
 
-https://github.com/skinny-framework/skinny-framework/blob/develop/example/src/main/scala/controller/MailController.scala
+https://github.com/skinny-framework/skinny-framework/blob/master/example/src/main/scala/controller/MailController.scala
 
 Configuration:
 
-https://github.com/skinny-framework/skinny-framework/blob/develop/example/src/main/resources/application.conf
+https://github.com/skinny-framework/skinny-framework/blob/master/example/src/main/resources/application.conf
