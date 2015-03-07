@@ -468,7 +468,7 @@ object Member extends SkinnyCRUDMapper[Member] {
   ).byDefault
  
   // when you cannot use defaultAlias, use this instead
-  lazy val mentorAlais = createAlias("mentor")
+  lazy val mentorAlias = createAlias("mentor")
   lazy val mentor = belongsToWithAlias(
     // in this case, "mentor" alias will be used in join query
     // the fk's name will be {aliasName} + {primaryKeyFieldName}
