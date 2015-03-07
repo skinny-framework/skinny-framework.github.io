@@ -61,7 +61,7 @@ GMail.
   cc(yourGmail).
   subject("SkinnyMailer GMail Test 2").
   htmlBody("<hr/><b>HTML</b> sample!<br/><hr/>").
-  attchment("memo.txt", "memomemo", "text/plain; charset=utf-8").
+  attachment("memo.txt", "memomemo", "text/plain; charset=utf-8").
   deliver()
 ```
 

@@ -43,7 +43,7 @@ Run the task:
 ```
 sbt "task/run echo foo bar baz"
 
-[info] Running TaskLancher echo foo bar baz
+[info] Running TaskLauncher echo foo bar baz
 foo
 bar
 baz

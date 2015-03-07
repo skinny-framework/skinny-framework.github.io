@@ -8,7 +8,7 @@ title: Packaging - Skinny Framework
 ### As you know, it's a servlet application
 <hr/>
 
-Skinny applications run on any Serlvet container. 
+Skinny applications run on any Servlet container. 
 
 So you just need to build a war file and deploy it to your production servers.
 

@@ -16,7 +16,7 @@ https://groups.google.com/forum/#!forum/skinny-framework
 ### ScalikeJDBC Users Group
 <hr/>
 
-ScalikeJDBC (Skinnny ORM base) users ML:
+ScalikeJDBC (Skinny ORM base) users ML:
 
 https://groups.google.com/forum/#!forum/scalikejdbc-users-group
 

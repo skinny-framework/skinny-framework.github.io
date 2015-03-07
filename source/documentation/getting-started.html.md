@@ -38,7 +38,7 @@ cd skinny-blank-app
 skinny run
 ```
 
-If you sufferred the following error, try `brew uninstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`). 
+If you suffered the following error, try `brew uninstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`). 
 
 <pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
 
@@ -104,7 +104,7 @@ Finally, let's create a war file to deploy.
 Skinny app development is very simple. When you create new pages, all the things you should do is below:
 
 <hr/>
-#### Create new `SkinnyController` under `conroller` package
+#### Create new `SkinnyController` under `controller` package
 
 You can create a controller by hand or by using generator.
 
@@ -168,7 +168,7 @@ https://github.com/skinny-framework/skinny-framework-example
 If you're familiar with [Yeoman](http://yeoman.io), a generator for [Skinny framework](https://github.com/skinny-framework/skinny-framework) is available.
 
 ```sh
-# brew instsall node
+# brew install node
 npm install -g yo
 npm install -g generator-skinny
 mkdir skinny-app

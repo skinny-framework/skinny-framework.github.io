@@ -23,7 +23,7 @@ https://github.com/skinny-framework/skinny-scaldi-example/
 
 This is an important notice. 
 
-Due to [SI-6240](https://issues.scala-lang.org/browse/SI-6240), Scaldi doesn’t work fine in Scala 2.10.x. 
+Due to [SI-6240](https://issues.scala-lang.org/browse/SI-6240), Scaldi doesn’t work fine in Scala 2.10.x.
 
 https://github.com/scaldi/scaldi/issues/16
 
@@ -84,11 +84,11 @@ class AppModule extends scaldi.Module {
 <hr/>
 #### Integrating Scaldi modules to Skinny controllers
 
-`skinny-scaldi`'s Scaldi integration is prety simple. Just prepare configuration and add `ScaldiFeature` trait to controllers.
+`skinny-scaldi`'s Scaldi integration is pretty simple. Just prepare configuration and add `ScaldiFeature` trait to controllers.
 
 And add modules to `src/main/resources/application.conf` like this. 
 
-Be aware that module in `applicationc.conf` should be not an object but a class.
+Be aware that module in `application.conf` should be not an object but a class.
 
 ```
 development {

@@ -25,7 +25,7 @@ And then, add `AssetsController` to routes. Now you can easily use CoffeeScript,
 
 ```scala
 // src/main/scala/ScalatraBootstrap.scala
-class ScalatraBootstrap exntends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     AssetsController.mount(ctx)
   }
@@ -170,7 +170,7 @@ Just put *.scala files under `WEB-INF/assets/scala`:
 
 You can access the latest transformed JS file at `http://localhost:8080/assets/js/application.js`.
 
-Or when using only `scalajs:watch`, it's also possible to acces `src/main/webapp/assets/js/application-*.js` directly.
+Or when using only `scalajs:watch`, it's also possible to access `src/main/webapp/assets/js/application-*.js` directly.
 
 
 <hr/>
@@ -198,7 +198,7 @@ object MyAssetsController extends MyAssetsController with Routes {
 }
 
 // src/main/scala/ScalatraBootstrap.scala
-class ScalatraBootstrap exntends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     MyAssetsController.mount(ctx)
   }
