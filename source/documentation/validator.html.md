@@ -144,7 +144,7 @@ messages.get("minLength", Seq("password", 6))
 ### How It Works in Skinny apps
 <hr/>
 
-You can easily understand how skinny-valdiator works in Skinny apps.
+You can easily understand how skinny-validator works in Skinny apps.
 
 [framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala)
 

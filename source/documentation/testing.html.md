@@ -101,7 +101,7 @@ Be aware of following points when you use `MockController`:
 <hr/>
 #### MockController cannot handle org.scalatra.HaltException
 
-HaltExcpetion is very exceptional operation by Scalatra. HaltException is not an Exception but a Throwable. Furthermore, it mutes all the stack traces.
+HaltException is very exceptional operation by Scalatra. HaltException is not an Exception but a Throwable. Furthermore, it mutes all the stack traces.
 
 When you call `halt` method or `redirect` method, HaltException will be thrown.
 

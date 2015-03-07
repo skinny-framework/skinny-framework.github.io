@@ -89,7 +89,7 @@ object Tweet extends SkinnyCRUDMapper[Tweet] with TimestampsFeature[Tweet] {
 }
 ```
 
-Other assocications can be generated with the following convention.
+Other associations can be generated with the following convention.
 
 - Option[{Entity}]: belongsTo association
 - Seq[{Entity}]: hasMany association
@@ -236,7 +236,7 @@ object ProjectMembersController extends SkinnyResource with ApplicationControlle
 #### Using your favorite ORM with SkinnyResource
 <hr/>
 
-Skinny ORM'S CRUDMappper implements `skinny.SkinnyModel`'s methods. If you'd like to use other ORM or DB library, you can do that by implementing `SkinnyModel` trait.
+Skinny ORM'S CRUDMapper implements `skinny.SkinnyModel`'s methods. If you'd like to use other ORM or DB library, you can do that by implementing `SkinnyModel` trait.
 
 https://github.com/skinny-framework/skinny-framework/blob/master/common/src/main/scala/skinny/SkinnyModel.scala
 
@@ -250,10 +250,10 @@ object MembersController extends SkinnyResource with ApplicationController {
 ```
 
 <hr/>
-#### SkinnyResource's paginaation for Oracle, MS SQLServer
+#### SkinnyResource's pagination for Oracle, MS SQLServer
 <hr/>
 
-Skinny ORM doesn't support Oracle DB or MS SQLServer's pagenation. You should override `SkinnyModel#findModels(pageSize: Int, pageNo: Int): List[Model]` method for your RDBMS. 
+Skinny ORM doesn't support Oracle DB or MS SQLServer's pagination. You should override `SkinnyModel#findModels(pageSize: Int, pageNo: Int): List[Model]` method for your RDBMS. 
 
 https://github.com/skinny-framework/skinny-framework/blob/master/common/src/main/scala/skinny/SkinnyModel.scala
 
@@ -344,7 +344,7 @@ Scaffold command's parameters are ...
 - {namespace}: prefix for the resource (e.g. admin.foo.bar)
 
 <hr/>
-#### reverse-*-all commnds
+#### reverse-*-all commands
 
 `reverse-scaffold-all/reverse-model-all` commands generate all the code from existing database.
 
@@ -378,7 +378,7 @@ create table organization_developer (
 );
 ```
 
-When you run `reverse-scaffold-all` generator for this dababase schema, skinny command will show you following output.
+When you run `reverse-scaffold-all` generator for this database schema, skinny command will show you following output.
 
 ```
 *** Skinny Reverse Engineering Task ***

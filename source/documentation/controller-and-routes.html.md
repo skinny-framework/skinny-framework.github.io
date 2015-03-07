@@ -62,7 +62,7 @@ object Controllers {
 }
 
 // src/main/scala/ScalatraBootstrap.scala
-class ScalatraBootstrap exntends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     // register routes
     Controllers.members.mount(ctx)
@@ -321,7 +321,7 @@ SkinnyFilter is our original filter to enable easily handling before/after/error
 
 Contrary to your expectations, Scalatra doesn't run all the handlers for after and error. Only the first one would be applied and the others are just ignored. We think it's difficult to be aware of this specification (it's not a bug but by design). So SkinnyFilter's before/after/error handlers are always applied. 
 
-For instance, in skinny-blank-app, ErrrorPageFilter is applied to ApplicationController. 
+For instance, in skinny-blank-app, ErrorPageFilter is applied to ApplicationController. 
 
 ```scala
 trait ApplicationController extends SkinnyController
@@ -606,7 +606,7 @@ val stream: InputStream = request.inputStream // raw HTTP POST data
 import skinny.SkinnyServlet
 import skinny.controller.feature.FileUploadFeature
 
-// SkinnySerlvet!!!
+// SkinnyServlet!!!
 class FilesController extends SkinnyServlet with FileUploadFeature {
 
   def upload = fileParams.get("file") match {
@@ -727,7 +727,7 @@ val memcachedServers: Option[Seq[String]] = SkinnyConfig.stringSeqConfigValue("m
 #### Awaiting several Futures within action method
 <hr/>
 
-The following is a simple dashboard application which collects serveral futures within the `index` method.
+The following is a simple dashboard application which collects several futures within the `index` method.
 
 Since Skinny 1.2.0, you can easily access request and requestScope from Futures by using futureWithRequest block.
 

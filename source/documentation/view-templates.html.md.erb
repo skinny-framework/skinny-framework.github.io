@@ -50,7 +50,7 @@ The render method expects that `src/main/webapp/WEB-INF/views/members/index.html
       <a href="${s.url(MembersController.editUrl, "id" -> member.id)}" 
          class="btn btn-info">Edit</a>
       <a data-method="delete" data-confirm="Are you sure?" 
-         href="${s.url(MembersControlller.deleteUrl, "id" -> member.id)}" 
+         href="${s.url(MembersController.deleteUrl, "id" -> member.id)}"
          class="btn btn-danger">Delete</a>
 
       <!-- Primitive HTML coding is also possible -->
@@ -116,7 +116,7 @@ table(class="table table-bordered")
       td #{member.name}
       td
         a(href={s.url(MembersController.editUrl, "id" -> member.id)} class="btn btn-info") Edit
-        a(data-method="delete" data-confirm="Are you sure?" href={s.url(MembersControlller.deleteUrl, "id" -> member.id)} class="btn btn-danger") Delete
+        a(data-method="delete" data-confirm="Are you sure?" href={s.url(MembersController.deleteUrl, "id" -> member.id)} class="btn btn-danger") Delete
         a(href={s"/members/${member.id}/edit"} class="btn btn-info") Edit
         a(data-method="delete" data-confirm="Are you sure?" href={s"/members/${member.id}"} class="btn btn-danger") Delete
 ```

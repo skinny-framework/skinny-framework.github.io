@@ -59,7 +59,7 @@ import model._
 class SampleWorker extends SkinnyWorker {
 
   override def execute = {
-    // If an exception is thrwon from this method, 
+    // If an exception is thrown from this method, 
     ImportantOperation.run()
   }
 

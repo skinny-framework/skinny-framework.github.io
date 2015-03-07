@@ -16,7 +16,7 @@ A key feature of Skinny-ORM is that it avoids N+1 queries because associations a
 
 `#belongsTo`, `#hasOne` and `#hasMany(Through)` associations are converted into join queries, so you don't need to worry about performance problems caused by N+1 queries. 
 
-Furthermore, the `#byDefault` option allows you to resolve assocations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
+Furthermore, the `#byDefault` option allows you to resolve associations anytime. If you don't always need some association, miss the `#byDefault` and just use `#joins` method such as `Team.joins(Team.members).findById(123)` on demand.
 
 On the other hand, it's impossible to resolve all the nested attributes' relationships by a single join query. If you need to resolve nested relationships, you can retrieve them with eager loading by using `#includes` method.
 
@@ -363,7 +363,7 @@ Order.where('deletedAt -> None, 'shopId -> 123).count()
 Order.where(sqls.eq(o.cancelled, false)).distinctCount('customerId)
 
 // ------------
-// calcuations
+// calculations
 // min, max, average and sum
 
 Order.sum('amount)
@@ -404,7 +404,7 @@ Member.updateById(123).withAttributes('name -> "Alice")
 
 // update by condition
 
-Member.updateBy(sqls.eq(m.groupId, 123)).withAttribtues('groupId -> 234)
+Member.updateBy(sqls.eq(m.groupId, 123)).withAttributes('groupId -> 234)
 
 // ------------
 // delete
@@ -437,7 +437,7 @@ http://scalikejdbc.org/documentation/one-to-x.html
 #### BelongsTo
 <hr/>
 
-Same as ActiveRecord's `belongs_to` assocation:
+Same as ActiveRecord's `belongs_to` association:
 
 http://guides.rubyonrails.org/association_basics.html#the-belongs-to-association
 
@@ -504,7 +504,7 @@ Find more here: https://github.com/skinny-framework/skinny-framework/blob/master
 #### HasOne
 <hr/>
 
-Same as ActiveRecord's `has_one` assocation:
+Same as ActiveRecord's `has_one` association:
 
 http://guides.rubyonrails.org/association_basics.html#the-has-one-association
 
@@ -541,7 +541,7 @@ create table names (
 #### HasMany
 <hr/>
 
-Same as ActiveRecord's `has_many` assocation:
+Same as ActiveRecord's `has_many` association:
 
 http://guides.rubyonrails.org/association_basics.html#the-has-many-association
 
@@ -697,7 +697,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 ### Other Configurations
 <hr/>
 
-Skinny ORM provides the folllowing settings to overwrite.
+Skinny ORM provides the following settings to overwrite.
 
 ```scala
 object GroupMember 
@@ -854,11 +854,11 @@ object Member extends SkinnyCRUDMapper[Member] {
 ```
 
 If you're using Skinny-ORM with Skinny Framework,
-[skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applciations.
+[skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applications.
 
 ```scala
 // src/main/scala/ScalatraBootstrap.scala
-class ScalatraBootstrap exntends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     ctx.mount(new TxPerRequestFilter, "/*")
   }
@@ -899,7 +899,7 @@ object Member extends SkinnyCRUDMapperWithId[UUID, Member]
   )
 }
 
-val m: Option[Member] = Memmber.findById(UUID.fromString("....."))
+val m: Option[Member] = Member.findById(UUID.fromString("....."))
 ```
 
 Don't worry. Skinny-ORM does well at resolving associations even if you use custom primary keys.
@@ -908,7 +908,7 @@ Don't worry. Skinny-ORM does well at resolving associations even if you use cust
 ### ActiveRecord-like Timestamps
 <hr/>
 
-`timetamps` from ActiveRecord is available as the `TimestampsFeature` trait. 
+`timestamps` from ActiveRecord is available as the `TimestampsFeature` trait.
 
 By default, this trait expects two columns on the table - `created_at timestamp not null` and `updated_at timestamp`. If you need customizing, override *FieldName methods as follows.
 
