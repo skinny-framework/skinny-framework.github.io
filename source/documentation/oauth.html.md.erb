@@ -105,8 +105,7 @@ https://console.developers.google.com/
 import skinny.controller.feature.GoogleLoginFeature
 import skinny.oauth2.client.google.GoogleUser
 
-class SessionsController extends ApplicationController with GoogleLoginFeature
-  with SkinnySessionOAuth2LoginFeature[GoogleUser] with SkinnyFilter {
+class SessionsController extends ApplicationController with GoogleLoginFeature {
 
   // these env variables are expected by default
   // SKINNY_OAUTH2_CLIENT_ID_GOOGLE
