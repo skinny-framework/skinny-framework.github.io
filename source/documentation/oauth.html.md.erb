@@ -127,8 +127,14 @@ As same as above examples, these env variables are expected by default.
 - SKINNY\_OAUTH2\_CLIENT\_ID\_DROPBOX
 - SKINNY\_OAUTH2\_CLIENT\_SECRET\_DROPBOX
 
+```scala
+class SessionsController extends ApplicationController with DropboxLoginFeature {
+  override protected def saveAuthorizedUser(dropboxUser: DropboxUser): Unit = { .. }
+}
+```
+
 <hr/>
-#### Typetalk from Nulab
+#### Typetalk from [Nulab](https://nulab-inc.com)
 
 - http://www.typetalk.in/
 - http://developer.nulab-inc.com/docs/typetalk
@@ -137,6 +143,49 @@ As same as above examples, these env variables are expected by default.
 
 - SKINNY\_OAUTH2\_CLIENT\_ID\_TYPETALK
 - SKINNY\_OAUTH2\_CLIENT\_SECRET\_TYPETALK
+
+```scala
+class SessionsController extends ApplicationController with TypetalkLoginFeature {
+  override protected def saveAuthorizedUser(typetalkUser: TypetalkUser): Unit = { .. }
+}
+```
+
+<hr/>
+#### Backlog from [Nulab](https://nulab-inc.com)
+
+- http://backlogtool.com/
+- http://developer.nulab-inc.com/docs/backlog/auth
+
+As same as above examples, these env variables are expected by default.
+
+- SKINNY\_OAUTH2\_CLIENT\_ID\_BACKLOG
+- SKINNY\_OAUTH2\_CLIENT\_SECRET\_BACKLOG
+
+Specify your own space id as `spaceID` in the controller.
+
+```scala
+class SessionsController extends ApplicationController with BacklogLoginFeature {
+  override def spaceID = "subdomain name"
+  override protected def saveAuthorizedUser(backlogUser: BacklogUser): Unit = { .. }
+}
+```
+
+Although it's a little bit confusing, OAuth2 support for Japanese customers are separated. Add "JP" suffix for all the configuarations.
+
+- http://www.backlog.jp/
+
+These env variables are expected by default.
+
+- SKINNY\_OAUTH2\_CLIENT\_ID\_BACKLOGJP
+- SKINNY\_OAUTH2\_CLIENT\_SECRET\_BACKLOGJP
+
+```scala
+class SessionsController extends ApplicationController with BacklogJPLoginFeature {
+  override def spaceID = "subdomain name"
+  // BacklogUser model is the same
+  override protected def saveAuthorizedUser(backlogUser: BacklogUser): Unit = { .. }
+}
+```
 
 <hr/>
 ### Twitter OAuth 1.0a for Login
