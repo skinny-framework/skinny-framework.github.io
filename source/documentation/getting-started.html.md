@@ -42,8 +42,6 @@ If you suffered the following error, try `brew uninstall node && brew install no
 
 <pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
 
-<script type="text/javascript" src="https://asciinema.org/a/11426.js" id="asciicast-11426" async></script>
-
 If all else fails, try using global Yeoman generator.
 
 ```sh
@@ -189,11 +187,6 @@ The following tree shows the directories and files in skinny-blank-app project. 
 ├── bin
 │   └── sbt-launch.jar # global sbt script in PATH is given priority over this
 ├── build.sbt
-├── heroku # for Heroku deployment
-│   ├── common.sh
-│   ├── run
-│   ├── skinny
-│   └── stage
 ├── project
 │   ├── Build.scala
 │   ├── build.properties

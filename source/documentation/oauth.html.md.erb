@@ -30,6 +30,7 @@ Facebook login API is mostly compatible with OAuth 2.0. See the official documen
 
 https://developers.facebook.com/docs/facebook-login/
 
+![Facebook](images/facebook.png)
 
 ```scala
 package controller
@@ -73,12 +74,11 @@ object Controllers {
 <hr/>
 #### GitHub 
 
-Almost same :)
-
-Your developer applications provide OAuth 2.0 authorization. Register new application here.
+Almost same :) Your developer applications provide OAuth 2.0 authorization. Register new application here.
 
 https://github.com/settings/applications
 
+![GitHub](images/github.png)
 
 ```scala
 import skinny.controller.feature.GitHubLoginFeature
@@ -98,6 +98,8 @@ class SessionsController extends ApplicationController with GitHubLoginFeature {
 #### Google 
 
 Google API supports OAuth 2.0 authorization. Create your API project and gerenate credentials here.
+
+![Google](images/google.png)
 
 https://console.developers.google.com/
 
@@ -122,6 +124,8 @@ class SessionsController extends ApplicationController with GoogleLoginFeature
 
 https://www.dropbox.com/developers/core/docs#oa2-authorize
 
+![Dropbox](images/dropbox.png)
+
 As same as above examples, these env variables are expected by default.
 
 - SKINNY\_OAUTH2\_CLIENT\_ID\_DROPBOX
@@ -139,6 +143,8 @@ class SessionsController extends ApplicationController with DropboxLoginFeature 
 - http://www.typetalk.in/
 - http://developer.nulab-inc.com/docs/typetalk
 
+![Typetalk](images/typetalk.png)
+
 As same as above examples, these env variables are expected by default.
 
 - SKINNY\_OAUTH2\_CLIENT\_ID\_TYPETALK
@@ -155,6 +161,8 @@ class SessionsController extends ApplicationController with TypetalkLoginFeature
 
 - http://backlogtool.com/
 - http://developer.nulab-inc.com/docs/backlog/auth
+
+![Backlog](images/backlog.png)
 
 As same as above examples, these env variables are expected by default.
 
@@ -192,6 +200,8 @@ class SessionsController extends ApplicationController with BacklogJPLoginFeatur
 <hr/>
 
 https://dev.twitter.com/docs/auth/oauth
+
+![Twitter](images/twitter.png)
 
 Your applications are here. Since you cannot register localhost app, edit `/etc/hosts` for debugging.
 

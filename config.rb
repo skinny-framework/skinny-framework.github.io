@@ -57,7 +57,7 @@ set :markdown, fenced_code_blocks: true, smartypants: true, autolink: true, with
 I18n.enforce_available_locales = false
 
 # Latest Skinny Framework version
-@skinny_version = "1.3.15"
+@skinny_version = "1.3.16"
 set :skinny_version, @skinny_version
 @scalikejdbc_version = "2.2.5"
 set :scalikejdbc_version, @scalikejdbc_version

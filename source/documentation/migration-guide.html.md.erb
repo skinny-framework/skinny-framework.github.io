@@ -1,0 +1,93 @@
+---
+title: Migration Guide - Skinny Framework
+---
+
+<hr/>
+### 1.3 Migration Guide for 1.2.x Users
+<hr/>
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/1.3.0
+
+Deprecated joda-time methods in WrappedResultSet are removed. If you you're using `rs.dateTime(...)`, just rename it to `rs.jodaDateTime(...)`.
+
+<hr/>
+### 1.2 Migration Guide for 1.1.x Users
+<hr/>
+
+APIs are basically compatible. If you don't have some extensions that depend on `LocaleFeature`, `RequestScopeFeature` and `SkinnySessionFilter` methods, 
+your app will work fine without changing your code.
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/1.2.0
+
+Though we believe migration is not difficult, please tell us here if you find something wrong.
+
+https://github.com/skinny-framework/skinny-framework/issues
+
+<hr/>
+### 1.1 Migration Guide for 1.0.x Users
+<hr/>
+
+Skinny 1.1 APIs are basically compatible with Skinny 1.0 though the release includes basic dependencies' major upgrades. 
+If your app depends on the dependencies directly (not via Skinny APIs), you may need to update your code.
+
+- All the components run on Scala 2.11 or Scala 2.10 (Skinny 1.0: Scala 2.10)
+- Web framework runs on Java 7 or higher (Skinny 1.0: Java 6 or higher) 
+- Web framework is compatible with Servlet API 3.1 (Skinny 1.0: Servlet 3.0)
+- Web framework depends on Scalatra 2.3 (Skinny 1.0: Scalatra 2.2)
+- ORM depends on ScalikeJDBC 2.0 (Skinny 1.0: ScalikeJDBC 1.8)
+- Migration command depends on Flyway 3.0 (Skinny 1.0: Flyway 2.3)
+- Test support depends on ScalaTest 2.2 (Skinny 1.0: ScalaTest 1.9)
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/1.1.0
+
+Though we believe migration is not difficult, please tell us here if you find something wrong.
+
+https://github.com/skinny-framework/skinny-framework/issues
+
+<hr/>
+#### Update skinny project structure by using Yeoman
+
+Yo can use Yeoman to merge updates in skinny-blank-app project. Yeoman's merging process is similar to Rails generator. Very easy to use!
+
+```
+npm install -g yo
+npm install -g generator-skinny
+yo skinny
+```
+
+<hr/>
+#### "org.scalatest.matchers.ShouldMatchers" is deprecated
+
+Use "org.scalatest.Matchers" instead. Sorry to say this.
+
+<hr/>
+#### Importing "scalikejdbc.SQLInterpolation._" is deprecated
+
+Just import only "scalikejdbc._".
+
+See also: https://github.com/skinny-framework/skinny-framework/commit/1e44f60e5c5d0f53ab0102697a00413ad7a696d0
+
+<hr/>
+#### Renamed joda-time APIs due to JSR-310
+
+`WrappedResultSet#dateTime`, `#localDate`, `#localTime` and `#localDateTime` are deprecated and `#jodaDateTime` and #jodaXXX are added.
+
+See also the issue: https://github.com/scalikejdbc/scalikejdbc/issues/222
+
+Other changes in ScalikeJDBC 2.0:
+
+https://github.com/scalikejdbc/scalikejdbc/blob/master/notes/2.0.0.markdown
+
+<hr/>
+#### skinny package's Scalate precompilation error
+
+Since Scalate 1.7.0, Skinny's blank app project's settings fail to execute `package` command.
+
+```
+default_ssp.scala:7: $_scalate_$default_ssp is already defined as object $_scalate_$default_ssp
+```
+
+Remove scalateSettings if your build settings loads it twice.
+
+See also: https://github.com/skinny-framework/skinny-framework/commit/4ad2b874116ad3b60b76b104b2bf528106aeda87
+
