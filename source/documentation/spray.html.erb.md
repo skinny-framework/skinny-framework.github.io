@@ -21,6 +21,12 @@ sbt run
 # access `localhost:8080` or `localhost:8080/?name=World` form curl or web browser
 ```
 
+Using sbt-resolver makes your Spray application development smoother. While running your Spray application by using the following command, sbt will detect your file changes and restart application automatically.
+
+```
+sbt ~reStart
+```
+
 If you'd like to create a portable jar file which can be invoked anywhere, use sbt-assembly to generate it.
 
 ```
@@ -43,7 +49,7 @@ lazy val sample = (project in file(".")).settings(
     "io.spray"             %% "spray-json"    % "1.3.1",
     "org.skinny-framework" %% "skinny-splash" % "1.0.+"
   )
-)
+).settings(Revolver.settings: _*)
 ```
 
 #### project/build.properties
@@ -55,6 +61,7 @@ sbt.version=0.13.8
 #### project/plugins.sbt
 
 ```scala
+addSbtPlugin("io.spray"     % "sbt-revolver" % "0.7.2")
 // for standalone jar creation
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.13.0")
 ```
