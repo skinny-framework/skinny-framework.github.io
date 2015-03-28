@@ -1,0 +1,135 @@
+---
+title: Reuse Skinny components in Spray apps - Skinny Framework
+---
+
+## Reuse Skinny components in Spray apps
+
+Skinny Framework itself depends on Scalatra and its Servlet integration. But skinny-validator, skinny-json and other components are independent from Scalatra Servlet environment.
+
+skinny-splash aims to provides handy APIs for Spray applciations by seamlessly integrating Skinny components.
+
+https://github.com/skinny-framework/skinny-splash
+
+<hr/>
+### Getting Started
+<hr/>
+
+After creating the following files, you can boot your first HTTP server built with skinny-splash. Pretty easy!
+
+```
+sbt run
+# access `localhost:8080` or `localhost:8080/?name=World` form curl or web browser
+```
+
+If you'd like to create a portable jar file which can be invoked anywhere, use sbt-assembly to generate it.
+
+```
+sbt assembly
+java -jar target/scala-2.11/my-blazing-app-assembly-0.1-SNAPSHOT.jar
+```
+
+---
+
+#### build.sbt
+
+```scala
+lazy val sample = (project in file(".")).settings(
+  scalaVersion := "2.11.6",
+  name := "my-blazing-app",
+  libraryDependencies ++= Seq(
+    "com.typesafe.akka"    %% "akka-actor"    % "2.3.9",
+    "io.spray"             %% "spray-can"     % "1.3.3",
+    "io.spray"             %% "spray-routing" % "1.3.3",
+    "io.spray"             %% "spray-json"    % "1.3.1",
+    "org.skinny-framework" %% "skinny-splash" % "1.0.+"
+  )
+)
+```
+
+#### project/build.properties
+
+```
+sbt.version=0.13.8
+```
+
+#### project/plugins.sbt
+
+```scala
+// for standalone jar creation
+addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.13.0")
+```
+
+#### src/main/scala/app.scala
+
+```scala
+import skinny.splash._
+import skinny.validator._
+
+class MyController extends SprayController {
+  def form(req: SprayRequest) = validation(req,
+    paramKey("name") is required & maxLength(10)
+  )
+  def index(implicit req: SprayRequest): SprayResponse = {
+    if (form(req).validate()) {
+      val body = toJSONString(Map("message" -> s"Hello, ${params.getOrElse("name", "Anonymous")}"))
+      respondAs(body)
+    } else {
+      respondAs(status = 400, body = toJSONString(keyAndErrorMessages))
+    }
+  }
+}
+
+trait MyDispatcher extends SprayDispatcher {
+  val myController = new MyController
+  def routes = Seq(
+    getRoute("")(implicit req => myController.index),
+    postRoute("post")(implicit req => myController.index)
+  )
+}
+
+class MyDispatcherActor
+  extends SprayDispatcherActor
+  with MyDispatcher
+
+object MyApp extends SprayApplication {
+  def dispatcherActorProps = toProps(classOf[MyDispatcherActor])
+}
+```
+
+#### src/main/resources/messages.conf
+
+```
+error {
+  required="{0} is required"
+  notNull="{0} is required"
+  notEmpty="{0} is required"
+  length="{0} length must be {1}"
+  minLength="{0} length must be greater than or equal to {1}"
+  maxLength="{0} length must be less than or equal to {1}"
+  minMaxLength="{0} length must be greater than or equal to {1} or be less than or equal to {2}"
+  numeric="{0} must be numeric"
+  intValue="{0} is less or greater than expected range"
+  longValue="{0} is less or greater than expected range"
+  intMinValue="{0} must be greater than or equal to {1}"
+  intMaxValue="{0} must be less than or equal to {1}"
+  intMinMaxValue="{0} must be greater than or equal to {1} or be less than or equal to {2}"
+  longMinValue="{0} must be greater than or equal to {1}"
+  longMaxValue="{0} must be less than or equal to {1}"
+  longMinMaxValue="{0} must be greater than or equal to {1} or be less than or equal to {2}"
+  dateTimeFormat="{0} must be a datetime value"
+  dateFormat="{0} must be a date value"
+  timeFormat="{0} must be a time value"
+  same="{0} must be the same with {1}"
+  email="{0} must be an e-mail"
+  past="{0} must be in the past"
+}
+```
+
+### Give us your feedback!
+
+skinny-splash is a very young library. We'd like to improve step by step with users. If you're interested in using it and hope more features, please let us know here:
+
+https://github.com/skinny-framework/skinny-splash/issues
+
+<hr/>
+
