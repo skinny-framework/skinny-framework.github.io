@@ -71,6 +71,18 @@ object Controllers {
 }
 ```
 
+If you'd like to integrate this login feature with SkinnySession, append the following traits.
+
+```scala
+import skinny.controller.feature.SkinnySessionOAuth2LoginFeature
+
+class FBAuthController extends ApplicationController with FacebookLoginFeature 
+  // skinny.filter.SkinnySessionFilter is also required in ApplicationController
+  with SkinnySessionOAuth2LoginFeature[FacebookUser] {
+
+}
+```
+
 <hr/>
 #### GitHub 
 
@@ -107,14 +119,13 @@ https://console.developers.google.com/
 import skinny.controller.feature.GoogleLoginFeature
 import skinny.oauth2.client.google.GoogleUser
 
-class SessionsController extends ApplicationController with GoogleLoginFeature
-  with SkinnySessionOAuth2LoginFeature[GoogleUser] with SkinnyFilter {
+class SessionsController extends ApplicationController with GoogleLoginFeature {
 
   // these env variables are expected by default
   // SKINNY_OAUTH2_CLIENT_ID_GOOGLE
   // SKINNY_OAUTH2_CLIENT_SECRET_GOOGLE
 
-  override protected def saveAuthorizedUser(ghUser: GoogleUser): Unit = { .. }
+  override protected def saveAuthorizedUser(gUser: GoogleUser): Unit = { .. }
   
 }
 ```
