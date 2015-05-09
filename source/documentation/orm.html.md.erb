@@ -144,6 +144,8 @@ The usage is like this:
 ```scala
 // create
 Member.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
+val column = Member.column
+Member.createWithNamedValues(column.name -> "Alice", column.createdAt -> DateTime.now)
 // update
 Member.updateById(123).withAttributes('name -> "Bob")
 Member.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
@@ -184,6 +186,8 @@ The usage is like this:
 ```scala
 // create
 Member2.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
+val m = Member2.column
+Member2.createWithNamedValues(m.name -> "Alice"< m.createdAt -> DateTime.now)
 // update
 Member2.updateById(MemberId(123)).withAttributes('name -> "Bob")
 Member2.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
@@ -381,7 +385,7 @@ val params = Map("name" -> "Bob")
 val id = Member.createWithPermittedAttributes(params.permit("name" -> ParamType.String))
 
 // ------------
-// create with unsafe parameters
+// create with parameters
 
 val m = Member.defaultAlias
 val id = Member.createWithNamedValues(m.name -> "Alice")
@@ -398,7 +402,7 @@ Member.createWithAttributes(
 Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType.String))
 
 // ------------
-// update with unsafe parameters
+// update with parameters
 
 Member.updateById(123).withAttributes('name -> "Alice")
 
