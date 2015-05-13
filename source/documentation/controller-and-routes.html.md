@@ -210,7 +210,7 @@ src/main/webapp/WEB-INF/views/members/
 └── show.html.ssp
 ```
 
-In this case, SkinnyResource provides the following URLs by default.
+In this case, SkinnyResource provides the following URLs from SkinnyResourceRoutes by default. If you don't need all the routes below, just mixin SkinnyResourceActions instead and specify only routes you need by hand.
 
 - GET /members
 - GET /members/
@@ -734,12 +734,14 @@ Since Skinny 1.2.0, you can easily access request and requestScope from Futures 
 ```scala
 package controller
 
+import _root_.service._
+import javax.servlet.http.HttpServletRequest
 import org.joda.time._
-import service._
 import scala.concurrent._
 import scala.concurrent.duration._
+
+// using your own ExecutionContext will be preferred in most cases
 import scala.concurrent.ExecutionContext.Implicits.global
-import javax.servlet.http.HttpServletRequest
 
 case class DashboardOps(controller: DashboardController) {
   def setCurrentUser(implicit req: HttpServletRequest) = {
@@ -765,13 +767,13 @@ class DashboardController extends ApplicationController {
         //set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
         set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))(req)
 
-        // [error] example/src/main/scala/controller/DashboardController.scala:43: ambiguous implicit values:
-        // [error]  both value req of type javax.servlet.http.HttpServletRequest
-        // [error]  and method request in class DashboardController of type => javax.servlet.http.HttpServletRequest
-        // [error]  match expected type javax.servlet.http.HttpServletRequest
-        // [error]         set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
-        // [error]            ^
-        // [error] one error found
+// [error] example/src/main/scala/controller/DashboardController.scala:43: ambiguous implicit values:
+// [error]  both value req of type javax.servlet.http.HttpServletRequest
+// [error]  and method request in class DashboardController of type => javax.servlet.http.HttpServletRequest
+// [error]  match expected type javax.servlet.http.HttpServletRequest
+// [error]         set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
+// [error]            ^
+// [error] one error found
       },
 
       // separate operation to outside of this controller

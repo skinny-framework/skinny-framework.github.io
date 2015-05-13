@@ -20,6 +20,13 @@ If you're a Windows user, don't worry. Use skinny.bat on cmd.exe instead.
 ./skinny run
 ```
 
+When you need to specify Skinny's env, set `SKINNY_ENV` env variable. `staging.*` configuration will be used instead of default `development.*` in `src/main/resources/application.conf`.
+
+```sh
+export SKINNY_ENV=staging # default: development
+./skinny run
+```
+
 <hr/>
 ### Homebrew
 <hr/>
@@ -256,7 +263,7 @@ The following tree shows the directories and files in skinny-blank-app project. 
 │           ├── controller
 │           │   └── RootControllerSpec.scala # testing with MockController
 │           └── integrationtest
-│               └── RootController_IntegrationTestSpec.scala # testing with embedded Jetty (scalatra-test)
+│               └── RootController_IntegrationTestSpec.scala # testing with embedded Jetty
 └── task
     └── src
         └── main
