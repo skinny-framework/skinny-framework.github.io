@@ -11,7 +11,7 @@
 ## What's Skinny?
 <hr/>
 
-Skinny is a full-stack web app framework built on Skinny Micro.
+Skinny is a full-stack web app framework built on [Scalatra](http://scalatra.org).
 
 To put it simply, Skinny framework's concept is **Scala on Rails**. Skinny is highly inspired by [Ruby on Rails](http://rubyonrails.org/) and it is optimized for sustainable productivity for Servlet-based web app development.
 
@@ -145,40 +145,54 @@ yo skinny
 ```
 
 <hr/>
-## Skinny's Components Overview
+### Integrating with existing Scalatra apps
 <hr/>
 
-### Skinny Micro
-<hr/>
+Actually, an application built with Skinny is also a normal Scalatra application. 
+After preparing a Scalatra app, just add the following dependency to your `project/Build.scala`. 
 
-In the aspect of Web application framework, Skinny Framework's core part is an independent and useful micro framework named [Skinny Micro](/documentation/micro.html).
+These components depends on Scalatra.
 
-```scala
-#!/usr/bin/env scalas
-/***
-scalaVersion := "2.11.7"
-libraryDependencies += "org.skinny-framework" %% "skinny-micro-server" % "0.9.+"
-*/
-import skinny.micro._
-object HelloApp extends WebApp {
-  get("/say-hello") {
-    s"Hello, ${params.getOrElse("name", "Anonymous")}!\n"
-  }
-}
-WebServer.mount(HelloApp).port(4567).start()
+```
+libraryDependencies ++= Seq(
+  "org.skinny-framework" %% "skinny-assets"             % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-framework"          % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-oauth2-controller"  % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-twitter-controller" % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-scaldi"             % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-test"               % "<%= @skinny_version %>" % "test"
+)
+```
 
-println
-println("Try: curl -v 'localhost:4567/say-hello?name=Martin'")
-println
+If you need only Skinny-ORM, Skinny-Validator and so on, you can use only what you need. 
+Even if you're using Play2 (or any other framework), these components are available for you as well.
+
+```
+libraryDependencies ++= Seq(
+  "org.skinny-framework" %  "skinny-logback"      % "1.0.6",
+  "org.skinny-framework" %% "skinny-orm"          % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-oauth"        % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-task"         % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-mailer"       % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-standalone"   % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-validator"    % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-http-client"  % "<%= @skinny_version %>",
+  "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny_version %>" % "test"
+)
 ```
 
 <hr/>
+## Skinny's Components Overview
+<hr/>
+
 ### Routing & Controller & Validator
 <hr/>
 
-Previously Skinny 1.x’s routing mechanism and controller layer on MVC architecture was built upon Scalatra. Skinny project decided to move its own rich Servlet layer, Skinny Micro described above.
+Skinny's routing mechanism and controller layer on MVC architecture can be thought of as a **rich Scalatra**. Skinny's extension provides you much simpler/rich syntax. Of course, if you need to use Scalatra's API directly, Skinny never bothers you.
 
-`SkinnyController` is a trait which extends `SkinnyMicroFilter (WebApp)` and includes various useful components out-of-the-box.
+![Scalatra](images/scalatra.png)
+
+`SkinnyController` is a trait which extends `ScalatraFilter` and includes various useful components out-of-the-box. 
 
 ```scala
 // src/main/scala/controller/MembersController.scala

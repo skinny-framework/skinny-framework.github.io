@@ -8,7 +8,7 @@ title: Validator - Skinny Framework
 ### Readable and Customizable DSL
 <hr/>
 
-skinny-validator is portable, so you can use skinny-validator with Play2, Scalatra and any other web app frameworks. Furthermore, you can use it in not only web apps but also any other applications (batch operation, cli and so on).
+skinny-validator is portable, so you can use skinny-validator with Play2, Scalatra (without Skinny) and any other web app frameworks. Furthermore, you can use it in not only web apps but also any other applications (batch operation, cli and so on).
 
 You can see simple usage of skinny-validator here:
 

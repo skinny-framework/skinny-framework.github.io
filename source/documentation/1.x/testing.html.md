@@ -63,6 +63,8 @@ class MemberSpec extends FunSpec with AutoRollback with Matchers with DBSettings
 }
 ```
 
+NOTICE: `AllRollback` feature is supported by ScalikeJDBC. And this trait is incompatible with ScalaTest 2.x. Furthermore, Scalatra 2.2.x is also incompatible with ScalaTest 2.x. If you'd like to use ScalaTest 2.x, use Scalatra 2.3.0.RC1 and ScalikeJDBC 2.0.0-SNAPSHOT for now (This situation will be fixed in Skinny 1.1).
+
 <hr/>
 ### Mocked Controller Tests
 <hr/>
@@ -97,9 +99,9 @@ class RootControllerSpec extends FunSpec with Matchers with DBSettings {
 Be aware of following points when you use `MockController`:
 
 <hr/>
-#### MockController cannot handle skinny.micro.control.HaltException
+#### MockController cannot handle org.scalatra.HaltException
 
-HaltException is very exceptional operation by Skinny Micro. HaltException is not an Exception but a Throwable. Furthermore, it mutes all the stack traces.
+HaltException is very exceptional operation by Scalatra. HaltException is not an Exception but a Throwable. Furthermore, it mutes all the stack traces.
 
 When you call `halt` method or `redirect` method, HaltException will be thrown.
 
@@ -109,20 +111,20 @@ We recommend you using `redirect302` instead because it is excellent with `MockC
 ### Integration Tests
 <hr/>
 
-Skinny Micro offers a great test toolkit with embedded Jetty server and easy-to-use DSL. Of course, you can use them without any problem.
+Scalatra provides a great test toolkit with embedded Jetty server and easy-to-use DSL. Of course, you can use them without any problem.
 
 Below is an integration test example with scalatra-test.
 
 ```scala
 package integrationtest
 
-import org.skinny.test._
+import org.scalatra.test.scalatest._
 import skinny.DBSettings 
 import skinny.test.SkinnyTestSupport
 import _root_.controller.Controllers
 import org.scalatest._
 
-class IntegrationTestSpec extends SkinnyFlatSpec with Matchers with SkinnyTestSupport with  DBSettings {
+class IntegrationTestSpec extends ScalatraFlatSpec with Matchers with SkinnyTestSupport with  DBSettings {
   addFilter(Controllers.members, "/*")
 
   it should "show index page" in {

@@ -1,0 +1,250 @@
+---
+title: OAuth for Login - Skinny Framework
+---
+
+## OAuth for Login
+<hr/>
+
+OAuth 2.0 is widely used for "login" feature. Skinny Framework provides some modules for that.
+
+Skinny's OAuth 2.0 modules uses Apache Oltu internally.
+
+https://oltu.apache.org/
+
+<hr/>
+### OAuth 2.0 (Facebook, GitHub, Google and so on)
+<hr/>
+
+`skinny-oauth2-controller` contains Facebook, GitHub and Google login features.
+
+Add the following dependency in your `project/Build.scala`.
+
+```scala
+libraryDependencies += "org.skinny-framework" %% "skinny-oauth2-controller" % "<%= skinny1_version %>"
+```
+
+<hr/>
+#### Facebook
+
+Facebook login API is mostly compatible with OAuth 2.0. See the official documentation here:
+
+https://developers.facebook.com/docs/facebook-login/
+
+![Facebook](images/facebook.png)
+
+```scala
+package controller
+
+import skinny.controller.feature.FacebookLoginFeature
+import skinny.oauth2.client.facebook.FacebookUser
+
+class FBAuthController extends ApplicationController with FacebookLoginFeature {
+  // these env variables are expected by default
+  // SKINNY_OAUTH2_CLIENT_ID_FACEBOOK
+  // SKINNY_OAUTH2_CLIENT_SECRET_FACEBOOK
+
+  override def redirectURI = "http://localhost:8080/auth/facebook/callback"
+
+  override protected def saveAuthorizedUser(fbUser: FacebookUser): Unit = {
+    val user = User.findById(fbUser.id).getOrElse { 
+      User.create(fbUser)
+    }
+    session.setAttribute("currentUser", user)
+  }
+
+  override protected def handleWhenLoginFailed(): Any = {
+    flash("warn") = "Login failed. Please try again."
+    redirect302("/auth")
+  }
+
+  override protected def handleWhenLoginSucceeded(): Any = {
+    flash("info") = "You have successfully registered and logged in."
+    redirect302("/")
+  }
+}
+
+object Controllers {
+  object fbAuth extends FBAuthController with Routes {
+    val facebookLoginUrl = post("/auth/facebook")(loginRedirect).as('facebookLogin)
+    val facebookLoginCallbackUrl = get("/auth/facebook/callback")(callback).as('facebookLogin)
+  }
+}
+```
+
+If you'd like to integrate this login feature with SkinnySession, append the following traits.
+
+```scala
+import skinny.controller.feature.SkinnySessionOAuth2LoginFeature
+
+class FBAuthController extends ApplicationController with FacebookLoginFeature 
+  // skinny.filter.SkinnySessionFilter is also required in ApplicationController
+  with SkinnySessionOAuth2LoginFeature[FacebookUser] {
+
+}
+```
+
+<hr/>
+#### GitHub 
+
+Almost same :) Your developer applications provide OAuth 2.0 authorization. Register new application here.
+
+https://github.com/settings/applications
+
+![GitHub](images/github.png)
+
+```scala
+import skinny.controller.feature.GitHubLoginFeature
+import skinny.oauth2.client.github.GitHubUser
+
+class SessionsController extends ApplicationController with GitHubLoginFeature {
+  // these env variables are expected by default
+  // SKINNY_OAUTH2_CLIENT_ID_GITHUB
+  // SKINNY_OAUTH2_CLIENT_SECRET_GITHUB
+
+  override protected def saveAuthorizedUser(ghUser: GitHubUser): Unit = { .. }
+  
+}
+```
+
+<hr/>
+#### Google 
+
+Google API supports OAuth 2.0 authorization. Create your API project and gerenate credentials here.
+
+![Google](images/google.png)
+
+https://console.developers.google.com/
+
+```scala
+import skinny.controller.feature.GoogleLoginFeature
+import skinny.oauth2.client.google.GoogleUser
+
+class SessionsController extends ApplicationController with GoogleLoginFeature {
+
+  // these env variables are expected by default
+  // SKINNY_OAUTH2_CLIENT_ID_GOOGLE
+  // SKINNY_OAUTH2_CLIENT_SECRET_GOOGLE
+
+  override protected def saveAuthorizedUser(gUser: GoogleUser): Unit = { .. }
+  
+}
+```
+
+<hr/>
+#### Dropbox
+
+https://www.dropbox.com/developers/core/docs#oa2-authorize
+
+![Dropbox](images/dropbox.png)
+
+As same as above examples, these env variables are expected by default.
+
+- SKINNY\_OAUTH2\_CLIENT\_ID\_DROPBOX
+- SKINNY\_OAUTH2\_CLIENT\_SECRET\_DROPBOX
+
+```scala
+class SessionsController extends ApplicationController with DropboxLoginFeature {
+  override protected def saveAuthorizedUser(dropboxUser: DropboxUser): Unit = { .. }
+}
+```
+
+<hr/>
+#### Typetalk from [Nulab](https://nulab-inc.com)
+
+- http://www.typetalk.in/
+- http://developer.nulab-inc.com/docs/typetalk
+
+![Typetalk](images/typetalk.png)
+
+As same as above examples, these env variables are expected by default.
+
+- SKINNY\_OAUTH2\_CLIENT\_ID\_TYPETALK
+- SKINNY\_OAUTH2\_CLIENT\_SECRET\_TYPETALK
+
+```scala
+class SessionsController extends ApplicationController with TypetalkLoginFeature {
+  override protected def saveAuthorizedUser(typetalkUser: TypetalkUser): Unit = { .. }
+}
+```
+
+<hr/>
+#### Backlog from [Nulab](https://nulab-inc.com)
+
+- http://backlogtool.com/
+- http://developer.nulab-inc.com/docs/backlog/auth
+
+![Backlog](images/backlog.png)
+
+As same as above examples, these env variables are expected by default.
+
+- SKINNY\_OAUTH2\_CLIENT\_ID\_BACKLOG
+- SKINNY\_OAUTH2\_CLIENT\_SECRET\_BACKLOG
+
+Specify your own space id as `spaceID` in the controller.
+
+```scala
+class SessionsController extends ApplicationController with BacklogLoginFeature {
+  override def spaceID = "subdomain name"
+  override protected def saveAuthorizedUser(backlogUser: BacklogUser): Unit = { .. }
+}
+```
+
+Although it's a little bit confusing, OAuth2 support for Japanese customers are separated. Add "JP" suffix for all the configuarations.
+
+- http://www.backlog.jp/
+
+These env variables are expected by default.
+
+- SKINNY\_OAUTH2\_CLIENT\_ID\_BACKLOGJP
+- SKINNY\_OAUTH2\_CLIENT\_SECRET\_BACKLOGJP
+
+```scala
+class SessionsController extends ApplicationController with BacklogJPLoginFeature {
+  override def spaceID = "subdomain name"
+  // BacklogUser model is the same
+  override protected def saveAuthorizedUser(backlogUser: BacklogUser): Unit = { .. }
+}
+```
+
+<hr/>
+### Twitter OAuth 1.0a for Login
+<hr/>
+
+https://dev.twitter.com/docs/auth/oauth
+
+![Twitter](images/twitter.png)
+
+Your applications are here. Since you cannot register localhost app, edit `/etc/hosts` for debugging.
+
+https://apps.twitter.com/
+
+`skinny-twitter-controller` provides you Twitter login (OAuth 1.0a authorization) and prepared `twitter4j.Twitter` in controllers.
+
+http://twitter4j.org/en/index.html
+
+<hr/>
+
+Add the following dependency in your `project/Build.scala`.
+
+```scala
+libraryDependencies += "org.skinny-framework" %% "skinny-twitter-controller" % skinnyVersion
+```
+
+<hr/>
+
+And just use `TwitterLoginFeature` trait. 
+
+```scala
+import skinny.controller.feature.TwitterLoginFeature
+
+class SessionsController extends ApplicationController with TwitterLoginFeature {
+  // these env variables are expected by default
+  // SKINNY_OAUTH1_CONSUMER_KEY_TWITTER
+  // SKINNY_OAUTH1_CONSUMER_SECRET_TWITTER
+
+  // Twitter API doesn't allow localhost app, edit /etc/hosts
+  override def isLocalDebug = true
+
+  override protected def saveAuthorizedUser(twUser: twitter4j.User): Unit = { .. }
+```
+

@@ -1,0 +1,642 @@
+---
+title: Skinny Micro
+---
+
+## Skinny Micro
+<hr/>
+
+Skinny Micro is at once a micro Web framework to build Servlet applications in Scala and the core part of Skinny Framework 2.
+
+Skinny Micro started as a fork of [Scalatra](http://scalatra.org/). After that, many improvements have been made to be safer and more efficient when working with Scala Future values upon it.
+
+Basically, Skinny Micro's DSLs are source compatible with Scalatra 2.3's ones. But names of base traits and packages are mostly renamed and the structure of internal modules are re-designed.
+
+https://github.com/skinny-framework/skinny-micro
+
+
+<hr/>
+### Getting Started
+<hr/>
+
+Taking a look at [skinny-micro-heroku-example](https://github.com/skinny-framework/skinny-micro-heroku-example) first would be helpful to understand what you need to do. [samples](https://github.com/skinny-framework/skinny-micro/tree/master/samples) and [scalas-samples](https://github.com/skinny-framework/skinny-micro/tree/master/scalas-samples) in this repository are also worth looking at.
+
+When you start new sbt project, add the following dependencies:
+
+```scala
+lazy val skinnyMicroVersion = "<%= skinny_micro_version %>"
+
+libraryDependencies ++= Seq(
+  // micro Web framework
+  "org.skinny-framework" %% "skinny-micro"             % skinnyMicroVersion,
+  // jackson integration
+  "org.skinny-framework" %% "skinny-micro-jackson"     % skinnyMicroVersion,
+  "org.skinny-framework" %% "skinny-micro-jackson-xml" % skinnyMicroVersion,
+  // json4s integration
+  "org.skinny-framework" %% "skinny-micro-json4s"      % skinnyMicroVersion,
+  // Scalate integration
+  "org.skinny-framework" %% "skinny-micro-scalate"     % skinnyMicroVersion,
+  // Standalone Web server (Jetty 9.2 / Servlet 3.1)
+  "org.skinny-framework" %% "skinny-micro-server"      % skinnyMicroVersion
+)
+```
+
+<hr/>
+### Scala API docs
+<hr/>
+
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-common"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.11/<%= skinny_micro_version %>/skinny-micro-common_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-jackson"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-jackson_2.11/<%= skinny_micro_version %>/skinny-micro-jackson_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-json4s"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-json4s_2.11/<%= skinny_micro_version %>/skinny-micro-json4s_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-scalate"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-scalate_2.11/<%= skinny_micro_version %>/skinny-micro-scalate_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-server"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-server_2.11/<%= skinny_micro_version %>/skinny-micro-server_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+
+<hr/>
+### Minimum Examples
+<hr/>
+
+We'd love to show you some simple but working examples briefly.
+
+Please also see more examples under [samples](https://github.com/skinny-framework/skinny-micro/tree/master/samples) and [scalas-samples](https://github.com/skinny-framework/skinny-micro/tree/master/scalas-samples).
+
+<hr/>
+### Simple Application
+<hr/>
+
+The following is a minimum Servlet example. `skinny.micro.SkinnyListener` initializes Skinny Micro's environment.
+
+As same as Scalatra, `_root_.Bootstrap` class (instead of `_root_.Bootstrap` for Scalatra) is detected by default. If you'd like to change the name of the `Bootstrap` class, it's also possible by specifying with Servlet's init parameter.
+
+Also take a look at [sbt-servlet-plugin](https://github.com/skinny-framework/sbt-servlet-plugin). The plugin will help you much when building Servlet applications in Scala.
+
+See [samples](https://github.com/skinny-framework/skinny-micro/tree/master/samples) for more examples.
+
+#### src/main/scala/app.scala
+
+```scala
+import javax.servlet._
+import skinny.micro._
+
+object Hello extends WebApp {
+  get("/say-hello") {
+    s"Hello, ${params.getOrElse("name", "Anonymous")}!\n"
+  }
+}
+
+class Bootstrap extends LifeCycle {
+  override def init(ctx: ServletContext) {
+    Hello.mount(ctx)
+  }
+}
+```
+
+#### src/main/webapp/WEB-INF/web.xml
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <listener>
+        <listener-class>skinny.micro.SkinnyListener</listener-class>
+    </listener>
+</web-app>
+```
+
+### Async Native Application
+
+Skinny Micro newly privides original base traits that named as `AsyncWebApp (AsyncSkinnyMicorFilter)` and `AsyncSingleWebApp (AsyncSkinnyMicroServlet)`.
+
+They are natively suitable for building Future-wired async operations. You will no longer unwantedly feel stressed when working with Future-wired operations.
+
+```scala
+case class Message(id: Long, text: String)
+
+object Messages {
+  def search(keyword: Option[String])(implicit ctx: ExecutionContext): Future[Seq[Message]]
+}
+
+object AsyncMessagesApp extends AsyncWebApp with JSONSupport {
+
+  post("/messages/search") { implicit ctx =>
+    // You don't need to explicitly wrap results with AsyncResult
+    // Of course, doing so is also fine
+    Messages.search(params.get("keyword"))
+      .map(ms => Ok(toJSONString(ms))) // returns Future[ActionResult]
+  }
+}
+```
+
+More working examples are available under [samples](https://github.com/skinny-framework/skinny-micro/tree/master/samples) and [scalas-samples](https://github.com/skinny-framework/skinny-micro/tree/master/scalas-samples).
+
+<hr/>
+### Details
+<hr/>
+
+Skinny Micro started as a Scalatra fork. So we basically continue Scalatra's guides for compatible APIs.
+
+<hr/>
+#### Routes
+<hr/>
+
+In Skinny Micro, as same as Scalatra, a route is an HTTP method (GET, PUT, POST, or DELETE) paired with a URL matching pattern. If you set up your application using RESTful conventions, your controller might look something like this:
+
+```scala
+import skinny.micro._
+
+class Articles extends WebApp {
+
+  get("/articles/:id") {  //  <= this is a route matcher
+    // this is an action
+    // this action would show the article which has the specified :id
+  }
+
+  post("/articles") {
+    // submit/create an article
+  }
+
+  put("/articles/:id") {
+    // update the article which has the specified :id
+  }
+
+  delete("/articles/:id") {
+    // delete the article with the specified :id
+  }
+}
+```
+
+Those four example routes, and the actions inside the route blocks, could be the basis of a simple blogging system. The examples just stub out the actions - in a real application, you'd replace the // comments with code to save and retrieve models, and show HTML views.
+
+The first matching route is invoked. Routes are matched from the bottom up, i.e. from the bottom of the Scala class defining your servlet to the top.  
+
+**Watch out!** This is the opposite of Sinatra. Route definitions are executed as part of a Scala constructor; by matching from the bottom up, routes can be overridden in child classes.
+
+<hr/>
+#### Conditions
+
+Routes may include conditions. A condition is any expression that returns Boolean. Conditions are evaluated by-name each time the route matcher runs.
+
+```scala
+get("/foo") {
+  // Matches "GET /foo"
+}
+
+get("/foo", request.getRemoteHost == "127.0.0.1") {
+  // Overrides "GET /foo" for local users
+}
+```
+
+Multiple conditions can be chained together. A route must match all conditions:
+
+```scala
+get("/foo", request.getRemoteHost == "127.0.0.1", request.getRemoteUser == "admin") {
+  // Only matches if you're the admin, and you're localhost
+}
+```
+
+No path pattern is necessary. A route may consist of solely a condition:
+
+```scala
+get(isMaintenanceMode) {
+  <h1>Go away!</h1>
+}
+```
+
+<hr/>
+#### Query/Form/Path Parameters
+<hr/>
+
+[Scala API docs for "skinny.micro.SkinnyMicroParams"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.SkinnyMicroParams)
+
+`params` is the basic accessor for request parameters. Both of GET query string params and POST form params end up in the `params` bag - you shouldn't need to read anything off the `request.body`.
+
+```scala
+val name: Option[String] = params.get("id")
+val id: Option[Int] = params.getAs[Int]("id")
+val id: Long = params.getAsOrElse[Long]("id", -1L)
+```
+
+`multiParams` returns multiple values for the same key if exists.
+
+```scala
+val ids: Option[Seq[Int]] = multiParams.getAs[Int]("ids")
+```
+
+If you need to distinguish query string parameters and form parameters, use the following APIs instead.
+
+- queryParams: Params
+- queryMultiParams: MultiParams
+- formParams: Params
+- formMultiParams: MultiParams
+
+<hr/>
+
+Route patterns may also include wildcard parameters, accessible through the "splat" key. 
+
+`multiParams("splat")` returns wildcard ("*") path params. 
+
+```scala
+get("/say/*/to/*") {
+  // Matches "GET /say/hello/to/world"
+  multiParams("splat") // == Seq("hello", "world")
+}
+
+get("/download/*.*") {
+  // Matches "GET /download/path/to/file.xml"
+  multiParams("splat") // == Seq("path/to/file", "xml")
+}
+```
+
+<hr/>
+
+The route matcher may also be a regular expression. Capture groups are accessible through the "captures" key. 
+
+`multiParams("captures")` returns captured
+
+```scala
+get("""^\/f(.*)/b(.*)""".r) {
+  // Matches "GET /foo/bar"
+  multiParams("captures") // == Seq("oo", "ar")
+}
+```
+
+<hr/>
+##### Rails-like pattern matching
+
+By default, route patterns parsing is based on Sinatra. Rails has a similar, but not identical, syntax, based on Rack::Mount's Strexp. The path pattern parser is resolved implicitly, and may be overridden if you prefer an alternate syntax:
+
+```scala
+import skinny.micro._
+
+class RailsLikeRouting extends WebApp {
+  implicit override def string2RouteMatcher(path: String) = RailsPathPatternParser(path)
+
+  get("/:file(.:ext)") { // matched Rails-style }
+}
+```
+
+<hr/>
+#### Accessing and setting Cookies
+<hr/>
+
+[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
+
+```scala
+val cookies: Map[String, String] = request.cookies
+val multiCookies: Map[String, Seq[String]] = request.multiCookies
+```
+
+[Scala API docs for "skinny.micro.cookie"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.cookie.package)
+
+Useful Cookie operation DSLs are available. See [Scala API docs for "skinny.micro.cookie.SweetCookies"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.cookie.SweetCookies) for details.
+
+```scala
+def hello = {
+  cookies += "name" -> "value"
+  cookies -= "name"
+}
+
+def helloWithOptions = {
+  cookies.set("name" -> "value")
+  cookies.set("name" -> "value").withOptions(CookieOptions(secure = true))
+}
+```
+
+<hr/>
+#### Request / Response Headers
+<hr/>
+
+[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
+
+```scala
+// access request headers
+val v: Option[String] = request.header(name)
+```
+
+[Scala API docs for "skinny.micro.response.RichResponse"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.response.RichResponse)
+
+```scala
+// access response headers
+response.headers += "name" -> "value"
+response.headers -= "name"
+```
+
+<hr/>
+#### Servlet Session
+<hr/>
+
+[Scala API docs for "skinny.micro.request.RichHttpServletSession"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichHttpServletSession)
+
+```scala
+val v: Any = session("name") // or session('name)
+session += "name" -> "value"
+session -= "name"
+```
+
+Skinny Micro's Flash and CSRF protection features are using servlet sessions by default.
+Even if you don't use sessions in your application code, be careful to avoid using them or implement your own implementation that don't use Servlet sessions.
+
+As you know, Servlet sessions are stateful. If you need to share the same session among several Servlet containers, consider using Skinny Framework's SkinnySession or your own session management (e.g. storing session into memcached/redis servers instead).
+
+<hr/>
+#### Response handling
+<hr/>
+
+Action methods in Skinny Micro apps should finally return `ActionResult` value which represents the request's response. 
+
+If you just return `String` value or `Array[Byte]` value, it would be the response body. It's also allowed style. You can always use setter to modify the Servlet response's mutable state.
+
+[Scala API docs for "skinny.micro.response.ActionResult"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.response.ActionResult)
+
+Meanwhile, `halt`ing immediately returns `ActionResult` by throwing `HaltException` within a filter or route.
+
+```scala
+halt(404) // throws HaltException
+
+halt(
+  status = 400,
+  charset = Some("utf-8"),
+  contentType = Some("application/json"),
+  cookies = Seq(Cookie("foo" -> "bar")),
+  headers = Map("foo" -> "bar")
+)
+```
+
+[Scala API docs for "skinny.micro.base.RedirectionDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.base.RedirectionDsl)
+
+If you prefer specifying status code for redirection, use more explicit DSLs.
+
+```scala
+// default redirection
+redirect("/top") // 302
+
+// explicit redirection DSLs
+redirect301("/new_url") // 301
+redirect302("/somewhere") // 302
+redirect303("/complete") // 303
+```
+
+A route can punt processing to the next matching route using pass(). Remember, unlike Sinatra, routes are matched from the bottom up.
+
+```scala
+get("/guess/*") {
+  "You missed!"
+}
+
+get("/guess/:who") {
+  params("who") match {
+    case "Frank" => "You got me!"
+    case _ => pass()
+  }
+}
+```
+
+The route block is immediately exited and control continues with the next matching route. If no matching route is found, the `notFound` handler is invoked.
+The `notFound` handler allows you to execute code when there is no matching route for the current request's URL.
+
+The default behavior is:
+
+```scala
+notFound {
+  <h1>Not found. Bummer.</h1>
+}
+```
+
+What happens next differs slightly based on whether you've set your application up using SkinnyMicroFilter or SkinnyMicroServlet. Async base traits follow the same rules.
+
+- SingleApp (SkinnyMicroServlet): sends a 404 response
+- WebApp (SkinnyMicroFilter): passes the request to the servlet filter chain, which may then throw a 404 or decide to do something different with it.
+
+
+<hr/>
+#### Flash
+<hr/>
+
+Notice: Flash uses servlet sessions by default. Be aware of sticky session mode.
+
+Skinny Micro doesn't activate FlashMapSupport by default. If you need to use Flash support, mixin the following trait. 
+Meanwhile, Skinny Framework enables FlashMapSupport by default because it's a full stack framework.
+
+[Scala API docs for "skinny.micro.contrib.FlashMapSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.FlashMapSupport)
+
+```scala
+class Controller extends WebApp with FlashMapSupport {
+  post("/article/create") {
+    // create session
+    flash("notice") = "article created succesfully"
+    redirect("/home")
+  }
+  get("/home") {
+    // this will access the value set in previous action
+    stuff_with(flash("notice"))
+  }
+}
+```
+
+[Scala API docs for "skinny.micro.contrib.flash.FlashMap"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.flash.FlashMap)
+
+```scala
+flash(name) = value
+flash += (name -> value)
+flash.now += (name -> value)
+```
+
+<hr/>
+#### Request Body
+<hr/>
+
+[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
+
+```scala
+val body: String = request.body
+val stream: InputStream = request.inputStream // raw HTTP POST data
+```
+
+
+<hr/>
+#### File Upload
+<hr/>
+
+<div class="alert alert-warning small">
+<b>WARNING:</b> Extend not Filter base traits but Servlet base traits. You cannot use FileUploadFeature with WebApp (SkinnyMicroFilter) and SkinnyController.
+</div>
+
+[Scala API docs for "skinny.micro.contrib.FileUploadSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.FileUploadSupport)
+
+FileUploadSupport can be mixed into a skinny.micro.SkinnyMicroServlet to provide easy access to data submitted as part of a multipart HTTP request. Commonly this is used for retrieving uploaded files.
+
+When the configuration has been done, you can access any files using fileParams("myFile") where myFile is the name of the parameter used to upload the file being retrieved. If you are expecting multiple files with the same name, you can use fileMultiParams("files[]") to access them all.
+
+To handle any errors that are caused by multipart handling, you need to configure an error handler to your handler class:
+
+```scala
+import skinny.micro._
+import skinny.micro.contrib.FileUploadFeature
+
+// SkinnyMicroServlet or SingleWebApp !!!
+class FilesController extends SkinnyMicroServlet with FileUploadFeature {
+
+  def upload = fileParams.get("file") match {
+    case Some(file) =>
+      Ok(file.get(), Map(
+        "Content-Type"        -> (file.contentType.getOrElse("application/octet-stream")),
+        "Content-Disposition" -> ("attachment; filename=\"" + file.name + "\"")
+      ))
+    case None =>
+      BadRequest(displayPage(
+        <p>
+          Hey! You forgot to select a file.
+        </p>))
+  }
+}
+```
+
+<hr/>
+#### CSRF Protection
+<hr/>
+
+Notice: CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.
+
+[Scala API docs for "skinny.micro.contrib.CSRFTokenSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.CSRFTokenSupport)
+
+`csrfKey` and `csrfToken` are available when activating `CSRFTokenSupport`.
+
+```scala
+class SampleApp extends WebApp with CSRFTokenSupport {
+}
+```
+
+<hr/>
+#### Filters
+<hr/>
+
+Skinny Micro offers a way for you too hook into the request chain of your application via `before` and `after` filters, which both accept a block to yield. Filters optionally take a URL pattern to match to the request.
+
+#### before filter
+
+The `before` method will let you pass a block to be evaluated **before** each and every route gets processed.
+
+```scala
+before() {
+  MyDb.connect
+  contentType="text/html"
+}
+
+get("/") {
+  val list = MyDb.findAll()
+  templateEngine.layout("index.ssp", list)
+}
+```
+
+In this example, we've set up a `before` filter to connect using a contrived MyDb module, and set the contentType for all requests to text/html.
+
+#### after filter
+
+The `after` method lets you pass a block to be evaluated **after** each and every route gets processed.
+
+```scala
+after() {
+  MyDb.disconnect
+}
+```
+
+As you can see from this example, we're asking the MyDB module to disconnect after the request has been processed.
+
+#### Pattern matching
+
+Filters optionally take a pattern to be matched against the requested URI during processing. Here's a quick example you could use to run a contrived authenticate! method before accessing any "admin" type requests.
+
+```scala
+before("/admin/*") { basicAuth }
+after("/admin/*") { user.logout }
+```
+
+Route actions, errors and filters run in the following order:
+
+- Invoke before filters
+- Run routes and actions
+- If Exception thrown during the before filters or route actions exists, invoke errorHandler function with it
+- Invoke after filters
+- Render the response
+
+<hr/>
+#### Check execution time
+<hr/>
+
+[Scala API docs for "skinny.logging.TimeLogging"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.11/<%= skinny_micro_version %>/skinny-micro-common_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.logging.TimeLogging)
+
+```scala
+val result = warnElapsedTime(1) {
+  Thread.sleep(10)
+}
+// will output "[SLOW EXECUTION DETECTED] Elapsed time: 10 millis"
+```
+
+<hr/>
+#### Reverse Routing
+<hr/>
+
+Page relative url:
+
+```scala
+get("/"){
+  // This will redirect to http://<host>/page-relative
+  redirect(url("page-relative"))
+}
+```
+
+Context relative url:
+
+```scala
+get("/"){
+  // This will redirect to http://<host>/<context>/context-relative
+  redirect(url("/context-relative"))
+}
+```
+
+Mapped params:
+
+```scala
+get("/") {
+  // This will redirect to http://<host>/<context>/en-to-es?one=uno&two=dos
+  redirect( url("/en-to-es", Map("one" -> "uno", "two" -> "dos")) )
+}
+```
+
+Reverse routes:
+
+It is possible to save your routes as variables so that they have convenient handles:
+
+```scala
+class MyApp extends WebApp {
+  // When you create a route, you can save it as a variable
+  val viewUser = get("/user/:id") {
+    // your user action would go here
+  }
+
+  post("/user/new") {
+    // url method provided by UrlGeneratorSupport.  Pass it the route
+    // and the params.
+    redirect(url(viewUser, "id" -> newUser.id))
+  }
+}
+```
+
+There's also a ScalateUrlGeneratorSupport. It reflectively finds all members of your app of type Route (e.g., viewUser above) and makes them available in your templates. You should then be able to do something like this right in your templates:
+
+```scala
+url(viewUser, "id" -> 1)
+```
+
+<hr/>
+### License
+<hr/>
+
+<pre>
+(The BSD 2-Clause License)
+
+Copyright (c) Alan Dipert
+Copyright (c) skinny-framework.org
+</pre>
+

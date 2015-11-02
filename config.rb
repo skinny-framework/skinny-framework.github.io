@@ -18,6 +18,7 @@
 #
 # With alternative layout
 # page "/path/to/file.html", :layout => :otherlayout
+page "/documentation/1.x/*", :layout => '1.x.erb'
 #
 # A path which all have the same layout
 # with_layout :admin do
@@ -57,12 +58,19 @@ set :markdown, fenced_code_blocks: true, smartypants: true, autolink: true, with
 I18n.enforce_available_locales = false
 
 # Latest Skinny Framework version
-@skinny_version = "1.3.20"
+@skinny1_version = "1.3.20"
+set :skinny1_version, @skinny1_version
+@skinny1_blank_app_version = @skinny1_version
+set :skinny1_blank_app_version, @skinny1_blank_app_version
+
+set :skinny_micro_version, "0.9.14"
+@skinny_version = "2.0.0.RC2"
 set :skinny_version, @skinny_version
-@scalikejdbc_version = "2.2.8"
-set :scalikejdbc_version, @scalikejdbc_version
 @skinny_blank_app_version = @skinny_version
 set :skinny_blank_app_version, @skinny_blank_app_version
+
+@scalikejdbc_version = "2.2.9"
+set :scalikejdbc_version, @scalikejdbc_version
 
 # Build-specific configuration
 configure :build do

@@ -36,7 +36,7 @@ body {
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><%= link_to 'Getting Started', '/documentation/getting-started.html' %></li>
+        <li><%= link_to 'Getting Started', '/documentation/1.x/getting-started.html' %></li>
         <li><a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a></li>
         <li><a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a></li>
       </ul>
@@ -46,6 +46,7 @@ body {
 <div class="container">
 <div class="row">
 <div class="col-md-10" role="main">
+<div class="alert alert-warning">WARNING: This page is not a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
   <%= yield %>
   <hr/>
   <div class="alert alert-info small"> 
@@ -69,37 +70,33 @@ body {
 <div class="col-md-2" role="complementary">
   <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
   <ul class="nav bs-docs-sidenav side-menu">
-    <li><%= link_to '1.x series', '/documentation/1.x/index.html' %></li>
+    <li><%= link_to 'Back to the latest', '/' %></li>
   </ul>
   <hr/>
   <ul class="nav bs-docs-sidenav side-menu">
-    <li><%= link_to 'Skinny Micro', '/documentation/micro.html' %></li>
-  </ul>
-  <hr/>
-  <ul class="nav bs-docs-sidenav side-menu">
-    <li><%= link_to 'Getting Started', '/documentation/getting-started.html' %></li>
-    <li><%= link_to 'Scaffolding', '/documentation/scaffolding.html' %></li>
-    <li><%= link_to 'Controller & Routes', '/documentation/controller-and-routes.html' %></li>
-    <li><%= link_to 'Validator', '/documentation/validator.html' %></li>
-    <li><%= link_to 'View Templates', '/documentation/view-templates.html' %></li>
-    <li><%= link_to 'OAuth for Login', '/documentation/oauth.html' %></li>
-    <li><%= link_to 'Assets Support', '/documentation/assets.html' %></li>
-    <li><%= link_to 'Mail', '/documentation/mail.html' %></li>
-    <li><%= link_to 'Worker Jobs', '/documentation/worker_jobs.html' %></li>
-    <li><%= link_to 'i18n', '/documentation/i18n.html' %></li>
-    <li><%= link_to 'O/R Mapper', '/documentation/orm.html' %></li>
-    <li><%= link_to 'FactoryGirl', '/documentation/factory-girl.html' %></li>
-    <li><%= link_to 'DB Migration', '/documentation/db-migration.html' %></li>
-    <li><%= link_to 'Working with JSON', '/documentation/json.html' %></li>
-    <li><%= link_to 'Angular.js Server Side', '/documentation/angular.html' %></li>
-    <li><%= link_to 'HTTP Client', '/documentation/http-client.html' %></li>
-    <li><%= link_to 'Dependency Injection', '/documentation/dependency-injection.html' %></li>
-    <li><%= link_to 'Tasks', '/documentation/tasks.html' %></li>
-    <li><%= link_to 'Testing', '/documentation/testing.html' %></li>
-    <li><%= link_to 'Packaging', '/documentation/packaging.html' %></li>
-    <li><%= link_to 'Spray', '/documentation/spray.html' %></li>
-    <li><%= link_to 'Migration Guide', '/documentation/migration-guide.html' %></li>
-    <li><%= link_to 'Community', '/documentation/community.html' %></li>
+    <li><%= link_to 'Getting Started', '/documentation/1.x/getting-started.html' %></li>
+    <li><%= link_to 'Scaffolding', '/documentation/1.x/scaffolding.html' %></li>
+    <li><%= link_to 'Controller & Routes', '/documentation/1.x/controller-and-routes.html' %></li>
+    <li><%= link_to 'Validator', '/documentation/1.x/validator.html' %></li>
+    <li><%= link_to 'View Templates', '/documentation/1.x/view-templates.html' %></li>
+    <li><%= link_to 'OAuth for Login', '/documentation/1.x/oauth.html' %></li>
+    <li><%= link_to 'Assets Support', '/documentation/1.x/assets.html' %></li>
+    <li><%= link_to 'Mail', '/documentation/1.x/mail.html' %></li>
+    <li><%= link_to 'Worker Jobs', '/documentation/1.x/worker_jobs.html' %></li>
+    <li><%= link_to 'i18n', '/documentation/1.x/i18n.html' %></li>
+    <li><%= link_to 'O/R Mapper', '/documentation/1.x/orm.html' %></li>
+    <li><%= link_to 'FactoryGirl', '/documentation/1.x/factory-girl.html' %></li>
+    <li><%= link_to 'DB Migration', '/documentation/1.x/db-migration.html' %></li>
+    <li><%= link_to 'Working with JSON', '/documentation/1.x/json.html' %></li>
+    <li><%= link_to 'Angular.js Server Side', '/documentation/1.x/angular.html' %></li>
+    <li><%= link_to 'HTTP Client', '/documentation/1.x/http-client.html' %></li>
+    <li><%= link_to 'Dependency Injection', '/documentation/1.x/dependency-injection.html' %></li>
+    <li><%= link_to 'Tasks', '/documentation/1.x/tasks.html' %></li>
+    <li><%= link_to 'Testing', '/documentation/1.x/testing.html' %></li>
+    <li><%= link_to 'Packaging', '/documentation/1.x/packaging.html' %></li>
+    <li><%= link_to 'Spray', '/documentation/1.x/spray.html' %></li>
+    <li><%= link_to 'Migration Guide', '/documentation/1.x/migration-guide.html' %></li>
+    <li><%= link_to 'Community', '/documentation/1.x/community.html' %></li>
     <li><%= link_to 'Contribution', '/contribution.html' %></li>
   </ul>
   </nav>

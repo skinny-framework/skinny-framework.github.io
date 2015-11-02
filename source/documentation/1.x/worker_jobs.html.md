@@ -10,7 +10,7 @@ title: Worker Jobs - Skinny Framework
 
 Skinny's WorkerService is a simple wrapper of Java built-in `ExecutorService` and prepared in Skinny apps by default. 
 
-You can access it as `skinnyWorkerService` in `Bootstrap.scala` and just call scheduling methods.
+You can access it as `skinnyWorkerService` in `ScalatraBootstrap.scala` and just call scheduling methods.
 
 ```scala
 import skinny._
@@ -18,7 +18,7 @@ import skinny.worker._
 import skinny.controller._
 import _root_.controller._
 
-class Bootstrap extends SkinnyLifeCycle {
+class ScalatraBootstrap extends SkinnyLifeCycle {
 
   override def initSkinnyApp(ctx: ServletContext) { 
 

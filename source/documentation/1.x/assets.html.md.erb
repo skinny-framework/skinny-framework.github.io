@@ -15,17 +15,17 @@ First, add `skinny-assets` to libraryDependencies.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-framework" % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-assets"    % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-test"      % "<%= @skinny_version %>" % "test"
+  "org.skinny-framework" %% "skinny-framework" % "<%= @skinny1_version %>",
+  "org.skinny-framework" %% "skinny-assets"    % "<%= @skinny1_version %>",
+  "org.skinny-framework" %% "skinny-test"      % "<%= @skinny1_version %>" % "test"
 )
 ```
 
 And then, add `AssetsController` to routes. Now you can easily use CoffeeScript, LESS and Sass.
 
 ```scala
-// src/main/scala/Bootstrap.scala
-class Bootstrap extends SkinnyLifeCycle {
+// src/main/scala/ScalatraBootstrap.scala
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     AssetsController.mount(ctx)
   }
@@ -197,8 +197,8 @@ object MyAssetsController extends MyAssetsController with Routes {
   get(s"${cssRootPath}/*")(css).as('css)
 }
 
-// src/main/scala/Bootstrap.scala
-class Bootstrap extends SkinnyLifeCycle {
+// src/main/scala/ScalatraBootstrap.scala
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     MyAssetsController.mount(ctx)
   }

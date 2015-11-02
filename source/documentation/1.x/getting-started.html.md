@@ -209,7 +209,7 @@ The following tree shows the directories and files in skinny-blank-app project. 
 │   │   │   ├── logback.xml
 │   │   │   └── messages.conf
 │   │   ├── scala
-│   │   │   ├── Bootstrap.scala # reserved name by convention
+│   │   │   ├── ScalatraBootstrap.scala # Scalatra convention
 │   │   │   ├── controller
 │   │   │   │   ├── ApplicationController.scala
 │   │   │   │   ├── Controllers.scala

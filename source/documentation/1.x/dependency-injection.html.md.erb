@@ -1,0 +1,158 @@
+---
+title: Dependency Injection - Skinny Framework
+---
+
+## Dependency Injection
+<hr/>
+
+If you'd like to introduce dependency injection pattern in Skinny apps, we recommend using [Scaldi](http://scaldi.org/) which is a pretty cool library to inject deps.
+
+http://scaldi.org/
+
+An optional module `skinny-scaldi` is an easy-to-use Scaldi adaptor module which is developed by Skinny Framework team.
+
+See also the following blog article and example:
+
+http://blog.seratch.net/post/90627493988/scaldi-dependency-injection-in-skinny-apps
+
+https://github.com/skinny-framework/skinny-scaldi-example/
+
+<hr/>
+### Don't use in Scala 2.10.x
+<hr/>
+
+This is an important notice. 
+
+Due to [SI-6240](https://issues.scala-lang.org/browse/SI-6240), Scaldi doesn’t work fine in Scala 2.10.x.
+
+https://github.com/scaldi/scaldi/issues/16
+
+Use Scala 2.11 (or higher).
+
+<hr/>
+### Setup
+<hr/>
+
+`skinny-scaldi` is an optional module (= not to be enabled by default). Add it to your libraryDependencies.
+
+```scala
+libraryDependencies += "org.skinny-framework" %% "skinny-scaldi" % "<%= @skinny1_version %>"
+```
+
+<hr/>
+### Simple Usage
+<hr/>
+
+#### A module which injects services
+
+This is a simple module which injects service objects to controllers or else.
+
+```scala
+package service
+trait EchoService {
+  def echo(msg: String): String
+}
+class EchoServiceImpl extends EchoService {
+  override def echo(msg: String) = msg
+}
+```
+
+```scala
+package module
+class ServicesModule extends scaldi.Module {
+  bind[EchoService] to new EchoServiceImpl
+}
+```
+
+<hr/>
+#### Yet another module
+
+The following is another module example.
+
+```scala
+package model
+case class AppName(value: String)
+```
+
+```scala
+package module
+class AppModule extends scaldi.Module {
+  bind[AppName] to AppName("My First Skinny App")
+}
+```
+
+<hr/>
+#### Integrating Scaldi modules to Skinny controllers
+
+`skinny-scaldi`'s Scaldi integration is pretty simple. Just prepare configuration and add `ScaldiFeature` trait to controllers.
+
+And add modules to `src/main/resources/application.conf` like this. 
+
+Be aware that module in `application.conf` should be not an object but a class.
+
+```
+development {
+  scaldi {
+    modules: ["module.ServicesModule", "module.AppModule"]
+  }
+}
+test {
+  scaldi {
+    modules: ["module.ServicesModule", "module.AppModule"]
+  }
+}
+```
+
+The following is the base controller.
+
+```scala
+import skinny._
+import skinny.controller.feature.ScaldiFeature
+
+trait ApplicationController extends SkinnyController 
+  with ScaldiFeature {
+}
+```
+
+If you'd like to replace modules after loading from application.conf, just override `scaldiModules: Seq[scaldi.Module]`.
+
+```scala
+package model
+case class Locale(value: String)
+object LocaleModule extends scaldi.Module {
+  bind[Locale] to new Locale("ja")
+}
+```
+
+```scala
+package controller
+trait ApplicationController extends SkinnyController 
+  with ScaldiFeature {
+
+  // this modules will be used instead of loaded one from application.conf
+  // you can use singleton objects
+  override def scaldiModules = Seq(new ServicesModule, LocaleModule)
+}
+```
+
+<hr/>
+#### Using Scaldi APIs
+
+Now you can use Scaldi APIs like `inject[A]`.
+
+```scala
+class InjectedController extends ApplicationController {
+  def index = {
+    val service: EchoService = inject[EchoService]
+    service.echo(params.getAs[String]("echo").getOrElse(""))
+  }
+
+  def appName = inject[AppName].value // "My First Skinny App"
+
+  // SkinnyEnv and SkinnyConfig are available by default 
+  // though you can do the same thing by using companion objects
+  def env = inject[SkinnyEnv].getOrElse("xxx") // "development"
+}
+```
+
+

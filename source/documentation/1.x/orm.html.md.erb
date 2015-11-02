@@ -8,7 +8,7 @@ title: ORM - Skinny Framework
 ### Skinny-ORM
 <hr/>
 
-Skinny provides you with Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). This is a portable library, so you can also use it with Play2, Scalatra, Lift and any other frameworks.
+Skinny provides you with Skinny-ORM as the default O/R mapper, which is built with [ScalikeJDBC](https://github.com/scalikejdbc/scalikejdbc). This is a portable library, so you can also use it with Play2, pure Scalatra, Lift and any other frameworks.
 
 ![Logo](images/scalikejdbc.png)
 
@@ -35,7 +35,7 @@ Let's prepare right now!
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-orm"      % "<%= skinny_version %>",
+  "org.skinny-framework" %% "skinny-orm"      % "<%= skinny1_version %>",
   "com.h2database"       %  "h2"              % "1.4.+",
   "ch.qos.logback"       %  "logback-classic" % "1.1.+"
 )
@@ -861,8 +861,8 @@ If you're using Skinny-ORM with Skinny Framework,
 [skinny.orm.servlet.TxPerRequestFilter](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/servlet/TxPerRequestFilter.scala) simplifies your applications.
 
 ```scala
-// src/main/scala/Bootstrap.scala
-class Bootstrap extends SkinnyLifeCycle {
+// src/main/scala/ScalatraBootstrap.scala
+class ScalatraBootstrap extends SkinnyLifeCycle {
   override def initSkinnyApp(ctx: ServletContext) {
     ctx.mount(new TxPerRequestFilter, "/*")
   }

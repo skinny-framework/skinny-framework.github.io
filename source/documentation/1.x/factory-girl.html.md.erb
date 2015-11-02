@@ -1,0 +1,154 @@
+---
+title: FactoryGirl - Skinny Framework
+---
+
+## FactoryGirl
+
+<hr/>
+### Easy-to-use Fixture Tool
+<hr/>
+
+Though Skinny's FactoryGirl is not a complete port of [thoughtbot/factory_girl](https://github.com/thoughtbot/factory_girl), this module is quite useful when testing your apps.
+
+FactoryGirl depends on only Skinny ORM. You can use FactoryGirl even in your Play2 apps!
+
+```
+libraryDependencies += "org.skinny-framework" %% "skinny-factory-girl" % "<%= @skinny1_version %>" % "test"
+```
+
+<hr/>
+### Usage
+<hr/>
+
+FactoryGirl's usage is very simple.
+
+- Defining `SkinnyCRUDMapper`
+- Append definitions to `factories.conf`
+
+#### Example code
+
+```scala
+import skinny.orm._
+
+case class Company(id: Long, name: String)
+object Company extends SkinnyCRUDMapper[Company] {
+  def extract ...
+}
+
+case class Member ...
+object Member extends SkinnyCRUDMapper[Member] ...
+
+case class Country ...
+object Country extends SkinnyCRUDMapper[Country] ...
+
+import skinny.test._
+
+val company1 = FactoryGirl(Company).create()
+
+// will forcely replace name attribute
+val company2 = FactoryGirl(Company).create('name -> "FactoryPal, Inc.")
+
+val country = FactoryGirl(Country, 'countryyy).create()
+
+// variables will replace "#{foo}" in factories.conf
+val factory = FactoryGirl(Member).withVariables('countryId -> country.id)
+val member = factory.create('companyId -> company1.id, 'createdAt -> DateTime.now)
+```
+
+In this example, `src/test/resources/factories.conf` is like this:
+
+```
+countryyy {
+  name="Japan"
+}
+member {
+  countryId="#{countryId}"
+}
+company {
+  name="FactoryGirl, Inc."
+}
+name {
+  first="Kazuhiro"
+  last="Sera"
+}
+skill {
+  name="Scala Programming"
+}
+```
+
+<hr/>
+### String interpolation is available
+
+By default, values in factories.conf is in string interpolation mode.
+
+```
+member {
+  luckyNumber="${scala.util.Random.nextInt(64)}"
+  memberCode="xyz-${System.currentTimeMillis}"
+}
+```
+
+You cannot embed complex Scala code or modules referenced from the test code. If you need to do so, use variables.
+
+
+<hr/>
+### Methods
+
+You should be aware that FactoryGirl has the following two methods.
+
+<hr/>
+### withVariables
+
+Attributes passed to this method will be used for replacing variables such as "#{userId}" in factories.conf.
+
+#### factories.conf
+
+```scala
+member {
+  name="Alice"
+  countryId="#{cntId}"
+}
+```
+
+#### FooSpec.scala
+
+```scala
+val countryId = FactoryGirl(Country).create().id
+FactoryGirl(Member).withVariables('cntId -> countryId).create()
+
+// will use name: Alice, countryId: 234
+```
+
+<hr/>
+### withAttributes
+
+These attributes will overwrite the values in factories.conf. 
+
+#### factories.conf
+
+```
+member {
+  name="Alice"
+  country="USA"
+}
+```
+
+#### SomeSpec.scala
+
+```scala
+FactoryGirl(Member).withAttributes('country -> "Japan").create()
+// will use name: Alice, country: Japan
+
+FactoryGirl(Member).create('country -> "Japan")
+// do the same thing!
+```
+
+<hr/>
+### More Examples
+
+You can find more examples here:
+
+[factory-girl/src/test](https://github.com/skinny-framework/skinny-framework/tree/master/factory-girl/src/test)
+
+[example/src/test](https://github.com/skinny-framework/skinny-framework/tree/master/example/src/test)
+

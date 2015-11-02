@@ -4,7 +4,7 @@ title: Reuse Skinny components in Spray apps - Skinny Framework
 
 ## Reuse Skinny components in Spray apps
 
-Skinny Framework itself depends on Skinny Micro and its Servlet integration. But skinny-validator, skinny-json4s and other components are independent from Servlet environment.
+Skinny Framework itself depends on Scalatra and its Servlet integration. But skinny-validator, skinny-json and other components are independent from Scalatra Servlet environment.
 
 skinny-splash aims to provides handy APIs for Spray applciations by seamlessly integrating Skinny components.
 

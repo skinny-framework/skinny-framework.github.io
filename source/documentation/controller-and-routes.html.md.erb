@@ -1,0 +1,686 @@
+---
+title: Controller & Routes - Skinny Framework
+---
+
+## Controller & Routes
+<hr/>
+
+Previously Skinny 1.x's routing mechanism and controller layer on MVC architecture was built upon Scalatra.
+
+Skinny project decided to move its own rich Servlet layer named [Skinny Micro](/documentation/micro.html).
+
+`SkinnyController` is a trait which extends `SkinnyMicroFilter (WebApp)` and includes various useful components out-of-the-box.
+
+```scala
+// src/main/scala/controller/MembersController.scala
+class MembersController extends SkinnyController {
+  protectFromForgery() // CSRF protection enabled
+
+  def index = {
+    // set 'members' in the request scope, then you can use it in views
+    set("members" -> Member.findAll())
+    render("/members/index")
+  }
+
+  def newOne = render("/members/new")
+
+  def createForm = validation(params,
+    paramKey("name") is required & minLength(2),
+    paramKey("countryId") is numeric
+  )
+
+  def createFormParams = params.permit(
+    "name" -> ParamType.String, 
+    "countryId" -> ParamType.Long)
+
+  def create = if (createForm.validate()) {
+    Member.createWithPermittedAttributes(createFormParams)
+    redirect("/members")
+  } else {
+    render("/members/new")
+  }
+
+  // searches both query params and path params
+  def show = params.getAs[Long]("id").map { id =>
+    Member.findById(id).map { member =>
+      set("member" -> member)
+    }.getOrElse haltWithBody(404)
+  }.getOrElse haltWithBody(404)
+
+}
+
+// src/main/scala/controller/Controllers.scala
+object Controllers {
+  object members extends MembersController with Routes {
+    val indexUrl = get("/members/?")(index).as('index)
+    val newUrl = get("/members/new")(newOne).as('new)
+    val createUrl = post("/members/?")(create).as('create)
+    val showUrl = get("/members/:id")(show).as('show)
+  }
+}
+
+// src/main/scala/Bootstrap.scala
+class Bootstrap extends SkinnyLifeCycle {
+  override def initSkinnyApp(ctx: ServletContext) {
+    // register routes
+    Controllers.members.mount(ctx)
+  }
+}
+```
+
+`#render` expects `src/main/webapp/WEB-INF/views/members/index.html.ssp` by default.
+
+```
+render("/members/index")
+```
+
+```
+<!-- src/main/webapp/WEB-INF/views/members/index.html.ssp -->
+<%%@val members: Seq[Member]%>
+<ul>
+#for (member <- members)
+  <li>${member.name}</li>
+#end
+<ul>
+```
+
+<hr/>
+### SkinnyController & SkinnyServlet
+<hr/>
+
+There are the two controller base traits. SkinnyController is a WebApp (SkinnyMicroFilter). SkinnyServlet is a SingleApp (SkinnyMicroServlet).
+
+- [Scala API docs for "skinny-micro"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+
+In general SkinnyController is more suitable for Skinny framework based applications.
+
+However, if you really need to use a Servlet instead of a filter, use SkinnyServlet.
+
+<hr/>
+### SkinnyResource
+<hr/>
+
+SkinnyResource is a useful base trait for RESTful web services. SkinnyResource is very similar to Rails ActiveResource.
+
+[Resource Routing: the Rails Default (Rails Routing from the Outside In — Ruby on Rails Guides)](http://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default)
+
+[https://github.com/rails/activeresource](https://github.com/rails/activeresource)
+
+SkinnyResource is also useful as a controller sample. If you're a Skinny beginner, take a look at its code.
+
+[framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
+
+SkinnyResourceActions has action methods for the resource and SkinnyResourceRoutes defines routings for the resource.
+If you'd like to customize routings (e.g. use only creation and deletion), just mixin only SkinnyResourceActions and define routings by yourself.
+
+You can see a SkinnyResource example using the scaffolding generator.
+
+```
+./skinny g scaffold members member name:String birthday:LocalDate
+```
+
+Then you get the following code. If you need to customize, override some parts of SkinnyResource:
+
+[framework/src/main/scala/skinny/controller/SkinnyResource.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala)
+
+```scala
+package controller
+
+import skinny._
+import skinny.validator._
+import model.Member
+
+object MembersController extends SkinnyResource {
+  protectFromForgery() // CSRF protection
+
+  override def model = Member // SkinnyModel for this controller
+  override def resourcesName = "members"
+  override def resourceName = "member"
+
+  // parameters & validations for creation
+  override def createParams = Params(params).withDate("birthday")
+  override def createForm = validation(createParams,
+    paramKey("name") is required & maxLength(512),
+    paramKey("birthday") is required & dateFormat
+  )
+  override def createFormStrongParameters = Seq(
+    "name" -> ParamType.String,
+    "birthday" -> ParamType.LocalDate
+  )
+
+  // parameters & validations for modification
+  override def updateParams = Params(params).withDate("birthday")
+  override def updateForm = validation(updateParams,
+    paramKey("name") is required & maxLength(512),
+    paramKey("birthday") is required & dateFormat
+  )
+  override def updateFormStrongParameters = Seq(
+    "name" -> ParamType.String,
+    "birthday" -> ParamType.LocalDate
+  )
+
+}
+```
+
+Required view templates:
+
+```
+src/main/webapp/WEB-INF/views/members/
+├── _form.html.ssp
+├── edit.html.ssp
+├── index.html.ssp
+├── new.html.ssp
+└── show.html.ssp
+```
+
+In this case, SkinnyResource provides the following URLs from SkinnyResourceRoutes by default. If you don't need all the routes below, just mixin SkinnyResourceActions instead and specify only routes you need by hand.
+
+- GET /members
+- GET /members/
+- GET /members.xml
+- GET /members.json
+- GET /members/new
+- POST /members
+- POST /members.xml
+- POST /members.json
+- POST /members/
+- GET /members/{id}
+- GET /members/{id}.xml
+- GET /members/{id}.json
+- GET /members/{id}/edit
+- POST /members/{id}.xml
+- POST /members/{id}.json
+- POST /members/{id}
+- PUT /members/{id}.xml
+- PUT /members/{id}.json
+- PUT /members/{id}
+- PATCH /members/{id}.xml
+- PATCH /members/{id}.json
+- PATCH /members/{id}
+- DELETE /members/{id}.xml
+- DELETE /members/{id}.json
+- DELETE /members/{id}
+
+
+<hr/>
+### AsyncSkinnyController & AsyncSkinnyServlet
+<hr/>
+
+If you're interested in building more Future-wired and non-blocking application with Skinny Framework, take a look at Async* traits.
+
+There are the two controller base traits for Future-wired applications. AsyncSkinnyController is a AsyncWebApp (AsyncSkinnyMicroFilter). AsyncSkinnyServlet is a AsyncSingleApp (AsyncSkinnyMicroServlet).
+
+These traits are mostly same as the above normal Controller/Servlet, but the biggest difference is that action methods accept implicit SkinnyContext value as its argument. Hereby, action methods can be safely executed even when its operation is divided across multiple threads.
+
+```scala
+// src/main/scala/controller/MembersController.scala
+class MembersController extends AsyncSkinnyController {
+
+  def index(implicit ctx: SkinnyContext): Future[ActionResult] = Future {
+    set("members" -> Member.findAll())
+    Ok(render("/members/index"))
+  }
+}
+
+// src/main/scala/controller/Controllers.scala
+object Controllers {
+  object members extends MembersController with Routes {
+    val indexUrl = get("/members/?")(implicit ctx => index).as('index)
+  }
+}
+```
+
+<hr/>
+### skinny.Skinny
+<hr/>
+
+skinny.Skinny provides getters for basic elements in view templates.
+
+```
+<%%@val s: skinny.Skinny %>
+```
+
+[framework/src/main/scala/skinny/Skinny.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/Skinny.scala)
+
+- params: Params
+- multiParams: MultiParams
+- flash: Flash
+- errorMessages: Seq[String]
+- keyAndErrorMessages: Map[String, Seq[String]]
+- contextPath: String
+- requestPath: String
+- requestPathWithQueryString: String
+- csrfKey: String
+- csrfToken: String
+- csrfMetaTag(s): String
+- csrfHiddenInputTag: String
+- i18n: I18n
+
+<hr/>
+### beforeAction/afterAction Filters
+<hr/>
+
+Skinny Micro has before/after filters by default, but we recommend Skinny users to use Skinny's beforeAction/afterAction filters. Skinny Micro doesn't support to run the filters for only specified action methods or excluding some action methods from filters execution. So if you need filters that are similar to Rails filters, just use Skinny filters.
+
+[/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
+
+See also: [Scala API docs for "skinny.micro.base.BeforeAfterDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.base.BeforeAfterDsl)
+
+```scala
+class MembersController extends SkinnyController with Routes {
+
+  // Skinny Micro filters
+  before() { ... }
+  after() { ... }
+
+  // Skinny filters
+  beforeAction(only = Seq('index, 'new)) {
+    println("before")
+  }
+  afterAction(except = Seq('new)) {
+    println("after")
+  }
+
+  //actions
+  def index = ...
+  def newInput = ...
+  def edit = ...
+
+  // routes
+  get("/members/?")(index).as('index)      // before, after
+  get("/members/new")(newInput).as('new)   // before
+  get("/members/:id/edit")(edit).as('edit) // after
+
+}
+```
+
+Filter functions in Async Skinny apps accept implicit `SkinnyContext` value as its argument.
+
+TODO: implementation
+
+See also: [Scala API docs for "skinny.micro.async.AsyncBeforeAfterDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.async.AsyncBeforeAfterDsl)
+
+```scala
+class MembersController extends AsyncSkinnyController with Routes {
+
+  // Skinny Micro filters
+  before() { implicit ctx => ... }
+  after() { implicit ctx => ... }
+
+  // Skinny filters
+  beforeAction(only = Seq('index, 'new)) { implicit ctx =>
+    println("before")
+  }
+  afterAction(except = Seq('new)) { implicit ctx =>
+    println("after")
+  }
+
+  //actions
+  def index(ctx: SkinnyContext) = ...
+  def newInput(ctx: SkinnyContext) = ...
+  def edit(ctx: SkinnyContext) = ...
+
+  // routes
+  get("/members/?")(implicit ctx => index).as('index)      // before, after
+  get("/members/new")(implicit ctx => newInput).as('new)   // before
+  get("/members/:id/edit")(implicit ctx => edit).as('edit) // after
+
+}
+```
+
+<hr/>
+### SkinnyFilter
+<hr/>
+
+SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing in SkinnyFilter-based traits.
+
+For instance, in skinny-blank-app, ErrorPageFilter is applied to ApplicationController. 
+
+```scala
+trait ApplicationController extends SkinnyController
+  with ErrorPageFilter {
+
+}
+```
+
+ErrorPageFilter is as follows. It's pretty easy to customize such a filter (e.g. adding error notification) as follows.
+
+```scala
+trait ErrorPageFilter extends SkinnyRenderingFilter {
+  // appends error filter in order
+  addRenderingErrorFilter {
+    case e: Throwable =>
+      logger.error(e.getMessage, e)
+      try {
+        status = 500
+        render("/error/500")
+      } catch {
+        case e: Exception => throw e
+      }
+  }
+}
+```
+
+It just outputs error logging, set status as 500 and renders "/error/500.html.ssp" or similar templates. `SkinnyRenderingFilter` is a sub-trait of `SkinnyFilter`. `SkinnyFilter`'s response value is always ignored. But `SkinnyRenderingFilter` can return a response body like above.
+
+The second example is `TxPerRequestFilter` which enables you to apply the open-session-in-view pattern to your apps.
+
+```scala
+trait TxPerRequestFilter extends SkinnyFilter with Logging {
+  def cp: ConnectionPool = ConnectionPool.get()
+
+  def begin = {
+    val db = ThreadLocalDB.create(cp.borrow())
+    db.begin()
+  }
+
+  // will handle exceptions occurred in controllers
+  addErrorFilter { case e: Throwable =>
+    Option(ThreadLocalDB.load()).foreach { db =>
+      if (db != null && !db.isTxNotActive) using(db)(_.rollbackIfActive())
+    }
+  }
+
+  def commit = {
+    val db = ThreadLocalDB.load()
+    if (db != null && !db.isTxNotActive) {
+      using(db)(_.commit())
+    }
+  }
+
+  beforeAction()(begin)
+  afterAction()(commit)
+}
+```
+
+<hr/>
+### How to Do It? Examples
+<hr/>
+
+Basic features needed when building Web apps are already provided by Skinny Micro. In this section, we'll introduce you how to do common things with it.
+
+<hr/>
+#### Query/Form/Path Parameters
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#query-form-path-parameters](/documentation/micro.html#query-form-path-parameters)
+
+<hr/>
+#### Cookies
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#accessing-and-setting-cookies](/documentation/micro.html#accessing-and-setting-cookies)
+
+<hr/>
+#### Request/Response Headers
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#request-response-headers](/documentation/micro.html#request-response-headers)
+
+<hr/>
+#### Servlet Session
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#servlet-session](/documentation/micro.html#servlet-session)
+
+We recommend you use SkinnySession to keep your Skinny apps stateless. When you enable SkinnySession, these features also start using SkinnySession instead of Servlet session attributes.
+
+Bootstrap.scala:
+
+```scala
+import scalikejdbc._
+import skinny.session.SkinnySessionInitializer
+
+class Bootstrap extends SkinnyLifeCycle {
+  override def initSkinnyApp(ctx: ServletContext) {
+    // Database queries will be increased
+    GlobalSettings.loggingSQLAndTime = LoggingSQLAndTimeSettings(
+      singleLineMode = true
+    )
+    ctx.mount(classOf[SkinnySessionInitializer], "/*")
+
+    Controllers.root.mount(ctx)
+    AssetsController.mount(ctx)
+  }
+}
+```
+
+controller/RootController.scala:
+
+```scala
+class RootController extends ApplicationController with SkinnySessionFilter {
+
+  def index = {
+    val v: Option[Any] = skinnySession.getAttribute("name")
+    skinnySession.setAttribute("name", "value")
+    skinnySession.deleteAttribute("name")
+  }
+}
+```
+
+DB migration file:
+
+```sql
+-- H2 Database compatible
+create table skinny_sessions (
+  id bigserial not null primary key,
+  created_at timestamp not null,
+  expire_at timestamp not null
+);
+create table servlet_sessions (
+  jsession_id varchar(32) not null primary key,
+  skinny_session_id bigint not null,
+  created_at timestamp not null,
+  foreign key(skinny_session_id) references skinny_sessions(id)
+);
+create table skinny_session_attributes (
+  skinny_session_id bigint not null,
+  attribute_name varchar(128) not null,
+  attribute_value bytea,
+  foreign key(skinny_session_id) references skinny_sessions(id)
+);
+alter table skinny_session_attributes add constraint
+  skinny_session_attributes_unique_idx
+  unique(skinny_session_id, attribute_name);
+```
+
+<hr/>
+#### Response handling
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#response-handling](/documentation/micro.html#repsonse-handling)
+
+<hr/>
+#### Flash
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#flash](/documentation/micro.html#flash)
+
+<hr/>
+#### Request Body
+<hr/>
+
+See Skinny Micro's documentation:
+[/documentation/micro.html#request-body](/documentation/micro.html#request-body)
+
+<hr/>
+#### File Upload
+<hr/>
+
+<div class="alert alert-warning small">
+<b>WARNING:</b> Extend not SkinnyController but SkinnyServlet. You cannot use FileUploadFeature with SkinnyController.
+</div>
+
+```scala
+import skinny.SkinnyServlet
+import skinny.controller.feature.FileUploadFeature
+
+// SkinnyServlet!!!
+class FilesController extends SkinnyServlet with FileUploadFeature {
+
+  def upload = fileParams.get("file") match {
+    case Some(file) =>
+      Ok(file.get(), Map(
+        "Content-Type"        -> (file.contentType.getOrElse("application/octet-stream")),
+        "Content-Disposition" -> ("attachment; filename=\"" + file.name + "\"")
+      ))
+    case None =>
+      BadRequest(displayPage(
+        <p>
+          Hey! You forgot to select a file.
+        </p>))
+  }
+}
+```
+
+See also Skinny Micro's documentation:
+[/documentation/micro.html#file-upload](/documentation/micro.html#file-upload)
+
+<hr/>
+#### CSRF Protection
+<hr/>
+
+Notice: CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.
+
+Define `protectFromForgery` in controller/RootController.scala:
+
+```scala
+class RootController extends ApplicationController {
+  protectFromForgery()
+
+}
+```
+
+Use `Skinny.csrfMetaTags` in /WEB-INF/layouts/default.jade:
+
+```
+-@val body: String
+-@val s: skinny.Skinny
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    != s.csrfMetaTags
+  %body
+    =unescape(body)
+    %script(type="text/javascript" src={uri("/assets/js/skinny.js")})
+```
+
+<hr/>
+#### Check execution time
+<hr/>
+
+```scala
+val result = warnElapsedTime(1) {
+  Thread.sleep(10)
+}
+// will output "[SLOW EXECUTION DETECTED] Elapsed time: 10 millis"
+```
+
+In controllers, you can add request info:
+
+```scala
+val result = warnElapsedTimeWithRequest(1) {
+  Thread.sleep(10)
+}
+```
+
+<hr/>
+#### Read your own configuration values
+<hr/>
+
+```
+development {
+  defaultLabel="foo"
+  timeout {
+    connect=1000
+    read=3000
+  }
+  memcached=["server1:11211", "server2:11211"]
+}
+```
+
+Read the server names like this:
+
+```scala
+val label: Option[String] = SkinnyConfig.stringConfigValue("defaultLabel")
+val connectTimeout: Option[Int] = SkinnyConfig.intConfigValue("timeout.connect")
+val memcachedServers: Option[Seq[String]] = SkinnyConfig.stringSeqConfigValue("memcached")
+```
+
+<hr/>
+#### Awaiting several Futures within action method
+<hr/>
+
+The following is a simple dashboard application which collects several futures within the `index` method.
+
+Since Skinny 1.2.0, you can easily access request and requestScope from Futures by using futureWithRequest block.
+
+```scala
+package controller
+
+import _root_.service._
+import javax.servlet.http.HttpServletRequest
+import org.joda.time._
+import scala.concurrent._
+import scala.concurrent.duration._
+
+// using your own ExecutionContext will be preferred in most cases
+import scala.concurrent.ExecutionContext.Implicits.global
+
+case class DashboardOps(controller: DashboardController) {
+  def setCurrentUser(implicit req: HttpServletRequest) = {
+    // implicit request is not ambiguous here
+    val userId = controller.currentUserId.getOrElse(controller.halt(401))
+    controller.set("currentUser" -> controller.adminUserService.getCurrentUser(userId))
+  }
+}
+
+class DashboardController extends ApplicationController {
+
+  val adminUserService = new AdminUserService
+  val accessService = new AccessLogService
+  val alertService = new AlertService
+  val ops = DashboardOps(this)
+
+  def index = {
+    val scope: scala.collection.concurrent.Map[String, Any] = requestScope()
+
+    awaitFutures(5.seconds)(
+      // simply define operation inside of this controller
+      futureWithRequest { implicit req =>
+        //set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
+        set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))(req)
+
+// [error] example/src/main/scala/controller/DashboardController.scala:43: ambiguous implicit values:
+// [error]  both value req of type javax.servlet.http.HttpServletRequest
+// [error]  and method request in class DashboardController of type => javax.servlet.http.HttpServletRequest
+// [error]  match expected type javax.servlet.http.HttpServletRequest
+// [error]         set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))
+// [error]            ^
+// [error] one error found
+      },
+
+      // separate operation to outside of this controller
+      futureWithRequest(req => ops.setCurrentUser(req)),
+
+      // just use Future directly
+      Future {
+        // When using Future directly, you must be aware of Scalatra's DynamicScope's thread local request.
+        // In this case, you cannot use request here. requestScope, session and so on 
+        // should be captured outside of this Future block.
+        scope.update("alerts", alertService.findAll())
+      }
+    )
+    render("/dashboard/index")
+  }
+
+  private[controller] def currentUserId(implicit req: HttpServletRequest): Option[Long] = session(req).getAs[Long]("userId")
+}
+```

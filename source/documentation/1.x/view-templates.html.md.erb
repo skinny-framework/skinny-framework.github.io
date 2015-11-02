@@ -8,7 +8,7 @@ title: View Templates - Skinny Framework
 ### Scalate
 <hr/>
 
-Skinny framework basically follows Skinny Micro's [Scalate](http://scalate.github.io/scalate/) Support, but Skinny has an additional convention.
+Skinny framework basically follows Scalatra's [Scalate](http://scalate.github.io/scalate/) Support, but Skinny has an additional convention.
 
 ![Scalate Logo](images/scalate.png)
 
@@ -46,7 +46,7 @@ The render method expects that `src/main/webapp/WEB-INF/views/members/index.html
     <td>${member.id}</td>
     <td>${member.name}</td>
     <td>
-      <!-- Using reverse routes is recommended -->
+      <!-- Using Scalatra reverse routes is recommended -->
       <a href="${s.url(MembersController.editUrl, "id" -> member.id)}" 
          class="btn btn-info">Edit</a>
       <a data-method="delete" data-confirm="Are you sure?" 
