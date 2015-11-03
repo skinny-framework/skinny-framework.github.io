@@ -63,7 +63,7 @@ set :skinny1_version, @skinny1_version
 @skinny1_blank_app_version = @skinny1_version
 set :skinny1_blank_app_version, @skinny1_blank_app_version
 
-set :skinny_micro_version, "0.9.14"
+set :skinny_micro_version, "1.0.0.RC2"
 @skinny_version = "2.0.0.RC2"
 set :skinny_version, @skinny_version
 @skinny_blank_app_version = @skinny_version
