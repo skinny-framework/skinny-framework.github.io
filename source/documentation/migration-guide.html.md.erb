@@ -13,15 +13,19 @@ https://github.com/skinny-framework/skinny-framework/releases/tag/2.0.0.RC3
 <hr/>
 #### Moving from Scalatra to Skinny Micro
 
-The biggest change is moving from Scalatra to Skinny Micro. If you're in trouble for replacing Scalatra with Skinny Micro, please post questsions on Google Group or stackoverflow.com.
+The biggest change is moving from Scalatra to Skinny Micro. We recommend you checking the 2.0.0 blank project first.
+
+If you're in trouble for replacing Scalatra with Skinny Micro, please post questsions on Google Group or stackoverflow.com.
 
 - http://skinny-framework.org/documentation/micro.html
 - https://github.com/skinny-framework/skinny-micro
 
 The migration is not so hard but you may need to work on the following things:
 
-- Replace `org.scalatra` package with `skinny.micro`
-- Fix renamed or removed traits
+- Replace `org.scalatra.servlet.ScalatraListener` with `skinny.micro.SkinnyListener` in src/main/webapp/WEB-INF/web.xml
+- Rename src/main/scala/ScalatraBoostrap.scala to src/main/scala/Bootstrap.scala
+- Replace all things that depend on `org.scalatra` package with new ones under `skinny.micro`
+- Fix some compilation errors due to renaming or removing existing traits (not so many)
 
 <hr/>
 #### Use json4s 3.3.x 
