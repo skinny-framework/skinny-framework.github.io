@@ -24,6 +24,7 @@ The migration is not so hard but you may need to work on the following things:
 
 - Replace `org.scalatra.servlet.ScalatraListener` with `skinny.micro.SkinnyListener` in src/main/webapp/WEB-INF/web.xml
 - Rename src/main/scala/ScalatraBoostrap.scala to src/main/scala/Bootstrap.scala
+- Replace `skinny.util.JSONStringOps` with `skinny.json4s.JSONStringOps`
 - Replace all things that depend on `org.scalatra` package with new ones under `skinny.micro`
 - Fix some compilation errors due to renaming or removing existing traits (not so many)
 
