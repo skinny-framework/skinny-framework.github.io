@@ -38,24 +38,9 @@ https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb
 ```sh
 brew update
 brew install skinny
-
-# If failed, try `npm install -g yo`
 skinny new skinny-blank-app
 cd skinny-blank-app
 skinny run
-```
-
-If you suffered the following error, try `brew uninstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`). 
-
-<pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
-
-If all else fails, try using global Yeoman generator.
-
-```sh
-brew install node --with-npm
-npm install -g yo
-npm install -g generator-skinny
-yo skinny
 ```
 
 <hr/>
@@ -162,25 +147,6 @@ When you forgot creating view templates, Skinny Framework will create template f
 You can see a simple example application here.
 
 https://github.com/skinny-framework/skinny-framework-example
-
-
-<hr/>
-### Yeoman generator
-<hr/>
-
-![Yeoman](images/yeoman.png)
-
-If you're familiar with [Yeoman](http://yeoman.io), a generator for [Skinny framework](https://github.com/skinny-framework/skinny-framework) is available.
-
-```sh
-# brew install node
-npm install -g yo
-npm install -g generator-skinny
-mkdir skinny-app
-cd skinny-app
-yo skinny
-./skinny run
-```
 
 <hr/>
 ### Project Structure
