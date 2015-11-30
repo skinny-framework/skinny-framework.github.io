@@ -8,7 +8,7 @@ title: Migration Guide - Skinny Framework
 ### 2.0 Migration Guide for 1.3.x Users
 <hr/>
 
-https://github.com/skinny-framework/skinny-framework/releases/tag/2.0.0.RC3
+https://github.com/skinny-framework/skinny-framework/releases/tag/2.0.0
 
 <hr/>
 #### Moving from Scalatra to Skinny Micro
@@ -20,12 +20,13 @@ If you're in trouble for replacing Scalatra with Skinny Micro, please post quest
 - http://skinny-framework.org/documentation/micro.html
 - https://github.com/skinny-framework/skinny-micro
 
-The migration is not so hard but you may need to work on the following things:
+You'll see deprecation warnings that point you which class to use when upgrading Skinny to 2.0.
+So We believe the migration should be very smooth. But in some cases, you might be in trouble.
+In particular, be careful about the following things:
 
 - Replace `org.scalatra.servlet.ScalatraListener` with `skinny.micro.SkinnyListener` in src/main/webapp/WEB-INF/web.xml
 - Rename src/main/scala/ScalatraBoostrap.scala to src/main/scala/Bootstrap.scala
-- Replace `skinny.util.JSONStringOps` with `skinny.json4s.JSONStringOps`
-- Replace all things that depend on `org.scalatra` package with new ones under `skinny.micro`
+- Replace all things that depend on `org.scalatra` package with new ones under `skinny.micro` (also for tests)
 - Fix some compilation errors due to renaming or removing existing traits (not so many)
 
 <hr/>
