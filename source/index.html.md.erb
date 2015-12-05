@@ -1,13 +1,10 @@
-# Skinny Framework
 <hr/>
-
 <iframe src="http://ghbtns.com/github-btn.html?user=skinny-framework&repo=skinny-framework&type=watch&count=true&size=large" height="30" width="140" frameborder="0" scrolling="0" style="width:140px; height: 30px;" allowTransparency="true"></iframe>
 <iframe src="http://ghbtns.com/github-btn.html?user=skinny-framework&repo=skinny-framework&type=fork&count=true&size=large" height="30" width="140" frameborder="0" scrolling="0" style="width:140px; height: 30px;" allowTransparency="true"></iframe>
 <hr/>
-
 <img alt="Logo" src="/images/logo.png" />
-
 <hr/>
+
 ## What's Skinny?
 <hr/>
 
@@ -19,15 +16,17 @@ What's more, Skinny's components are basically independent from Skinny app envir
 
 Why Skinny named as Skinny? What does the name `Skinny` actually mean? We have three reasons as follows.
 
-<code>Application should be skinny</code>
+<hr/>
+
+<h3>Application should be skinny</h3>
 
 All the parts of a web application - controllers, models, views, routings and other settings - should be skinny. If you use Skinny framework, you can do without a lot of non-essential boilerplate code. For instance, when you create a simple registration form, all you need to do is define the parameters and validation rules and create view templates in an efficient way (ssp, scaml, jade, FreeMarker or something else) in most cases.
 
-<code>Framework itself should be skinny</code>
+<h3>Framework itself should be skinny</h3>
 
-Even if you need to investigate Skinny's internals, don't worry. Skinny keeps itself skinny, too. We believe that if the framework is well-designed, the resulting implementation will be skinny. 
+Even if you need to investigate Skinny's internals, don't worry. Skinny keeps itself skinny, too. We believe that if the framework is well-designed, the resulting implementation will be skinny.
 
-<code>'su-ki-ni' in Japanese means 'as you like it'</code>
+<h3>'su-ki-ni' in Japanese means 'as you like it'</h3>
 
 A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like it"**. This is only half kidding but it also represents Skinny's concept. Skinny framework should provide flexible APIs to empower developers as much as possible and shouldn't get in the way.
 
@@ -37,7 +36,7 @@ A sound-alike word **"好きに (su-ki-ni)"** in Japanese means **"as you like i
 
 Download `skinny-blank-app(-with-deps).zip` and unzip it, then just run ./skinny (or skinny.bat) command on your terminal. That's all!
 
-If you're a Scala beginner, `skinny-blank-app-with-deps.zip` is highly recommended. This is a bootstrap package which includes all library dependencies. 
+If you're a Scala beginner, `skinny-blank-app-with-deps.zip` is highly recommended. This is a bootstrap package which includes all library dependencies.
 
 Don't waste your passion by waiting for the download to complete!
 
@@ -58,7 +57,7 @@ If you're a heavy Scala user, this one will be suitable for you.
 
 [![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= skinny_blank_app_version %>/skinny-blank-app.zip)
 
-#### 3) Homebrew 
+#### 3) Homebrew
 
 If you're a MacOS X user, take a look at our Homebrew formula.
 
@@ -268,7 +267,7 @@ DB migration is provided by [Flyway](http://flywaydb.org/). Usage is pretty simp
 ./skinny db:migrate [env]
 ````
 
-This command expects `src/main/resources/db/migration/V***__***.sql` files. 
+This command expects `src/main/resources/db/migration/V***__***.sql` files.
 
 See in detail: [DB Migration](documentation/db-migration.html)
 
@@ -371,7 +370,7 @@ class ScalatraBootstrap extends SkinnyLifeCycle {
 }
 ```
 
-AssetsController supports Last-Modified header and returns status 304 correctly if the requested file isn't changed. 
+AssetsController supports Last-Modified header and returns status 304 correctly if the requested file isn't changed.
 
 However, precompiling the assets is highly recommended in production (`./skinny package` does that).
 
@@ -506,6 +505,3 @@ If you're interested in Skinny development, pull requests are always welcome.
 (The MIT License)
 
 Copyright (c) skinny-framework.org
-
-
-

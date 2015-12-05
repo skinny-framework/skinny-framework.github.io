@@ -6,104 +6,71 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Use title if it's in the page YAML frontmatter -->
 <title><%= current_page.data.title || "Skinny Framework" %></title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
 <script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 <%= stylesheet_link_tag "all" %>
 <%= javascript_include_tag  "all" %>
-<style>
-body { 
-  padding-top: 50px; 
-}
-.side-menu>li>a {
-  padding: 4px 15px 2px 10px;
-  font-size: 13px;
-}
-</style>
 </head>
 <body>
-<header class="navbar navbar-fixed-top bs-docs-nav" id="top" role="banner">
-  <div class="container">
-    <div class="navbar-header">
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a href="/" class="navbar-brand">
-        <b>Skinny Framework</b> <span class="subtitle">- Rapid Development in Scala -</span>
-      </a>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <%= link_to 'Getting Started', '/documentation/getting-started.html' %>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
     </div>
-    <nav class="collapse navbar-collapse bs-navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li><%= link_to 'Getting Started', '/documentation/1.x/getting-started.html' %></li>
-        <li><a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a></li>
-        <li><a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a></li>
-      </ul>
-    </nav>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
   </div>
-</header>
-<div class="container">
-<div class="row">
-<div class="col-md-10" role="main">
-<div class="alert alert-warning">WARNING: This page is not a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
-  <%= yield %>
-  <hr/>
-  <div class="alert alert-info small"> 
-    If you find a typo or mistake in this page, please report or fix it. <%= link_to 'How?', '/contribution.html' %>
-  </div> 
-  <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="#Scala on #Rails" data-via="skinnyframework">Tweet</a>
-  <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-</a>
-  <div id="fb-root"></div>
-  <script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=658247244206928";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-  <div class="fb-like" data-href="http://skinny-framework.org/" data-layout="standard" data-action="recommend" data-show-faces="true" data-share="true"></div>
-</div>
-<div class="col-md-2" role="complementary">
-  <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
-  <ul class="nav bs-docs-sidenav side-menu">
-    <li><%= link_to 'Back to the latest', '/' %></li>
-  </ul>
-  <hr/>
-  <ul class="nav bs-docs-sidenav side-menu">
-    <li><%= link_to 'Getting Started', '/documentation/1.x/getting-started.html' %></li>
-    <li><%= link_to 'Scaffolding', '/documentation/1.x/scaffolding.html' %></li>
-    <li><%= link_to 'Controller & Routes', '/documentation/1.x/controller-and-routes.html' %></li>
-    <li><%= link_to 'Validator', '/documentation/1.x/validator.html' %></li>
-    <li><%= link_to 'View Templates', '/documentation/1.x/view-templates.html' %></li>
-    <li><%= link_to 'OAuth for Login', '/documentation/1.x/oauth.html' %></li>
-    <li><%= link_to 'Assets Support', '/documentation/1.x/assets.html' %></li>
-    <li><%= link_to 'Mail', '/documentation/1.x/mail.html' %></li>
-    <li><%= link_to 'Worker Jobs', '/documentation/1.x/worker_jobs.html' %></li>
-    <li><%= link_to 'i18n', '/documentation/1.x/i18n.html' %></li>
-    <li><%= link_to 'O/R Mapper', '/documentation/1.x/orm.html' %></li>
-    <li><%= link_to 'FactoryGirl', '/documentation/1.x/factory-girl.html' %></li>
-    <li><%= link_to 'DB Migration', '/documentation/1.x/db-migration.html' %></li>
-    <li><%= link_to 'Working with JSON', '/documentation/1.x/json.html' %></li>
-    <li><%= link_to 'Angular.js Server Side', '/documentation/1.x/angular.html' %></li>
-    <li><%= link_to 'HTTP Client', '/documentation/1.x/http-client.html' %></li>
-    <li><%= link_to 'Dependency Injection', '/documentation/1.x/dependency-injection.html' %></li>
-    <li><%= link_to 'Tasks', '/documentation/1.x/tasks.html' %></li>
-    <li><%= link_to 'Testing', '/documentation/1.x/testing.html' %></li>
-    <li><%= link_to 'Packaging', '/documentation/1.x/packaging.html' %></li>
-    <li><%= link_to 'Spray', '/documentation/1.x/spray.html' %></li>
-    <li><%= link_to 'Migration Guide', '/documentation/1.x/migration-guide.html' %></li>
-    <li><%= link_to 'Community', '/documentation/1.x/community.html' %></li>
-    <li><%= link_to 'Contribution', '/contribution.html' %></li>
-  </ul>
-  </nav>
-</div>
-</div>
-</div>
-<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-</body>
-</html>
 
+  <div id="sidebar">
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><%= link_to 'Getting Started', '/documentation/1.x/getting-started.html' %></li>
+      <li><%= link_to 'Scaffolding', '/documentation/1.x/scaffolding.html' %></li>
+      <li><%= link_to 'Controller & Routes', '/documentation/1.x/controller-and-routes.html' %></li>
+      <li><%= link_to 'Validator', '/documentation/1.x/validator.html' %></li>
+      <li><%= link_to 'View Templates', '/documentation/1.x/view-templates.html' %></li>
+      <li><%= link_to 'OAuth for Login', '/documentation/1.x/oauth.html' %></li>
+      <li><%= link_to 'Assets Support', '/documentation/1.x/assets.html' %></li>
+      <li><%= link_to 'Mail', '/documentation/1.x/mail.html' %></li>
+      <li><%= link_to 'Worker Jobs', '/documentation/1.x/worker_jobs.html' %></li>
+      <li><%= link_to 'i18n', '/documentation/1.x/i18n.html' %></li>
+      <li><%= link_to 'O/R Mapper', '/documentation/1.x/orm.html' %></li>
+      <li><%= link_to 'FactoryGirl', '/documentation/1.x/factory-girl.html' %></li>
+      <li><%= link_to 'DB Migration', '/documentation/1.x/db-migration.html' %></li>
+      <li><%= link_to 'Working with JSON', '/documentation/1.x/json.html' %></li>
+      <li><%= link_to 'Angular.js Server Side', '/documentation/1.x/angular.html' %></li>
+      <li><%= link_to 'HTTP Client', '/documentation/1.x/http-client.html' %></li>
+      <li><%= link_to 'Dependency Injection', '/documentation/1.x/dependency-injection.html' %></li>
+      <li><%= link_to 'Tasks', '/documentation/1.x/tasks.html' %></li>
+      <li><%= link_to 'Testing', '/documentation/1.x/testing.html' %></li>
+      <li><%= link_to 'Packaging', '/documentation/1.x/packaging.html' %></li>
+      <li><%= link_to 'Spray', '/documentation/1.x/spray.html' %></li>
+      <li><%= link_to 'Migration Guide', '/documentation/1.x/migration-guide.html' %></li>
+      <li><%= link_to 'Community', '/documentation/1.x/community.html' %></li>
+      <li><%= link_to 'Contribution', '/contribution.html' %></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><%= link_to 'Back to the latest', '/' %></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is not a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <%= yield %>
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <%= link_to 'How?', '/contribution.html' %>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</div>
