@@ -130,13 +130,13 @@ It's also possible to build a standalone runnable jar file (with embedded Jetty 
 ### Skinny Micro
 <hr/>
 
-In the aspect of Web application framework, Skinny Framework's core part is an independent and useful micro framework named [Skinny Micro](/documentation/micro.html).
+In the aspect of Web application framework, Skinny Framework's core part is an independent and useful micro framework named [Skinny Micro](/documentation/micro.html). The following code shows you how to run Skinny Micro application right now by using [sbt Script runnner](http://www.scala-sbt.org/0.13/docs/Scripts.html).
 
 ```scala
 #!/usr/bin/env scalas
 /***
 scalaVersion := "2.11.7"
-libraryDependencies += "org.skinny-framework" %% "skinny-micro-server" % "0.9.+"
+libraryDependencies += "org.skinny-framework" %% "skinny-micro-server" % "<%= skinny_micro_version %>"
 */
 import skinny.micro._
 object HelloApp extends WebApp {
