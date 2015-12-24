@@ -326,7 +326,7 @@ Just run `./skinny run` and access `http://localhost:8080/project_members` from 
 <hr/>
 #### Parameters
 
-Scaffold command's parameters are ...
+Reverse scaffold command's parameters are ...
 
 ```
 ./skinny g reverse-scaffold:{template} {tableName} {resources} {resource}
