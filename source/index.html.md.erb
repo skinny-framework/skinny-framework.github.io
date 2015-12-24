@@ -73,15 +73,10 @@ https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb
 brew update
 brew install skinny
 
-# If failed, try `npm install -g yo`
 skinny new skinny-blank-app
 cd skinny-blank-app
 skinny run
 ```
-
-If you suffered the following error, try `brew uninstall node && brew install node --with-npm` (in some cases, also need to `rm -rf /usr/local/lib/node_modules`).
-
-<pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
 
 <hr/>
 
