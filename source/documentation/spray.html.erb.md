@@ -40,10 +40,10 @@ java -jar target/scala-2.11/my-blazing-app-assembly-0.1-SNAPSHOT.jar
 
 ```scala
 lazy val sample = (project in file(".")).settings(
-  scalaVersion := "2.11.6",
+  scalaVersion := "2.11.7",
   name := "my-blazing-app",
   libraryDependencies ++= Seq(
-    "com.typesafe.akka"    %% "akka-actor"    % "2.3.9",
+    "com.typesafe.akka"    %% "akka-actor"    % "2.4.0",
     "io.spray"             %% "spray-can"     % "1.3.3",
     "io.spray"             %% "spray-routing" % "1.3.3",
     "io.spray"             %% "spray-json"    % "1.3.1",
