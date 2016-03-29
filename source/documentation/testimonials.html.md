@@ -15,7 +15,7 @@ Skinny is easy-to-use with a minimum of decision overhead and has a dependable, 
 
 <hr/>
 <pre>
-If you're interested in listing your company (or service/product) here, please send seratch_at_gmail.com (or @scalikejdbc on twitter) the following information:
+If you're interested in listing your company (or service/product) here, please send seratch_at_gmail.com (or @skinnyframework on twitter) the following information:
 
   1. Your name
   2. Your website URL
