@@ -298,6 +298,14 @@ Account.findAll() // with emails
 ```
 
 <hr/>
+### Transaction
+<hr/>
+
+Skinny ORM is built upon ScalikeJDBC. Transaction management is based on ScalikeJDBC. See the following documentation. Skinny mappers seamlessly work with the described APIs.
+
+http://scalikejdbc.org/documentation/transaction.html
+
+<hr/>
 ### Useful APIs by Skinny ORM
 <hr/>
 
@@ -418,7 +426,7 @@ Member.deleteBy(sqls.eq(m.groupId, 123))
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala
+[orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/CRUDFeature.scala)
 
 <hr/>
 ### Associations
@@ -427,7 +435,7 @@ https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/sc
 If you need to join other tables, just add `belongsTo`, `hasOne` or `hasMany(Through)` to the companion. 
 
 Examples: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala
+[orm/src/test/scala/skinny/orm/models.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/test/scala/skinny/orm/models.scala)
 
 Be aware of Skinny ORM's concept that basically joins tables to resolve associations to reduce N+1 queries. We recommend enabling query logging for development.
 
@@ -502,7 +510,8 @@ create table companies (
 );
 ```
 
-Find more here: https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala
+Find more here:
+[orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/AssociationsFeature.scala)
 
 <hr/>
 #### HasOne
@@ -694,8 +703,7 @@ Member.includes(Member.skills).findById(123) // with skills
 Note: when your entities have the same associations (e.g. Company has Employee, Country and Employee have Country), avoiding using the default alias for the associations is recommended because that may cause invalid join query generation when you use eager loading. We plan to provide more useful error messages for such cases in version 1.0.0.
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala
-
+[orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/IncludesFeature.scala)
 
 <hr/>
 ### Other Configurations
@@ -839,7 +847,7 @@ Order.withTableName("orders_2012").count()
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala
+[orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/DynamicTableNameFeature.scala)
 
 <hr/>
 ### Adding Methods
@@ -929,7 +937,7 @@ object Member extends SkinnyCRUDMapper[Member] with TimestampsFeature[Member] {
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala
+[orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/TimestampsFeature.scala)
 
 <hr/>
 ### Soft Deletion
@@ -949,10 +957,10 @@ object Member extends SkinnyCRUDMapper[Member]
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala
+[orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithBooleanFeature.scala)
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala
+[orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/SoftDeleteWithTimestampFeature.scala)
 
 <hr/>
 ### Optimistic Lock
@@ -969,10 +977,10 @@ object Member extends SkinnyCRUDMapper[Member]
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala
+[orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithVersionFeature.scala)
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala
+[orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/feature/OptimisticLockWithTimestampFeature.scala)
 
 <hr/>
 ### SkinnyRecord
@@ -998,7 +1006,7 @@ Member.findById(id).map { member =>
 ```
 
 Source code: 
-https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/SkinnyRecordBaseWithId.scala
+[orm/src/main/scala/skinny/orm/SkinnyRecordBaseWithId.scala](https://github.com/skinny-framework/skinny-framework/blob/master/orm/src/main/scala/skinny/orm/SkinnyRecordBaseWithId.scala)
 
 <hr/>
 ### FactoryGirl
