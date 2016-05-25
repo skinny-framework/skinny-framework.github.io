@@ -343,10 +343,13 @@ trait ApplicationController extends SkinnyController
 }
 ```
 
-ErrorPageFilter is as follows. It's pretty easy to customize such a filter (e.g. adding error notification) as follows.
+ErrorPageFilter is as follows. It's pretty easy to customize such a filter (e.g. adding error notification) as follows. If you need to access SkinnyMicroContext in filters, mix in MainThreadLocalEverywhere too.
 
 ```scala
-trait ErrorPageFilter extends SkinnyRenderingFilter {
+import skinny.filter.SkinnyRenderingFilter
+import skinny.micro.base.MainThreadLocalEverywhere
+
+trait ErrorPageFilter extends SkinnyRenderingFilter with MainThreadLocalEverywhere {
   // appends error filter in order
   addRenderingErrorFilter {
     case e: Throwable =>
