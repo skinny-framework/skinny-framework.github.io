@@ -457,7 +457,7 @@ class RootController extends ApplicationController with SkinnySessionFilter {
   def index = {
     val v: Option[Any] = skinnySession.getAttribute("name")
     skinnySession.setAttribute("name", "value")
-    skinnySession.deleteAttribute("name")
+    skinnySession.removeAttribute("name")
   }
 }
 ```
