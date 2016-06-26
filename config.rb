@@ -56,13 +56,15 @@ set :markdown_engine, :redcarpet
 set :markdown, fenced_code_blocks: true, smartypants: true, autolink: true, with_toc_data: true
 I18n.enforce_available_locales = false
 
+set :latest_scala_version, "2.11.8"
+
 # Latest Skinny Framework version
 @skinny1_version = "1.3.20"
 set :skinny1_version, @skinny1_version
 @skinny1_blank_app_version = @skinny1_version
 set :skinny1_blank_app_version, @skinny1_blank_app_version
 
-set :skinny_micro_version, "1.0.6"
+set :skinny_micro_version, "1.1.0"
 @skinny_version = "2.1.2"
 set :skinny_version, @skinny_version
 @skinny_blank_app_version = @skinny_version
