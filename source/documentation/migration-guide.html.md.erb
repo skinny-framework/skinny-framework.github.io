@@ -5,6 +5,57 @@ title: Migration Guide - Skinny Framework
 ## Migration Guide
 <hr/>
 
+### 2.2 Migration Guide for 2.1.x USers
+<hr/>
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/2.2.0
+
+<hr/>
+#### sbt 0.13.12
+
+Skinny 2.2.0's blank project use `build.sbt` instead of `project/Build.scala` because since 0.13.12, sbt marks the Build trait deprecated and will remove it since version 1.0.
+
+https://github.com/sbt/sbt/pull/2530
+
+The migration from your existing `project/Build.scala` to `build.sbt` is not difficult. But if you're stuck with it, check the default settings in skinny-blank-app.
+
+###### Remove the build object
+
+In `build.sbt`, you don't need a parent object which extends Build trait. Just remove it.
+
+```scala
+object SkinnyAppBuild extends Build {
+}
+```
+
+###### Migrate project definition DSL
+
+In `build.sbt`, the DSL to define projects is different from `project/Build.scala`. Migrate `Project(...)`
+
+```scala
+  lazy val dev = Project(id = "dev", base = file("."),
+    settings = devBaseSettings ++ Seq(
+      name := appName + "-dev",
+      target := baseDirectory.value / "target" / "dev"
+    )
+  )
+```
+
+to `(project in file(dir)).settings(...)` like this:
+
+```scala
+lazy val dev = (project in file(".")).settings(devBaseSettings).settings(
+  name := appName + "-dev",
+  target := baseDirectory.value / "target" / "dev"
+)
+```
+
+##### Limitation
+
+Unfortunately, `build.sbt` doesn't allow defining multiple sub projects which share the same base directory. Due to the limitation, the precompileDev project is disabled by default since 2.2.0. If you prefer using precompileDev project, modify `build.sbt` after creating a skinny project.
+
+
+<hr/>
 ### 2.1 Migration Guide for 2.0.x Users
 <hr/>
 

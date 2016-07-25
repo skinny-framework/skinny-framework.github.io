@@ -65,12 +65,12 @@ set :skinny1_version, @skinny1_version
 set :skinny1_blank_app_version, @skinny1_blank_app_version
 
 set :skinny_micro_version, "1.1.0"
-@skinny_version = "2.1.2"
+@skinny_version = "2.2.0"
 set :skinny_version, @skinny_version
 @skinny_blank_app_version = @skinny_version
 set :skinny_blank_app_version, @skinny_blank_app_version
 
-@scalikejdbc_version = "2.4.1"
+@scalikejdbc_version = "2.4.2"
 set :scalikejdbc_version, @scalikejdbc_version
 
 # Build-specific configuration
