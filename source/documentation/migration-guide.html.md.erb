@@ -5,6 +5,37 @@ title: Migration Guide - Skinny Framework
 ## Migration Guide
 <hr/>
 
+### 2.3 Migration Guide for 2.2.x USers
+<hr/>
+
+https://github.com/skinny-framework/skinny-framework/releases/tag/2.3.0
+
+<hr/>
+#### Java 8+ required
+
+Since 2.3, we dropped Java 7 support. Use Java 8 or higher. If you need to run your skinny app on Java 7, stay in 2.2.x series.
+
+<hr/>
+#### Compatible dependencies
+
+Key dependencies are upgraded. We're afraid that some of them may not be binary compatible with previous versions.
+
+- skinny-micro 1.2
+- ScalikeJDBC 2.5
+- Scalate 1.8
+- json4s 3.5
+- Jetty 9.3
+- ScalaTest 3.0
+- typesafe config 1.3
+
+<hr/>
+#### sbt 0.13.13
+
+sbt 0.13.13 brought more deprecation warnings. Refer the settings in the latest blank-app project.
+
+https://github.com/skinny-framework/skinny-framework/blob/2.3.0/skinny-blank-app/build.sbt
+
+
 ### 2.2 Migration Guide for 2.1.x USers
 <hr/>
 
