@@ -35,7 +35,7 @@ libraryDependencies ++= Seq(
   "org.skinny-framework" %% "skinny-micro-json4s"      % skinnyMicroVersion,
   // Scalate integration
   "org.skinny-framework" %% "skinny-micro-scalate"     % skinnyMicroVersion,
-  // Standalone Web server (Jetty 9.2 / Servlet 3.1)
+  // Standalone Web server (Jetty 9.3 / Servlet 3.1)
   "org.skinny-framework" %% "skinny-micro-server"      % skinnyMicroVersion
 )
 ```
@@ -96,8 +96,8 @@ class Bootstrap extends LifeCycle {
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         version="3.0">
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3.1.xsd"
+         version="3.1">
     <listener>
         <listener-class>skinny.micro.SkinnyListener</listener-class>
     </listener>
