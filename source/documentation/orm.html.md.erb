@@ -187,7 +187,7 @@ The usage is like this:
 // create
 Member2.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
 val m = Member2.column
-Member2.createWithNamedValues(m.name -> "Alice"< m.createdAt -> DateTime.now)
+Member2.createWithNamedValues(m.name -> "Alice", m.createdAt -> DateTime.now)
 // update
 Member2.updateById(MemberId(123)).withAttributes('name -> "Bob")
 Member2.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
