@@ -46,8 +46,8 @@ class MembersController extends SkinnyController {
   def show = params.getAs[Long]("id").map { id =>
     Member.findById(id).map { member =>
       set("member" -> member)
-    }.getOrElse haltWithBody(404)
-  }.getOrElse haltWithBody(404)
+    } getOrElse haltWithBody(404)
+  } getOrElse haltWithBody(404)
 
 }
 
