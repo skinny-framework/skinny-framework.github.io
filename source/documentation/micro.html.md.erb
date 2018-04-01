@@ -44,12 +44,12 @@ libraryDependencies ++= Seq(
 ### Scala API docs
 <hr/>
 
-- [Scala API docs for "org.skinny-framework" %% "skinny-micro-common"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.11/<%= skinny_micro_version %>/skinny-micro-common_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html)
-- [Scala API docs for "org.skinny-framework" %% "skinny-micro"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
-- [Scala API docs for "org.skinny-framework" %% "skinny-micro-jackson"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-jackson_2.11/<%= skinny_micro_version %>/skinny-micro-jackson_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
-- [Scala API docs for "org.skinny-framework" %% "skinny-micro-json4s"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-json4s_2.11/<%= skinny_micro_version %>/skinny-micro-json4s_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
-- [Scala API docs for "org.skinny-framework" %% "skinny-micro-scalate"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-scalate_2.11/<%= skinny_micro_version %>/skinny-micro-scalate_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
-- [Scala API docs for "org.skinny-framework" %% "skinny-micro-server"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-server_2.11/<%= skinny_micro_version %>/skinny-micro-server_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-common"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.12/<%= skinny_micro_version %>/skinny-micro-common_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-jackson"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-jackson_2.12/<%= skinny_micro_version %>/skinny-micro-jackson_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-json4s"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-json4s_2.12/<%= skinny_micro_version %>/skinny-micro-json4s_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-scalate"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-scalate_2.12/<%= skinny_micro_version %>/skinny-micro-scalate_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "org.skinny-framework" %% "skinny-micro-server"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-server_2.12/<%= skinny_micro_version %>/skinny-micro-server_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
 
 <hr/>
 ### Minimum Examples
@@ -207,7 +207,7 @@ get(isMaintenanceMode) {
 #### Query/Form/Path Parameters
 <hr/>
 
-[Scala API docs for "skinny.micro.SkinnyMicroParams"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.SkinnyMicroParams)
+[Scala API docs for "skinny.micro.SkinnyMicroParams"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.SkinnyMicroParams)
 
 `params` is the basic accessor for request parameters. Both of GET query string params and POST form params end up in the `params` bag - you shouldn't need to read anything off the `request.body`.
 
@@ -280,16 +280,16 @@ class RailsLikeRouting extends WebApp {
 #### Accessing and setting Cookies
 <hr/>
 
-[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
+[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
 
 ```scala
 val cookies: Map[String, String] = request.cookies
 val multiCookies: Map[String, Seq[String]] = request.multiCookies
 ```
 
-[Scala API docs for "skinny.micro.cookie"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.cookie.package)
+[Scala API docs for "skinny.micro.cookie"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.cookie.package)
 
-Useful Cookie operation DSLs are available. See [Scala API docs for "skinny.micro.cookie.SweetCookies"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.cookie.SweetCookies) for details.
+Useful Cookie operation DSLs are available. See [Scala API docs for "skinny.micro.cookie.SweetCookies"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.cookie.SweetCookies) for details.
 
 ```scala
 def hello = {
@@ -307,14 +307,14 @@ def helloWithOptions = {
 #### Request / Response Headers
 <hr/>
 
-[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
+[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
 
 ```scala
 // access request headers
 val v: Option[String] = request.header(name)
 ```
 
-[Scala API docs for "skinny.micro.response.RichResponse"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.response.RichResponse)
+[Scala API docs for "skinny.micro.response.RichResponse"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.response.RichResponse)
 
 ```scala
 // access response headers
@@ -326,7 +326,7 @@ response.headers -= "name"
 #### Servlet Session
 <hr/>
 
-[Scala API docs for "skinny.micro.request.RichHttpServletSession"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichHttpServletSession)
+[Scala API docs for "skinny.micro.request.RichHttpServletSession"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichHttpServletSession)
 
 ```scala
 val v: Any = session("name") // or session('name)
@@ -347,7 +347,7 @@ Action methods in Skinny Micro apps should finally return `ActionResult` value w
 
 If you just return `String` value or `Array[Byte]` value, it would be the response body. It's also allowed style. You can always use setter to modify the Servlet response's mutable state.
 
-[Scala API docs for "skinny.micro.response.ActionResult"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.response.ActionResult)
+[Scala API docs for "skinny.micro.response.ActionResult"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.response.ActionResult)
 
 Meanwhile, `halt`ing immediately returns `ActionResult` by throwing `HaltException` within a filter or route.
 
@@ -363,7 +363,7 @@ halt(
 )
 ```
 
-[Scala API docs for "skinny.micro.base.RedirectionDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.base.RedirectionDsl)
+[Scala API docs for "skinny.micro.base.RedirectionDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.base.RedirectionDsl)
 
 If you prefer specifying status code for redirection, use more explicit DSLs.
 
@@ -418,7 +418,7 @@ Notice: Flash uses servlet sessions by default. Be aware of sticky session mode.
 Skinny Micro doesn't activate FlashMapSupport by default. If you need to use Flash support, mixin the following trait. 
 Meanwhile, Skinny Framework enables FlashMapSupport by default because it's a full stack framework.
 
-[Scala API docs for "skinny.micro.contrib.FlashMapSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.FlashMapSupport)
+[Scala API docs for "skinny.micro.contrib.FlashMapSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.FlashMapSupport)
 
 ```scala
 class Controller extends WebApp with FlashMapSupport {
@@ -434,7 +434,7 @@ class Controller extends WebApp with FlashMapSupport {
 }
 ```
 
-[Scala API docs for "skinny.micro.contrib.flash.FlashMap"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.flash.FlashMap)
+[Scala API docs for "skinny.micro.contrib.flash.FlashMap"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.flash.FlashMap)
 
 ```scala
 flash(name) = value
@@ -446,7 +446,7 @@ flash.now += (name -> value)
 #### Request Body
 <hr/>
 
-[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
+[Scala API docs for "skinny.micro.request.RichRequest"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.request.RichRequest)
 
 ```scala
 val body: String = request.body
@@ -462,7 +462,7 @@ val stream: InputStream = request.inputStream // raw HTTP POST data
 <b>WARNING:</b> Extend not Filter base traits but Servlet base traits. You cannot use FileUploadFeature with WebApp (SkinnyMicroFilter) and SkinnyController.
 </div>
 
-[Scala API docs for "skinny.micro.contrib.FileUploadSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.FileUploadSupport)
+[Scala API docs for "skinny.micro.contrib.FileUploadSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.FileUploadSupport)
 
 FileUploadSupport can be mixed into a skinny.micro.SkinnyMicroServlet to provide easy access to data submitted as part of a multipart HTTP request. Commonly this is used for retrieving uploaded files.
 
@@ -498,7 +498,7 @@ class FilesController extends SkinnyMicroServlet with FileUploadFeature {
 
 Notice: CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.
 
-[Scala API docs for "skinny.micro.contrib.CSRFTokenSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.11/<%= skinny_micro_version %>/skinny-micro_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.CSRFTokenSupport)
+[Scala API docs for "skinny.micro.contrib.CSRFTokenSupport"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.contrib.CSRFTokenSupport)
 
 `csrfKey` and `csrfToken` are available when activating `CSRFTokenSupport`.
 
@@ -564,7 +564,7 @@ Route actions, errors and filters run in the following order:
 #### Check execution time
 <hr/>
 
-[Scala API docs for "skinny.logging.TimeLogging"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.11/<%= skinny_micro_version %>/skinny-micro-common_2.11-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.logging.TimeLogging)
+[Scala API docs for "skinny.logging.TimeLogging"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.12/<%= skinny_micro_version %>/skinny-micro-common_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.logging.TimeLogging)
 
 ```scala
 val result = warnElapsedTime(1) {
