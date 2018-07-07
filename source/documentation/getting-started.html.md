@@ -161,7 +161,6 @@ The following tree shows the directories and files in skinny-blank-app project. 
 │   └── sbt-launch.jar # global sbt script in PATH is given priority over this
 ├── build.sbt
 ├── project
-│   ├── Build.scala
 │   ├── build.properties
 │   └── plugins.sbt
 ├── sbt      # Skinny uses this sbt command
