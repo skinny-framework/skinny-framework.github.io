@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Packaging - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h2 id="packaging">Packaging</h2>
+
+<hr/>
+
+<h3 id="as-you-know-its-a-servlet-application">As you know, it&rsquo;s a servlet application</h3>
+
+<hr/>
+
+<p>Skinny applications run on any Servlet container. </p>
+
+<p>So you just need to build a war file and deploy it to your production servers.</p>
+
+<hr/>
+
+<h3 id="packaging-war-file">Packaging war file</h3>
+
+<hr/>
+
+<p>It&rsquo;s very simple to do that. Just </p>
+<div class="highlight"><pre class="highlight plaintext"><code>./skinny package
+</code></pre></div>
+<p>You will see the created war file under <code>build/target/scala_2.10</code>.</p>
+
+<p>If you want to deploy the war file to a Maven repository (e.g. Artifactory), just run <code>./skinny publish</code> after customizing the build settings file.</p>
+
+<hr/>
+
+<h3 id="creating-stand-alone-app">Creating stand alone app</h3>
+
+<hr/>
+
+<p>What&rsquo;s more, you can easily create a stand alone jar file by just running the following command: </p>
+<div class="highlight"><pre class="highlight plaintext"><code>./skinny package:standalone
+</code></pre></div>
+<p>After a while, you will get a standalone jar file. </p>
+<div class="highlight"><pre class="highlight shell"><code>java <span class="nt">-jar</span> standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
+</code></pre></div>
+<p>You can pass configuration via system properties. Otherwise, it&rsquo;s also possible to use environment variables.</p>
+<div class="highlight"><pre class="highlight shell"><code>java <span class="nt">-jar</span> <span class="nt">-Dskinny</span>.port<span class="o">=</span>9000 <span class="nt">-Dskinny</span>.env<span class="o">=</span>production <span class="nt">-Dskinny</span>.prefix<span class="o">=</span>/foo/ <span class="se">\</span>
+  standalone-build/target/scala-2.10/skinny-standalone-app-assembly-0.1.0-SNAPSHOT.jar
+</code></pre></div>
+<hr/>
+
+<h3 id="configuration">Configuration</h3>
+
+<hr/>
+
+<p>The following options are available to configure your Skinny applications. You can pass the following values from environment variables or system properties.</p>
+
+<hr/>
+
+<h4 id="skinny-env-or-app-env-or-skinny_env-or-app_env">skinny.env or app.env or SKINNY_ENV or APP_ENV</h4>
+
+<hr/>
+
+<p>Default value is &ldquo;development&rdquo;. If <code>skinny.env</code> system property is &ldquo;production&rdquo;, application load the &ldquo;production&rdquo; settings from &ldquo;src/main/resources/application.conf&rdquo;.</p>
+
+<ul>
+<li>sys.props.get(&ldquo;skinny.env&rdquo;) or sys.props.get(&ldquo;app.env&rdquo;)</li>
+<li>sys.env.get(&ldquo;SKINNY_ENV&rdquo;) or sys.env.get(&ldquo;APP_ENV&rdquo;)</li>
+</ul>
+
+<p>You can access the value via <a href="https://github.com/skinny-framework/skinny-framework/blob/master/common/src/main/scala/skinny/SkinnyEnv.scala"><code>skinny.SkinnyEnv</code></a> in application.</p>
+
+<hr/>
+
+<h4 id="skinny-port-or-skinny_port">skinny.port or SKINNY_PORT</h4>
+
+<hr/>
+
+<p>This value is only for stand alone apps. Default value is 8080. You can customize the port number on which the stand alone app server listens.</p>
+
+<hr/>
+
+<h4 id="skinny-prefix-or-skinny_prefix">skinny.prefix or SKINNY_PREFIX</h4>
+
+<hr/>
+
+<p>This value is only for stand alone apps. Default value is &ldquo;/&rdquo;. You can customize the context path for the servlet app.</p>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>
