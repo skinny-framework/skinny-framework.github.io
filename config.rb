@@ -18,7 +18,7 @@
 #
 # With alternative layout
 # page "/path/to/file.html", :layout => :otherlayout
-page "/documentation/1.x/*", :layout => '1.x.erb'
+page "/documentation/1.x/*", layout: '1.x'
 #
 # A path which all have the same layout
 # with_layout :admin do
@@ -64,6 +64,7 @@ set :skinny1_version, @skinny1_version
 @skinny1_blank_app_version = @skinny1_version
 set :skinny1_blank_app_version, @skinny1_blank_app_version
 
+@skinny_micro_version = "2.1.0"
 set :skinny_micro_version, "2.1.0"
 @skinny_version = "3.0.3"
 set :skinny_version, @skinny_version
@@ -91,8 +92,7 @@ configure :build do
   # set :http_prefix, "/Content/images/"
 end
 
-activate :deploy do |deploy|
-  deploy.build_before = true
-  deploy.method = :git
-  deploy.branch = 'master'
+activate :gh_pages do |gh_pages|
+  gh_pages.remote = 'git@github.com:skinny-framework/skinny-framework.github.io.git'
+  gh_pages.branch = 'master'
 end

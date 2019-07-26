@@ -1,4 +1,4 @@
 #!/bin/bash
 
-bundle exec middleman deploy
+bundle exec middleman gh_pages
 

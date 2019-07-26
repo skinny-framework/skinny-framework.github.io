@@ -49,13 +49,13 @@ If you're already familiar with Scala and your `sbt.ivy.home` directory has lots
 
 For beginners, this one is highly recommended because you don't need to wait download dependencies.
 
-[![Download](images/blank-app-with-deps-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= skinny_blank_app_version %>/skinny-blank-app-with-deps.zip)
+[![Download](images/blank-app-with-deps-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= config[:skinny_blank_app_version] %>/skinny-blank-app-with-deps.zip)
 
 #### 2) skinny-blank-app.zip (1MB)
 
 If you're a heavy Scala user, this one will be suitable for you.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= skinny_blank_app_version %>/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= config[:skinny_blank_app_version] %>/skinny-blank-app.zip)
 
 #### 3) Homebrew
 
@@ -130,8 +130,8 @@ In the aspect of Web application framework, Skinny Framework's core part is an i
 ```scala
 #!/usr/bin/env scalas
 /***
-scalaVersion := "<%= latest_scala_version %>"
-libraryDependencies += "org.skinny-framework" %% "skinny-micro-server" % "<%= skinny_micro_version %>"
+scalaVersion := "<%= config[:latest_scala_version] %>"
+libraryDependencies += "org.skinny-framework" %% "skinny-micro-server" % "<%= config[:skinny_micro_version] %>"
 */
 import skinny.micro._
 object HelloApp extends WebApp {
@@ -348,9 +348,9 @@ First, add `skinny-assets` to libraryDependencies.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-framework" % "<%= skinny_version %>",
-  "org.skinny-framework" %% "skinny-assets"    % "<%= skinny_version %>",
-  "org.skinny-framework" %% "skinny-test"      % "<%= skinny_version %>" % "test"
+  "org.skinny-framework" %% "skinny-framework" % "<%= config[:skinny_version] %>",
+  "org.skinny-framework" %% "skinny-assets"    % "<%= config[:skinny_version] %>",
+  "org.skinny-framework" %% "skinny-test"      % "<%= config[:skinny_version] %>" % "test"
 )
 ```
 

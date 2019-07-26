@@ -4,8 +4,7 @@ gem 'middleman'
 gem 'middleman-syntax'
 gem 'middleman-livereload'
 
-# middleman build -> deploy
-gem 'middleman-deploy'
+gem 'middleman-gh_pages'
 
 gem 'redcarpet'
 

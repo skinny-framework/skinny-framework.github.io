@@ -15,9 +15,9 @@ First, add `skinny-assets` to libraryDependencies.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-framework" % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-assets"    % "<%= @skinny_version %>",
-  "org.skinny-framework" %% "skinny-test"      % "<%= @skinny_version %>" % "test"
+  "org.skinny-framework" %% "skinny-framework" % "<%= config[:skinny_version] %>",
+  "org.skinny-framework" %% "skinny-assets"    % "<%= config[:skinny_version] %>",
+  "org.skinny-framework" %% "skinny-test"      % "<%= config[:skinny_version] %>" % "test"
 )
 ```
 

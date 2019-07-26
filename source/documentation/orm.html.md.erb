@@ -35,7 +35,7 @@ Let's prepare right now!
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-orm"      % "<%= skinny_version %>",
+  "org.skinny-framework" %% "skinny-orm"      % "<%= config[:skinny_version] %>",
   "com.h2database"       %  "h2"              % "1.4.+",
   "ch.qos.logback"       %  "logback-classic" % "1.1.+"
 )
@@ -1103,7 +1103,7 @@ case class Member(
 Currently we still keep supporting Java SE 7 users, so the feature is not enabled by default. You can use them with `scalikejdbc-jsr310` dependency. First, add the following dependency to `libraryDependencies`.
 
 ```scala
-libraryDependencies += "org.scalikejdbc" %% "scalikejdbc-jsr310" % "<%= scalikejdbc_version %>"
+libraryDependencies += "org.scalikejdbc" %% "scalikejdbc-jsr310" % "<%= config[:scalikejdbc_version] %>"
 ```
 
 And then, `import scalikejdbc.jsr310._` into your mapper classes. That's all.

@@ -50,13 +50,13 @@ If you're already familiar with Scala and your `sbt.ivy.home` directory has lots
 
 For beginners, this one is highly recommended because you don't need to wait download dependencies.
 
-[![Download](images/blank-app-with-deps-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= skinny1_blank_app_version %>/skinny-blank-app-with-deps.zip)
+[![Download](images/blank-app-with-deps-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= config[:skinny1_blank_app_version] %>/skinny-blank-app-with-deps.zip)
 
 #### 2) skinny-blank-app.zip (1MB)
 
 If you're a heavy Scala user, this one will be suitable for you.
 
-[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= skinny1_blank_app_version %>/skinny-blank-app.zip)
+[![Download](images/blank-app-download.png)](https://github.com/skinny-framework/skinny-framework/releases/download/<%= config[:skinny1_blank_app_version] %>/skinny-blank-app.zip)
 
 #### 3) Homebrew 
 
@@ -155,12 +155,12 @@ These components depends on Scalatra.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-assets"             % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-framework"          % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-oauth2-controller"  % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-twitter-controller" % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-scaldi"             % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-test"               % "<%= skinny1_version %>" % "test"
+  "org.skinny-framework" %% "skinny-assets"             % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-framework"          % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-oauth2-controller"  % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-twitter-controller" % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-scaldi"             % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-test"               % "<%= config[:skinny1_version] %>" % "test"
 )
 ```
 
@@ -170,14 +170,14 @@ Even if you're using Play2 (or any other framework), these components are availa
 ```
 libraryDependencies ++= Seq(
   "org.skinny-framework" %  "skinny-logback"      % "1.0.6",
-  "org.skinny-framework" %% "skinny-orm"          % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-oauth"        % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-task"         % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-mailer"       % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-standalone"   % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-validator"    % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-http-client"  % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-factory-girl" % "<%= skinny1_version %>" % "test"
+  "org.skinny-framework" %% "skinny-orm"          % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-oauth"        % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-task"         % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-mailer"       % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-standalone"   % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-validator"    % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-http-client"  % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-factory-girl" % "<%= config[:skinny1_version] %>" % "test"
 )
 ```
 
@@ -388,9 +388,9 @@ First, add `skinny-assets` to libraryDependencies.
 
 ```
 libraryDependencies ++= Seq(
-  "org.skinny-framework" %% "skinny-framework" % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-assets"    % "<%= skinny1_version %>",
-  "org.skinny-framework" %% "skinny-test"      % "<%= skinny1_version %>" % "test"
+  "org.skinny-framework" %% "skinny-framework" % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-assets"    % "<%= config[:skinny1_version] %>",
+  "org.skinny-framework" %% "skinny-test"      % "<%= config[:skinny1_version] %>" % "test"
 )
 ```
 

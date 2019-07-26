@@ -90,7 +90,7 @@ render("/members/index")
 
 There are the two controller base traits. SkinnyController is a WebApp (SkinnyMicroFilter). SkinnyServlet is a SingleApp (SkinnyMicroServlet).
 
-- [Scala API docs for "skinny-micro"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.package)
+- [Scala API docs for "skinny-micro"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= config[:skinny_micro_version] %>/skinny-micro_2.12-<%= config[:skinny_micro_version] %>-javadoc.jar/!/index.html#skinny.micro.package)
 
 In general SkinnyController is more suitable for Skinny framework based applications.
 
@@ -264,7 +264,7 @@ Skinny Micro has before/after filters by default, but we recommend Skinny users 
 
 [/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala](https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala)
 
-See also: [Scala API docs for "skinny.micro.base.BeforeAfterDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.base.BeforeAfterDsl)
+See also: [Scala API docs for "skinny.micro.base.BeforeAfterDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= config[:skinny_micro_version] %>/skinny-micro_2.12-<%= config[:skinny_micro_version] %>-javadoc.jar/!/index.html#skinny.micro.base.BeforeAfterDsl)
 
 ```scala
 class MembersController extends SkinnyController with Routes {
@@ -298,7 +298,7 @@ Filter functions in Async Skinny apps accept implicit `SkinnyContext` value as i
 
 TODO: implementation
 
-See also: [Scala API docs for "skinny.micro.async.AsyncBeforeAfterDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= skinny_micro_version %>/skinny-micro_2.12-<%= skinny_micro_version %>-javadoc.jar/!/index.html#skinny.micro.async.AsyncBeforeAfterDsl)
+See also: [Scala API docs for "skinny.micro.async.AsyncBeforeAfterDsl"](https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/<%= config[:skinny_micro_version] %>/skinny-micro_2.12-<%= config[:skinny_micro_version] %>-javadoc.jar/!/index.html#skinny.micro.async.AsyncBeforeAfterDsl)
 
 ```scala
 class MembersController extends AsyncSkinnyController with Routes {
