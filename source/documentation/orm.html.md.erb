@@ -700,6 +700,62 @@ object Member extends SkinnyCRUDMapper[Member] {
 Member.includes(Member.skills).findById(123) // with skills
 ```
 
+Example of eager loading of a nested entity:
+
+Member -> Company -> Country
+
+Note: can only eager load first level nested entities.
+
+```scala
+case class Country(id: Long, name: String)
+case class Company(
+  id: Long,
+  name: String,
+  countryId: Option[Long] = None
+  country: Option[Country] = None
+)
+case class Member(
+  id: Long,
+  companyId: Option[Long] = None,
+  company: Option[Company] = None
+)
+
+object Company extends SkinnyCRUDMapper[Company] {
+  // company loads country eagerly using .byDefault
+  val countryOpt =
+    belongsTo[Country](
+      right = Country,
+      merge = (company, country) => company.copy(country = country)
+    ).byDefault
+}
+
+object Member extends SkinnyCRUDMapper[Member] {
+  lazy val companyOpt = {
+    // normal belongsTo: loads company but not the nested field member.company.country
+    belongsTo[Company](
+      right = Company,
+      merge = (member, company) => member.copy(company = company))
+    // eager loading operation that'd load member.company.country
+    .includes[Company](
+      merge = (members, companiesWithCountries) => members.map { m =>
+        companiesWithCountries.find(c => m.company.exists(_.id == c.id))
+          .map(c => m.copy(company = Some(c)))
+          .getOrElse(m)
+      })
+  }
+}
+
+Member
+  .joins(Member.companyOpt)
+  .includes(Member.companyOpt)
+  .findById(123) // member.company.country is accessible
+
+// joins: will join in company with the main member loading query
+// includes: will create another query to load companies with their countries (remember countryOpt is .byDefault).
+// the scala merge fn will then lookup members company and copy in the companyWithCountry
+
+```
+
 Note: when your entities have the same associations (e.g. Company has Employee, Country and Employee have Country), avoiding using the default alias for the associations is recommended because that may cause invalid join query generation when you use eager loading. We plan to provide more useful error messages for such cases in version 1.0.0.
 
 Source code: 
