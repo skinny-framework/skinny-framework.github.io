@@ -65,8 +65,8 @@ class FBAuthController extends ApplicationController with FacebookLoginFeature {
 
 object Controllers {
   object fbAuth extends FBAuthController with Routes {
-    val facebookLoginUrl = post("/auth/facebook")(loginRedirect).as('facebookLogin)
-    val facebookLoginCallbackUrl = get("/auth/facebook/callback")(callback).as('facebookLogin)
+    val facebookLoginUrl = post("/auth/facebook")(loginRedirect).as("facebookLogin")
+    val facebookLoginCallbackUrl = get("/auth/facebook/callback")(callback).as("facebookLogin")
   }
 }
 ```

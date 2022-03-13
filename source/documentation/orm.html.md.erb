@@ -118,7 +118,7 @@ And you can use Finder and Querying as follows:
 
 ```scala
 val member: Option[Member] = Member.findById(123)
-val members: Seq[Member] = Member.where('name -> "Alice").apply()
+val members: Seq[Member] = Member.where("name" -> "Alice").apply()
 ```
 
 <hr/>
@@ -143,12 +143,12 @@ The usage is like this:
 
 ```scala
 // create
-Member.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
+Member.createWithAttributes("name" -> "Alice", "createdAt" -> DateTime.now)
 val column = Member.column
 Member.createWithNamedValues(column.name -> "Alice", column.createdAt -> DateTime.now)
 // update
-Member.updateById(123).withAttributes('name -> "Bob")
-Member.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
+Member.updateById(123).withAttributes("name" -> "Bob")
+Member.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes("name" -> "Bob")
 // delete
 Member.deleteById(123)
 Member.deleteBy(sqls.eq(Member.column.name, "Alice"))
@@ -185,12 +185,12 @@ The usage is like this:
 
 ```scala
 // create
-Member2.createWithAttributes('name -> "Alice", 'createdAt -> DateTime.now)
+Member2.createWithAttributes("name" -> "Alice", "createdAt" -> DateTime.now)
 val m = Member2.column
 Member2.createWithNamedValues(m.name -> "Alice", m.createdAt -> DateTime.now)
 // update
-Member2.updateById(MemberId(123)).withAttributes('name -> "Bob")
-Member2.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes('name -> "Bob")
+Member2.updateById(MemberId(123)).withAttributes("name" -> "Bob")
+Member2.updateBy(sqls.eq(Member.column.name, "Bob")).withAttributes("name" -> "Bob")
 // delete
 Member2.deleteById(MemberId(123))
 Member2.deleteBy(sqls.eq(Member.column.name, "Alice"))
@@ -247,7 +247,7 @@ object UselessData extends SkinnyNoIdCRUDMapper[UselessData] {
 The usage is like this:
 
 ```scala
-UselessData.createWithAttributes('a -> "foo", 'b -> Some(123), 'createdTimestamp -> DateTime.now)
+UselessData.createWithAttributes("a" -> "foo", "b" -> Some(123), "createdTimestamp" -> DateTime.now)
 UselessData.findAll()
 ```
 
@@ -291,9 +291,9 @@ object AccountEmail extends SkinnyJoinTable[AccountEmail] {
 The usage is like this:
 
 ```scala
-Email.createWithAttributes('email -> "alice@example.com")
-Account.createWithAttributes('name -> "Alice")
-AccountEmail.createWithAttributes('accountId -> 1, 'emailId -> 1)
+Email.createWithAttributes("email" -> "alice@example.com")
+Account.createWithAttributes("name" -> "Alice")
+AccountEmail.createWithAttributes("accountId" -> 1, "emailId" -> 1)
 Account.findAll() // with emails
 ```
 
@@ -332,7 +332,7 @@ val m = Member.defaultAlias
 // find by primary key
 val member: Option[Member] = Member.findById(123)
 
-val member: Option[Member] = Member.where('id -> 123).apply().headOption
+val member: Option[Member] = Member.where("id" -> 123).apply().headOption
 
 // ------------
 // find many
@@ -342,12 +342,12 @@ val members: List[Member] = Member.findAll()
 // in clause
 val members: List[Member] = Member.findAllBy(sqls.in(m.id, Seq(123, 234, 345)))
 
-val members: List[Member] = Member.where('id -> Seq(123, 234, 345)).apply()
+val members: List[Member] = Member.where("id" -> Seq(123, 234, 345)).apply()
 
 // will return 345, 234, 123 in order
 val m = Member.defaultAlias
 val members: List[Member] = 
-  Member.where('id -> Seq(123, 234, 345))
+  Member.where("id" -> Seq(123, 234, 345))
     .orderBy(m.id.desc).offset(0).limit(5)
     .apply()
 
@@ -371,18 +371,18 @@ val members = Member.where(sqls.eq(m.groupId, 123))
 Order.count()
 Order.countBy(sqls.isNull(m.deletedAt).and.eq(m.shopId, 123))
 
-Order.where('deletedAt -> None, 'shopId -> 123).count()
-Order.where(sqls.eq(o.cancelled, false)).distinctCount('customerId)
+Order.where("deletedAt" -> None, "shopId" -> 123).count()
+Order.where(sqls.eq(o.cancelled, false)).distinctCount("customerId")
 
 // ------------
 // calculations
 // min, max, average and sum
 
-Order.sum('amount)
+Order.sum("amount")
 
-Product.min('price)
-Product.where(sqls.ge(p.createdAt, startDate)).max('price)
-Product.average('price)
+Product.min("price")
+Product.where(sqls.ge(p.createdAt, startDate)).max("price")
+Product.average("price")
 
 Product.calculate(sqls"original_func(${p.userId})")
 
@@ -399,9 +399,9 @@ val m = Member.defaultAlias
 val id = Member.createWithNamedValues(m.name -> "Alice")
 
 Member.createWithAttributes(
-  'id -> 123,
-  'name -> "Chris",
-  'createdAt -> DateTime.now
+  "id" -> 123,
+  "name" -> "Chris",
+  "createdAt" -> DateTime.now
 )
 
 // ------------
@@ -412,11 +412,11 @@ Member.updateById(123).withPermittedAttributes(params.permit("name" -> ParamType
 // ------------
 // update with parameters
 
-Member.updateById(123).withAttributes('name -> "Alice")
+Member.updateById(123).withAttributes("name" -> "Alice")
 
 // update by condition
 
-Member.updateBy(sqls.eq(m.groupId, 123)).withAttributes('groupId -> 234)
+Member.updateBy(sqls.eq(m.groupId, 123)).withAttributes("groupId" -> 234)
 
 // ------------
 // delete

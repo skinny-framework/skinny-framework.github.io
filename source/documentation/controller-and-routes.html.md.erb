@@ -52,10 +52,10 @@ class MembersController extends SkinnyController {
 // src/main/scala/controller/Controllers.scala
 object Controllers {
   object members extends MembersController with Routes {
-    val indexUrl = get("/members/?")(index).as('index)
-    val newUrl = get("/members/new")(newOne).as('new)
-    val createUrl = post("/members/?")(create).as('create)
-    val showUrl = get("/members/:id")(show).as('show)
+    val indexUrl = get("/members/?")(index).as("index")
+    val newUrl = get("/members/new")(newOne).as("new")
+    val createUrl = post("/members/?")(create).as("create")
+    val showUrl = get("/members/:id")(show).as("show")
   }
 }
 
@@ -225,7 +225,7 @@ class MembersController extends AsyncSkinnyController {
 // src/main/scala/controller/Controllers.scala
 object Controllers {
   object members extends MembersController with Routes {
-    val indexUrl = get("/members/?")(implicit ctx => index).as('index)
+    val indexUrl = get("/members/?")(implicit ctx => index).as("index")
   }
 }
 ```
@@ -274,10 +274,10 @@ class MembersController extends SkinnyController with Routes {
   after() { ... }
 
   // Skinny filters
-  beforeAction(only = Seq('index, 'new)) {
+  beforeAction(only = Seq("index", "new")) {
     println("before")
   }
-  afterAction(except = Seq('new)) {
+  afterAction(except = Seq("new")) {
     println("after")
   }
 
@@ -287,9 +287,9 @@ class MembersController extends SkinnyController with Routes {
   def edit = ...
 
   // routes
-  get("/members/?")(index).as('index)      // before, after
-  get("/members/new")(newInput).as('new)   // before
-  get("/members/:id/edit")(edit).as('edit) // after
+  get("/members/?")(index).as("index")      // before, after
+  get("/members/new")(newInput).as("new")   // before
+  get("/members/:id/edit")(edit).as("edit") // after
 
 }
 ```
@@ -308,10 +308,10 @@ class MembersController extends AsyncSkinnyController with Routes {
   after() { implicit ctx => ... }
 
   // Skinny filters
-  beforeAction(only = Seq('index, 'new)) { implicit ctx =>
+  beforeAction(only = Seq("index", "new")) { implicit ctx =>
     println("before")
   }
-  afterAction(except = Seq('new)) { implicit ctx =>
+  afterAction(except = Seq("new")) { implicit ctx =>
     println("after")
   }
 
@@ -321,9 +321,9 @@ class MembersController extends AsyncSkinnyController with Routes {
   def edit(ctx: SkinnyContext) = ...
 
   // routes
-  get("/members/?")(implicit ctx => index).as('index)      // before, after
-  get("/members/new")(implicit ctx => newInput).as('new)   // before
-  get("/members/:id/edit")(implicit ctx => edit).as('edit) // after
+  get("/members/?")(implicit ctx => index).as("index")      // before, after
+  get("/members/new")(implicit ctx => newInput).as("new")   // before
+  get("/members/:id/edit")(implicit ctx => edit).as("edit") // after
 
 }
 ```

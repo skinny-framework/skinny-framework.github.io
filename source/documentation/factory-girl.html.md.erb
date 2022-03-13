@@ -46,13 +46,13 @@ import skinny.test._
 val company1 = FactoryGirl(Company).create()
 
 // will forcely replace name attribute
-val company2 = FactoryGirl(Company).create('name -> "FactoryPal, Inc.")
+val company2 = FactoryGirl(Company).create("name" -> "FactoryPal, Inc.")
 
 val country = FactoryGirl(Country, 'countryyy).create()
 
 // variables will replace "#{foo}" in factories.conf
-val factory = FactoryGirl(Member).withVariables('countryId -> country.id)
-val member = factory.create('companyId -> company1.id, 'createdAt -> DateTime.now)
+val factory = FactoryGirl(Member).withVariables("countryId" -> country.id)
+val member = factory.create("companyId" -> company1.id, "createdAt" -> DateTime.now)
 ```
 
 In this example, `src/test/resources/factories.conf` is like this:
@@ -114,7 +114,7 @@ member {
 
 ```scala
 val countryId = FactoryGirl(Country).create().id
-FactoryGirl(Member).withVariables('cntId -> countryId).create()
+FactoryGirl(Member).withVariables("cntId" -> countryId).create()
 
 // will use name: Alice, countryId: 234
 ```
@@ -136,10 +136,10 @@ member {
 #### SomeSpec.scala
 
 ```scala
-FactoryGirl(Member).withAttributes('country -> "Japan").create()
+FactoryGirl(Member).withAttributes("country" -> "Japan").create()
 // will use name: Alice, country: Japan
 
-FactoryGirl(Member).create('country -> "Japan")
+FactoryGirl(Member).create("country" -> "Japan")
 // do the same thing!
 ```
 
