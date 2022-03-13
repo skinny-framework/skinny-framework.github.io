@@ -1,6 +1,6 @@
 ## Skinny Framework website
 
-http://skinny-framework.org/
+https://skinny-framework.github.io/
 
 ### How to contribute skinny-framework.org?
 
