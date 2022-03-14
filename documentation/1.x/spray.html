@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Reuse Skinny components in Spray apps - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h2 id="reuse-skinny-components-in-spray-apps">Reuse Skinny components in Spray apps</h2>
+
+<p>Skinny Framework itself depends on Scalatra and its Servlet integration. But skinny-validator, skinny-json and other components are independent from Scalatra Servlet environment.</p>
+
+<p>skinny-splash aims to provides handy APIs for Spray applciations by seamlessly integrating Skinny components.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-splash">https://github.com/skinny-framework/skinny-splash</a></p>
+
+<hr/>
+
+<h3 id="getting-started">Getting Started</h3>
+
+<hr/>
+
+<p>After creating the following files, you can boot your first HTTP server built with skinny-splash. Pretty easy!</p>
+<div class="highlight"><pre class="highlight plaintext"><code>sbt run
+# access `localhost:8080` or `localhost:8080/?name=World` form curl or web browser
+</code></pre></div>
+<p>Using sbt-resolver makes your Spray application development smoother. While running your Spray application by using the following command, sbt will detect your file changes and restart application automatically.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>sbt ~reStart
+</code></pre></div>
+<p>If you&rsquo;d like to create a portable jar file which can be invoked anywhere, use sbt-assembly to generate it.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>sbt assembly
+java -jar target/scala-2.11/my-blazing-app-assembly-0.1-SNAPSHOT.jar
+</code></pre></div>
+<hr>
+
+<h4 id="build-sbt">build.sbt</h4>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">lazy</span> <span class="k">val</span> <span class="nv">sample</span> <span class="k">=</span> <span class="o">(</span><span class="n">project</span> <span class="n">in</span> <span class="nf">file</span><span class="o">(</span><span class="s">"."</span><span class="o">)).</span><span class="py">settings</span><span class="o">(</span>
+  <span class="n">scalaVersion</span> <span class="o">:=</span> <span class="s">"2.11.6"</span><span class="o">,</span>
+  <span class="n">name</span> <span class="o">:=</span> <span class="s">"my-blazing-app"</span><span class="o">,</span>
+  <span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="s">"com.typesafe.akka"</span>    <span class="o">%%</span> <span class="s">"akka-actor"</span>    <span class="o">%</span> <span class="s">"2.3.9"</span><span class="o">,</span>
+    <span class="s">"io.spray"</span>             <span class="o">%%</span> <span class="s">"spray-can"</span>     <span class="o">%</span> <span class="s">"1.3.3"</span><span class="o">,</span>
+    <span class="s">"io.spray"</span>             <span class="o">%%</span> <span class="s">"spray-routing"</span> <span class="o">%</span> <span class="s">"1.3.3"</span><span class="o">,</span>
+    <span class="s">"io.spray"</span>             <span class="o">%%</span> <span class="s">"spray-json"</span>    <span class="o">%</span> <span class="s">"1.3.1"</span><span class="o">,</span>
+    <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-splash"</span> <span class="o">%</span> <span class="s">"1.0.+"</span>
+  <span class="o">)</span>
+<span class="o">).</span><span class="py">settings</span><span class="o">(</span><span class="nv">Revolver</span><span class="o">.</span><span class="py">settings</span><span class="k">:</span> <span class="k">_</span><span class="kt">*</span><span class="o">)</span>
+</code></pre></div>
+<h4 id="project-build-properties">project/build.properties</h4>
+<div class="highlight"><pre class="highlight plaintext"><code>sbt.version=0.13.8
+</code></pre></div>
+<h4 id="project-plugins-sbt">project/plugins.sbt</h4>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">addSbtPlugin</span><span class="o">(</span><span class="s">"io.spray"</span>     <span class="o">%</span> <span class="s">"sbt-revolver"</span> <span class="o">%</span> <span class="s">"0.7.2"</span><span class="o">)</span>
+<span class="c1">// for standalone jar creation</span>
+<span class="nf">addSbtPlugin</span><span class="o">(</span><span class="s">"com.eed3si9n"</span> <span class="o">%</span> <span class="s">"sbt-assembly"</span> <span class="o">%</span> <span class="s">"0.13.0"</span><span class="o">)</span>
+</code></pre></div>
+<h4 id="src-main-scala-app-scala">src/main/scala/app.scala</h4>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.splash._</span>
+<span class="k">import</span> <span class="nn">skinny.validator._</span>
+
+<span class="k">class</span> <span class="nc">MyController</span> <span class="k">extends</span> <span class="nc">SprayController</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">form</span><span class="o">(</span><span class="n">req</span><span class="k">:</span> <span class="kt">SprayRequest</span><span class="o">)</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">req</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">maxLength</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+  <span class="o">)</span>
+  <span class="k">def</span> <span class="nf">index</span><span class="o">(</span><span class="k">implicit</span> <span class="n">req</span><span class="k">:</span> <span class="kt">SprayRequest</span><span class="o">)</span><span class="k">:</span> <span class="kt">SprayResponse</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="nf">form</span><span class="o">(</span><span class="n">req</span><span class="o">).</span><span class="py">validate</span><span class="o">())</span> <span class="o">{</span>
+      <span class="k">val</span> <span class="nv">body</span> <span class="k">=</span> <span class="nf">toJSONString</span><span class="o">(</span><span class="nc">Map</span><span class="o">(</span><span class="s">"message"</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="s">"Hello, ${params.getOrElse("</span><span class="n">name</span><span class="s">", "</span><span class="nc">Anonymous</span><span class="s">")}"</span><span class="o">))</span>
+      <span class="nf">respondAs</span><span class="o">(</span><span class="n">body</span><span class="o">)</span>
+    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+      <span class="nf">respondAs</span><span class="o">(</span><span class="n">status</span> <span class="k">=</span> <span class="mi">400</span><span class="o">,</span> <span class="n">body</span> <span class="k">=</span> <span class="nf">toJSONString</span><span class="o">(</span><span class="n">keyAndErrorMessages</span><span class="o">))</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">trait</span> <span class="nc">MyDispatcher</span> <span class="k">extends</span> <span class="nc">SprayDispatcher</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">myController</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">MyController</span>
+  <span class="k">def</span> <span class="nf">routes</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="nf">getRoute</span><span class="o">(</span><span class="s">""</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">req</span> <span class="k">=&gt;</span> <span class="nv">myController</span><span class="o">.</span><span class="py">index</span><span class="o">),</span>
+    <span class="nf">postRoute</span><span class="o">(</span><span class="s">"post"</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">req</span> <span class="k">=&gt;</span> <span class="nv">myController</span><span class="o">.</span><span class="py">index</span><span class="o">)</span>
+  <span class="o">)</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">MyDispatcherActor</span>
+  <span class="k">extends</span> <span class="nc">SprayDispatcherActor</span>
+  <span class="k">with</span> <span class="nc">MyDispatcher</span>
+
+<span class="k">object</span> <span class="nc">MyApp</span> <span class="k">extends</span> <span class="nc">SprayApplication</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">dispatcherActorProps</span> <span class="k">=</span> <span class="nf">toProps</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">MyDispatcherActor</span><span class="o">])</span>
+<span class="o">}</span>
+</code></pre></div>
+<h4 id="src-main-resources-messages-conf">src/main/resources/messages.conf</h4>
+<div class="highlight"><pre class="highlight plaintext"><code>error {
+  required="{0} is required"
+  notNull="{0} is required"
+  notEmpty="{0} is required"
+  length="{0} length must be {1}"
+  minLength="{0} length must be greater than or equal to {1}"
+  maxLength="{0} length must be less than or equal to {1}"
+  minMaxLength="{0} length must be greater than or equal to {1} or be less than or equal to {2}"
+  numeric="{0} must be numeric"
+  intValue="{0} is less or greater than expected range"
+  longValue="{0} is less or greater than expected range"
+  intMinValue="{0} must be greater than or equal to {1}"
+  intMaxValue="{0} must be less than or equal to {1}"
+  intMinMaxValue="{0} must be greater than or equal to {1} or be less than or equal to {2}"
+  longMinValue="{0} must be greater than or equal to {1}"
+  longMaxValue="{0} must be less than or equal to {1}"
+  longMinMaxValue="{0} must be greater than or equal to {1} or be less than or equal to {2}"
+  dateTimeFormat="{0} must be a datetime value"
+  dateFormat="{0} must be a date value"
+  timeFormat="{0} must be a time value"
+  same="{0} must be the same with {1}"
+  email="{0} must be an e-mail"
+  past="{0} must be in the past"
+}
+</code></pre></div>
+<h3 id="give-us-your-feedback">Give us your feedback!</h3>
+
+<p>skinny-splash is a very young library. We&rsquo;d like to improve step by step with users. If you&rsquo;re interested in using it and hope more features, please let us know here:</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-splash/issues">https://github.com/skinny-framework/skinny-splash/issues</a></p>
+
+<hr/>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

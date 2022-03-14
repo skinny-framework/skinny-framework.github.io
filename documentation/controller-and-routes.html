@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Controller & Routes - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>Skinny Micro:</h2>
+    <ul>
+      <li><a href="/documentation/micro.html">Skinny Micro</a></li>
+    </ul>
+    <h2>Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/validator.html">Validator</a></li>
+      <li><a href="/documentation/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/mail.html">Mail</a></li>
+      <li><a href="/documentation/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/i18n.html">i18n</a></li>
+      <li><a href="/documentation/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/testing.html">Testing</a></li>
+      <li><a href="/documentation/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/spray.html">Spray</a></li>
+      <li><a href="/documentation/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/testimonials.html">Testimonials</a></li>
+      <li><a href="/documentation/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>    </ul>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/documentation/1.x/">1.3.x series</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <h2 id="controller-routes">Controller &amp; Routes</h2>
+
+<hr/>
+
+<p>Previously Skinny 1.x&rsquo;s routing mechanism and controller layer on MVC architecture was built upon Scalatra.</p>
+
+<p>Skinny project decided to move its own rich Servlet layer named <a href="/documentation/micro.html">Skinny Micro</a>.</p>
+
+<p><code>SkinnyController</code> is a trait which extends <code>SkinnyMicroFilter (WebApp)</code> and includes various useful components out-of-the-box.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// src/main/scala/controller/MembersController.scala</span>
+<span class="k">class</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">SkinnyController</span> <span class="o">{</span>
+  <span class="nf">protectFromForgery</span><span class="o">()</span> <span class="c1">// CSRF protection enabled</span>
+
+  <span class="k">def</span> <span class="nf">index</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="c1">// set 'members' in the request scope, then you can use it in views</span>
+    <span class="nf">set</span><span class="o">(</span><span class="s">"members"</span> <span class="o">-&gt;</span> <span class="nv">Member</span><span class="o">.</span><span class="py">findAll</span><span class="o">())</span>
+    <span class="nf">render</span><span class="o">(</span><span class="s">"/members/index"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">def</span> <span class="nf">newOne</span> <span class="k">=</span> <span class="nf">render</span><span class="o">(</span><span class="s">"/members/new"</span><span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">createForm</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">params</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">minLength</span><span class="o">(</span><span class="mi">2</span><span class="o">),</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"countryId"</span><span class="o">)</span> <span class="n">is</span> <span class="n">numeric</span>
+  <span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">createFormParams</span> <span class="k">=</span> <span class="nv">params</span><span class="o">.</span><span class="py">permit</span><span class="o">(</span>
+    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">String</span><span class="o">,</span> 
+    <span class="s">"countryId"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">Long</span><span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">create</span> <span class="k">=</span> <span class="nf">if</span> <span class="o">(</span><span class="nv">createForm</span><span class="o">.</span><span class="py">validate</span><span class="o">())</span> <span class="o">{</span>
+    <span class="nv">Member</span><span class="o">.</span><span class="py">createWithPermittedAttributes</span><span class="o">(</span><span class="n">createFormParams</span><span class="o">)</span>
+    <span class="nf">redirect</span><span class="o">(</span><span class="s">"/members"</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="nf">render</span><span class="o">(</span><span class="s">"/members/new"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="c1">// searches both query params and path params</span>
+  <span class="k">def</span> <span class="nf">show</span> <span class="k">=</span> <span class="nv">params</span><span class="o">.</span><span class="py">getAs</span><span class="o">[</span><span class="kt">Long</span><span class="o">](</span><span class="s">"id"</span><span class="o">).</span><span class="py">map</span> <span class="o">{</span> <span class="n">id</span> <span class="k">=&gt;</span>
+    <span class="nv">Member</span><span class="o">.</span><span class="py">findById</span><span class="o">(</span><span class="n">id</span><span class="o">).</span><span class="py">map</span> <span class="o">{</span> <span class="n">member</span> <span class="k">=&gt;</span>
+      <span class="nf">set</span><span class="o">(</span><span class="s">"member"</span> <span class="o">-&gt;</span> <span class="n">member</span><span class="o">)</span>
+    <span class="o">}</span> <span class="n">getOrElse</span> <span class="nf">haltWithBody</span><span class="o">(</span><span class="mi">404</span><span class="o">)</span>
+  <span class="o">}</span> <span class="n">getOrElse</span> <span class="nf">haltWithBody</span><span class="o">(</span><span class="mi">404</span><span class="o">)</span>
+
+<span class="o">}</span>
+
+<span class="c1">// src/main/scala/controller/Controllers.scala</span>
+<span class="k">object</span> <span class="nc">Controllers</span> <span class="o">{</span>
+  <span class="k">object</span> <span class="nc">members</span> <span class="k">extends</span> <span class="nc">MembersController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">indexUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/members/?"</span><span class="o">)(</span><span class="n">index</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"index"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">newUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/members/new"</span><span class="o">)(</span><span class="n">newOne</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"new"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">createUrl</span> <span class="k">=</span> <span class="nf">post</span><span class="o">(</span><span class="s">"/members/?"</span><span class="o">)(</span><span class="n">create</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"create"</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">showUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/members/:id"</span><span class="o">)(</span><span class="n">show</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"show"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// src/main/scala/Bootstrap.scala</span>
+<span class="k">class</span> <span class="nc">Bootstrap</span> <span class="k">extends</span> <span class="nc">SkinnyLifeCycle</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">initSkinnyApp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// register routes</span>
+    <span class="nv">Controllers</span><span class="o">.</span><span class="py">members</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><code>#render</code> expects <code>src/main/webapp/WEB-INF/views/members/index.html.ssp</code> by default.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>render("/members/index")
+</code></pre></div><div class="highlight"><pre class="highlight plaintext"><code>&lt;!-- src/main/webapp/WEB-INF/views/members/index.html.ssp --&gt;
+&lt;%@val members: Seq[Member]%&gt;
+&lt;ul&gt;
+#for (member &lt;- members)
+  &lt;li&gt;${member.name}&lt;/li&gt;
+#end
+&lt;ul&gt;
+</code></pre></div>
+<hr/>
+
+<h3 id="skinnycontroller-skinnyservlet">SkinnyController &amp; SkinnyServlet</h3>
+
+<hr/>
+
+<p>There are the two controller base traits. SkinnyController is a WebApp (SkinnyMicroFilter). SkinnyServlet is a SingleApp (SkinnyMicroServlet).</p>
+
+<ul>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.package">Scala API docs for &ldquo;skinny-micro&rdquo;</a></li>
+</ul>
+
+<p>In general SkinnyController is more suitable for Skinny framework based applications.</p>
+
+<p>However, if you really need to use a Servlet instead of a filter, use SkinnyServlet.</p>
+
+<hr/>
+
+<h3 id="skinnyresource">SkinnyResource</h3>
+
+<hr/>
+
+<p>SkinnyResource is a useful base trait for RESTful web services. SkinnyResource is very similar to Rails ActiveResource.</p>
+
+<p><a href="http://guides.rubyonrails.org/routing.html#resource-routing-the-rails-default">Resource Routing: the Rails Default (Rails Routing from the Outside In — Ruby on Rails Guides)</a></p>
+
+<p><a href="https://github.com/rails/activeresource">https://github.com/rails/activeresource</a></p>
+
+<p>SkinnyResource is also useful as a controller sample. If you&rsquo;re a Skinny beginner, take a look at its code.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala">framework/src/main/scala/skinny/controller/SkinnyResource.scala</a></p>
+
+<p>SkinnyResourceActions has action methods for the resource and SkinnyResourceRoutes defines routings for the resource.
+If you&rsquo;d like to customize routings (e.g. use only creation and deletion), just mixin only SkinnyResourceActions and define routings by yourself.</p>
+
+<p>You can see a SkinnyResource example using the scaffolding generator.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>./skinny g scaffold members member name:String birthday:LocalDate
+</code></pre></div>
+<p>Then you get the following code. If you need to customize, override some parts of SkinnyResource:</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/SkinnyResource.scala">framework/src/main/scala/skinny/controller/SkinnyResource.scala</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">package</span> <span class="nn">controller</span>
+
+<span class="k">import</span> <span class="nn">skinny._</span>
+<span class="k">import</span> <span class="nn">skinny.validator._</span>
+<span class="k">import</span> <span class="nn">model.Member</span>
+
+<span class="k">object</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">SkinnyResource</span> <span class="o">{</span>
+  <span class="nf">protectFromForgery</span><span class="o">()</span> <span class="c1">// CSRF protection</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">model</span> <span class="k">=</span> <span class="nc">Member</span> <span class="c1">// SkinnyModel for this controller</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourcesName</span> <span class="k">=</span> <span class="s">"members"</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourceName</span> <span class="k">=</span> <span class="s">"member"</span>
+
+  <span class="c1">// parameters &amp; validations for creation</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">createParams</span> <span class="k">=</span> <span class="nc">Params</span><span class="o">(</span><span class="n">params</span><span class="o">).</span><span class="py">withDate</span><span class="o">(</span><span class="s">"birthday"</span><span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">createForm</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">createParams</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">maxLength</span><span class="o">(</span><span class="mi">512</span><span class="o">),</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"birthday"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="n">dateFormat</span>
+  <span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">createFormStrongParameters</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">String</span><span class="o">,</span>
+    <span class="s">"birthday"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">LocalDate</span>
+  <span class="o">)</span>
+
+  <span class="c1">// parameters &amp; validations for modification</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">updateParams</span> <span class="k">=</span> <span class="nc">Params</span><span class="o">(</span><span class="n">params</span><span class="o">).</span><span class="py">withDate</span><span class="o">(</span><span class="s">"birthday"</span><span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">updateForm</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">updateParams</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">maxLength</span><span class="o">(</span><span class="mi">512</span><span class="o">),</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"birthday"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="n">dateFormat</span>
+  <span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">updateFormStrongParameters</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">String</span><span class="o">,</span>
+    <span class="s">"birthday"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">LocalDate</span>
+  <span class="o">)</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>Required view templates:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>src/main/webapp/WEB-INF/views/members/
+├── _form.html.ssp
+├── edit.html.ssp
+├── index.html.ssp
+├── new.html.ssp
+└── show.html.ssp
+</code></pre></div>
+<p>In this case, SkinnyResource provides the following URLs from SkinnyResourceRoutes by default. If you don&rsquo;t need all the routes below, just mixin SkinnyResourceActions instead and specify only routes you need by hand.</p>
+
+<ul>
+<li>GET /members</li>
+<li>GET /members/</li>
+<li>GET /members.xml</li>
+<li>GET /members.json</li>
+<li>GET /members/new</li>
+<li>POST /members</li>
+<li>POST /members.xml</li>
+<li>POST /members.json</li>
+<li>POST /members/</li>
+<li>GET /members/{id}</li>
+<li>GET /members/{id}.xml</li>
+<li>GET /members/{id}.json</li>
+<li>GET /members/{id}/edit</li>
+<li>POST /members/{id}.xml</li>
+<li>POST /members/{id}.json</li>
+<li>POST /members/{id}</li>
+<li>PUT /members/{id}.xml</li>
+<li>PUT /members/{id}.json</li>
+<li>PUT /members/{id}</li>
+<li>PATCH /members/{id}.xml</li>
+<li>PATCH /members/{id}.json</li>
+<li>PATCH /members/{id}</li>
+<li>DELETE /members/{id}.xml</li>
+<li>DELETE /members/{id}.json</li>
+<li>DELETE /members/{id}</li>
+</ul>
+
+<hr/>
+
+<h3 id="asyncskinnycontroller-asyncskinnyservlet">AsyncSkinnyController &amp; AsyncSkinnyServlet</h3>
+
+<hr/>
+
+<p>If you&rsquo;re interested in building more Future-wired and non-blocking application with Skinny Framework, take a look at Async* traits.</p>
+
+<p>There are the two controller base traits for Future-wired applications. AsyncSkinnyController is a AsyncWebApp (AsyncSkinnyMicroFilter). AsyncSkinnyServlet is a AsyncSingleApp (AsyncSkinnyMicroServlet).</p>
+
+<p>These traits are mostly same as the above normal Controller/Servlet, but the biggest difference is that action methods accept implicit SkinnyContext value as its argument. Hereby, action methods can be safely executed even when its operation is divided across multiple threads.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// src/main/scala/controller/MembersController.scala</span>
+<span class="k">class</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">AsyncSkinnyController</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">index</span><span class="o">(</span><span class="k">implicit</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">SkinnyContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">ActionResult</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Future</span> <span class="o">{</span>
+    <span class="nf">set</span><span class="o">(</span><span class="s">"members"</span> <span class="o">-&gt;</span> <span class="nv">Member</span><span class="o">.</span><span class="py">findAll</span><span class="o">())</span>
+    <span class="nc">Ok</span><span class="o">(</span><span class="nf">render</span><span class="o">(</span><span class="s">"/members/index"</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="c1">// src/main/scala/controller/Controllers.scala</span>
+<span class="k">object</span> <span class="nc">Controllers</span> <span class="o">{</span>
+  <span class="k">object</span> <span class="nc">members</span> <span class="k">extends</span> <span class="nc">MembersController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">indexUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/members/?"</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span> <span class="n">index</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"index"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="skinny-skinny">skinny.Skinny</h3>
+
+<hr/>
+
+<p>skinny.Skinny provides getters for basic elements in view templates.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>&lt;%@val s: skinny.Skinny %&gt;
+</code></pre></div>
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/Skinny.scala">framework/src/main/scala/skinny/Skinny.scala</a></p>
+
+<ul>
+<li>params: Params</li>
+<li>multiParams: MultiParams</li>
+<li>flash: Flash</li>
+<li>errorMessages: Seq[String]</li>
+<li>keyAndErrorMessages: Map[String, Seq[String]]</li>
+<li>contextPath: String</li>
+<li>requestPath: String</li>
+<li>requestPathWithQueryString: String</li>
+<li>csrfKey: String</li>
+<li>csrfToken: String</li>
+<li>csrfMetaTag(s): String</li>
+<li>csrfHiddenInputTag: String</li>
+<li>i18n: I18n</li>
+</ul>
+
+<hr/>
+
+<h3 id="beforeaction-afteraction-filters">beforeAction/afterAction Filters</h3>
+
+<hr/>
+
+<p>Skinny Micro has before/after filters by default, but we recommend Skinny users to use Skinny&rsquo;s beforeAction/afterAction filters. Skinny Micro doesn&rsquo;t support to run the filters for only specified action methods or excluding some action methods from filters execution. So if you need filters that are similar to Rails filters, just use Skinny filters.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala">/framework/src/main/scala/skinny/controller/feature/BeforeAfterActionFeature.scala</a></p>
+
+<p>See also: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.base.BeforeAfterDsl">Scala API docs for &ldquo;skinny.micro.base.BeforeAfterDsl&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">SkinnyController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+
+  <span class="c1">// Skinny Micro filters</span>
+  <span class="nf">before</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+  <span class="nf">after</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+
+  <span class="c1">// Skinny filters</span>
+  <span class="nf">beforeAction</span><span class="o">(</span><span class="n">only</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"index"</span><span class="o">,</span> <span class="s">"new"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nf">println</span><span class="o">(</span><span class="s">"before"</span><span class="o">)</span>
+  <span class="o">}</span>
+  <span class="nf">afterAction</span><span class="o">(</span><span class="n">except</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"new"</span><span class="o">))</span> <span class="o">{</span>
+    <span class="nf">println</span><span class="o">(</span><span class="s">"after"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="c1">//actions</span>
+  <span class="k">def</span> <span class="nf">index</span> <span class="k">=</span> <span class="o">...</span>
+  <span class="k">def</span> <span class="nf">newInput</span> <span class="k">=</span> <span class="o">...</span>
+  <span class="k">def</span> <span class="nf">edit</span> <span class="k">=</span> <span class="o">...</span>
+
+  <span class="c1">// routes</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/members/?"</span><span class="o">)(</span><span class="n">index</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"index"</span><span class="o">)</span>      <span class="c1">// before, after</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/members/new"</span><span class="o">)(</span><span class="n">newInput</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"new"</span><span class="o">)</span>   <span class="c1">// before</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/members/:id/edit"</span><span class="o">)(</span><span class="n">edit</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"edit"</span><span class="o">)</span> <span class="c1">// after</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>Filter functions in Async Skinny apps accept implicit <code>SkinnyContext</code> value as its argument.</p>
+
+<p>TODO: implementation</p>
+
+<p>See also: <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.async.AsyncBeforeAfterDsl">Scala API docs for &ldquo;skinny.micro.async.AsyncBeforeAfterDsl&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">AsyncSkinnyController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+
+  <span class="c1">// Skinny Micro filters</span>
+  <span class="nf">before</span><span class="o">()</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="o">}</span>
+  <span class="nf">after</span><span class="o">()</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span> <span class="o">...</span> <span class="o">}</span>
+
+  <span class="c1">// Skinny filters</span>
+  <span class="nf">beforeAction</span><span class="o">(</span><span class="n">only</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"index"</span><span class="o">,</span> <span class="s">"new"</span><span class="o">))</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span>
+    <span class="nf">println</span><span class="o">(</span><span class="s">"before"</span><span class="o">)</span>
+  <span class="o">}</span>
+  <span class="nf">afterAction</span><span class="o">(</span><span class="n">except</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"new"</span><span class="o">))</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span>
+    <span class="nf">println</span><span class="o">(</span><span class="s">"after"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="c1">//actions</span>
+  <span class="k">def</span> <span class="nf">index</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">SkinnyContext</span><span class="o">)</span> <span class="k">=</span> <span class="o">...</span>
+  <span class="k">def</span> <span class="nf">newInput</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">SkinnyContext</span><span class="o">)</span> <span class="k">=</span> <span class="o">...</span>
+  <span class="k">def</span> <span class="nf">edit</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">SkinnyContext</span><span class="o">)</span> <span class="k">=</span> <span class="o">...</span>
+
+  <span class="c1">// routes</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/members/?"</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span> <span class="n">index</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"index"</span><span class="o">)</span>      <span class="c1">// before, after</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/members/new"</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span> <span class="n">newInput</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"new"</span><span class="o">)</span>   <span class="c1">// before</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/members/:id/edit"</span><span class="o">)(</span><span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span> <span class="n">edit</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="s">"edit"</span><span class="o">)</span> <span class="c1">// after</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="skinnyfilter">SkinnyFilter</h3>
+
+<hr/>
+
+<p>SkinnyFilter is our original filter to enable easily handling before/after/error for each controller. You can apply the same beforeAction/afterAction/error filters to several controllers by just mixing in SkinnyFilter-based traits.</p>
+
+<p>For instance, in skinny-blank-app, ErrorPageFilter is applied to ApplicationController. </p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">trait</span> <span class="nc">ApplicationController</span> <span class="k">extends</span> <span class="nc">SkinnyController</span>
+  <span class="k">with</span> <span class="nc">ErrorPageFilter</span> <span class="o">{</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>ErrorPageFilter is as follows. It&rsquo;s pretty easy to customize such a filter (e.g. adding error notification) as follows. If you need to access SkinnyMicroContext in filters, mix in MainThreadLocalEverywhere too.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.filter.SkinnyRenderingFilter</span>
+<span class="k">import</span> <span class="nn">skinny.micro.base.MainThreadLocalEverywhere</span>
+
+<span class="k">trait</span> <span class="nc">ErrorPageFilter</span> <span class="k">extends</span> <span class="nc">SkinnyRenderingFilter</span> <span class="k">with</span> <span class="nc">MainThreadLocalEverywhere</span> <span class="o">{</span>
+  <span class="c1">// appends error filter in order</span>
+  <span class="n">addRenderingErrorFilter</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">Throwable</span> <span class="o">=&gt;</span>
+      <span class="nv">logger</span><span class="o">.</span><span class="py">error</span><span class="o">(</span><span class="nv">e</span><span class="o">.</span><span class="py">getMessage</span><span class="o">,</span> <span class="n">e</span><span class="o">)</span>
+      <span class="k">try</span> <span class="o">{</span>
+        <span class="n">status</span> <span class="k">=</span> <span class="mi">500</span>
+        <span class="nf">render</span><span class="o">(</span><span class="s">"/error/500"</span><span class="o">)</span>
+      <span class="o">}</span> <span class="k">catch</span> <span class="o">{</span>
+        <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">Exception</span> <span class="o">=&gt;</span> <span class="k">throw</span> <span class="n">e</span>
+      <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>It just outputs error logging, set status as 500 and renders &ldquo;/error/500.html.ssp&rdquo; or similar templates. <code>SkinnyRenderingFilter</code> is a sub-trait of <code>SkinnyFilter</code>. <code>SkinnyFilter</code>&lsquo;s response value is always ignored. But <code>SkinnyRenderingFilter</code> can return a response body like above.</p>
+
+<p>The second example is <code>TxPerRequestFilter</code> which enables you to apply the open-session-in-view pattern to your apps.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">trait</span> <span class="nc">TxPerRequestFilter</span> <span class="k">extends</span> <span class="nc">SkinnyFilter</span> <span class="k">with</span> <span class="nc">Logging</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">cp</span><span class="k">:</span> <span class="kt">ConnectionPool</span> <span class="o">=</span> <span class="nv">ConnectionPool</span><span class="o">.</span><span class="py">get</span><span class="o">()</span>
+
+  <span class="k">def</span> <span class="nf">begin</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">db</span> <span class="k">=</span> <span class="nv">ThreadLocalDB</span><span class="o">.</span><span class="py">create</span><span class="o">(</span><span class="nv">cp</span><span class="o">.</span><span class="py">borrow</span><span class="o">())</span>
+    <span class="nv">db</span><span class="o">.</span><span class="py">begin</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="c1">// will handle exceptions occurred in controllers</span>
+  <span class="n">addErrorFilter</span> <span class="o">{</span> <span class="k">case</span> <span class="n">e</span><span class="k">:</span> <span class="kt">Throwable</span> <span class="o">=&gt;</span>
+    <span class="nc">Option</span><span class="o">(</span><span class="nv">ThreadLocalDB</span><span class="o">.</span><span class="py">load</span><span class="o">()).</span><span class="py">foreach</span> <span class="o">{</span> <span class="n">db</span> <span class="k">=&gt;</span>
+      <span class="nf">if</span> <span class="o">(</span><span class="n">db</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nv">db</span><span class="o">.</span><span class="py">isTxNotActive</span><span class="o">)</span> <span class="nf">using</span><span class="o">(</span><span class="n">db</span><span class="o">)(</span><span class="nv">_</span><span class="o">.</span><span class="py">rollbackIfActive</span><span class="o">())</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="k">def</span> <span class="nf">commit</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">db</span> <span class="k">=</span> <span class="nv">ThreadLocalDB</span><span class="o">.</span><span class="py">load</span><span class="o">()</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">db</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nv">db</span><span class="o">.</span><span class="py">isTxNotActive</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nf">using</span><span class="o">(</span><span class="n">db</span><span class="o">)(</span><span class="nv">_</span><span class="o">.</span><span class="py">commit</span><span class="o">())</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="nf">beforeAction</span><span class="o">()(</span><span class="n">begin</span><span class="o">)</span>
+  <span class="nf">afterAction</span><span class="o">()(</span><span class="n">commit</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="how-to-do-it-examples">How to Do It? Examples</h3>
+
+<hr/>
+
+<p>Basic features needed when building Web apps are already provided by Skinny Micro. In this section, we&rsquo;ll introduce you how to do common things with it.</p>
+
+<hr/>
+
+<h4 id="query-form-path-parameters">Query/Form/Path Parameters</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#query-form-path-parameters">/documentation/micro.html#query-form-path-parameters</a></p>
+
+<hr/>
+
+<h4 id="cookies">Cookies</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#accessing-and-setting-cookies">/documentation/micro.html#accessing-and-setting-cookies</a></p>
+
+<hr/>
+
+<h4 id="request-response-headers">Request/Response Headers</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#request-response-headers">/documentation/micro.html#request-response-headers</a></p>
+
+<hr/>
+
+<h4 id="servlet-session">Servlet Session</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#servlet-session">/documentation/micro.html#servlet-session</a></p>
+
+<p>We recommend you use SkinnySession to keep your Skinny apps stateless. When you enable SkinnySession, these features also start using SkinnySession instead of Servlet session attributes.</p>
+
+<p>Bootstrap.scala:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">scalikejdbc._</span>
+<span class="k">import</span> <span class="nn">skinny.session.SkinnySessionInitializer</span>
+
+<span class="k">class</span> <span class="nc">Bootstrap</span> <span class="k">extends</span> <span class="nc">SkinnyLifeCycle</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">initSkinnyApp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// Database queries will be increased</span>
+    <span class="nv">GlobalSettings</span><span class="o">.</span><span class="py">loggingSQLAndTime</span> <span class="k">=</span> <span class="nc">LoggingSQLAndTimeSettings</span><span class="o">(</span>
+      <span class="n">singleLineMode</span> <span class="k">=</span> <span class="kc">true</span>
+    <span class="o">)</span>
+    <span class="nv">ctx</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">classOf</span><span class="o">[</span><span class="kt">SkinnySessionInitializer</span><span class="o">],</span> <span class="s">"/*"</span><span class="o">)</span>
+
+    <span class="nv">Controllers</span><span class="o">.</span><span class="py">root</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+    <span class="nv">AssetsController</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>controller/RootController.scala:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">RootController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">SkinnySessionFilter</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">index</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">v</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="nv">skinnySession</span><span class="o">.</span><span class="py">getAttribute</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span>
+    <span class="nv">skinnySession</span><span class="o">.</span><span class="py">setAttribute</span><span class="o">(</span><span class="s">"name"</span><span class="o">,</span> <span class="s">"value"</span><span class="o">)</span>
+    <span class="nv">skinnySession</span><span class="o">.</span><span class="py">removeAttribute</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>DB migration file:</p>
+<div class="highlight"><pre class="highlight sql"><code><span class="c1">-- H2 Database compatible</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">skinny_sessions</span> <span class="p">(</span>
+  <span class="n">id</span> <span class="n">bigserial</span> <span class="k">not</span> <span class="k">null</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
+  <span class="n">created_at</span> <span class="nb">timestamp</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+  <span class="n">expire_at</span> <span class="nb">timestamp</span> <span class="k">not</span> <span class="k">null</span>
+<span class="p">);</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">servlet_sessions</span> <span class="p">(</span>
+  <span class="n">jsession_id</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="k">not</span> <span class="k">null</span> <span class="k">primary</span> <span class="k">key</span><span class="p">,</span>
+  <span class="n">skinny_session_id</span> <span class="nb">bigint</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+  <span class="n">created_at</span> <span class="nb">timestamp</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+  <span class="k">foreign</span> <span class="k">key</span><span class="p">(</span><span class="n">skinny_session_id</span><span class="p">)</span> <span class="k">references</span> <span class="n">skinny_sessions</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="k">create</span> <span class="k">table</span> <span class="n">skinny_session_attributes</span> <span class="p">(</span>
+  <span class="n">skinny_session_id</span> <span class="nb">bigint</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+  <span class="n">attribute_name</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span> <span class="k">not</span> <span class="k">null</span><span class="p">,</span>
+  <span class="n">attribute_value</span> <span class="n">bytea</span><span class="p">,</span>
+  <span class="k">foreign</span> <span class="k">key</span><span class="p">(</span><span class="n">skinny_session_id</span><span class="p">)</span> <span class="k">references</span> <span class="n">skinny_sessions</span><span class="p">(</span><span class="n">id</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="k">alter</span> <span class="k">table</span> <span class="n">skinny_session_attributes</span> <span class="k">add</span> <span class="k">constraint</span>
+  <span class="n">skinny_session_attributes_unique_idx</span>
+  <span class="k">unique</span><span class="p">(</span><span class="n">skinny_session_id</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">);</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="response-handling">Response handling</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#repsonse-handling">/documentation/micro.html#response-handling</a></p>
+
+<hr/>
+
+<h4 id="flash">Flash</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#flash">/documentation/micro.html#flash</a></p>
+
+<hr/>
+
+<h4 id="request-body">Request Body</h4>
+
+<hr/>
+
+<p>See Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#request-body">/documentation/micro.html#request-body</a></p>
+
+<hr/>
+
+<h4 id="file-upload">File Upload</h4>
+
+<hr/>
+
+<div class="alert alert-warning small">
+<b>WARNING:</b> Extend not SkinnyController but SkinnyServlet. You cannot use FileUploadFeature with SkinnyController.
+</div>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.SkinnyServlet</span>
+<span class="k">import</span> <span class="nn">skinny.controller.feature.FileUploadFeature</span>
+
+<span class="c1">// SkinnyServlet!!!</span>
+<span class="k">class</span> <span class="nc">FilesController</span> <span class="k">extends</span> <span class="nc">SkinnyServlet</span> <span class="k">with</span> <span class="nc">FileUploadFeature</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">upload</span> <span class="k">=</span> <span class="nv">fileParams</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"file"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">file</span><span class="o">)</span> <span class="k">=&gt;</span>
+      <span class="nc">Ok</span><span class="o">(</span><span class="nv">file</span><span class="o">.</span><span class="py">get</span><span class="o">(),</span> <span class="nc">Map</span><span class="o">(</span>
+        <span class="s">"Content-Type"</span>        <span class="o">-&gt;</span> <span class="o">(</span><span class="nv">file</span><span class="o">.</span><span class="py">contentType</span><span class="o">.</span><span class="py">getOrElse</span><span class="o">(</span><span class="s">"application/octet-stream"</span><span class="o">)),</span>
+        <span class="s">"Content-Disposition"</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="s">"attachment; filename=\""</span> <span class="o">+</span> <span class="nv">file</span><span class="o">.</span><span class="py">name</span> <span class="o">+</span> <span class="s">"\""</span><span class="o">)</span>
+      <span class="o">))</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span>
+      <span class="nc">BadRequest</span><span class="o">(</span><span class="nf">displayPage</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+          <span class="nc">Hey</span><span class="o">!</span> <span class="nc">You</span> <span class="n">forgot</span> <span class="n">to</span> <span class="n">select</span> <span class="n">a</span> <span class="n">file</span><span class="o">.</span>
+        <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>See also Skinny Micro&rsquo;s documentation:
+<a href="/documentation/micro.html#file-upload">/documentation/micro.html#file-upload</a></p>
+
+<hr/>
+
+<h4 id="csrf-protection">CSRF Protection</h4>
+
+<hr/>
+
+<p>Notice: CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.</p>
+
+<p>Define <code>protectFromForgery</code> in controller/RootController.scala:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">RootController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="o">{</span>
+  <span class="nf">protectFromForgery</span><span class="o">()</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>Use <code>Skinny.csrfMetaTags</code> in /WEB-INF/layouts/default.jade:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>-@val body: String
+-@val s: skinny.Skinny
+!!! 5
+%html(lang="en")
+  %head
+    %meta(charset="utf-8")
+    != s.csrfMetaTags
+  %body
+    =unescape(body)
+    %script(type="text/javascript" src={uri("/assets/js/skinny.js")})
+</code></pre></div>
+<hr/>
+
+<h4 id="check-execution-time">Check execution time</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nf">warnElapsedTime</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nv">Thread</span><span class="o">.</span><span class="py">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="c1">// will output "[SLOW EXECUTION DETECTED] Elapsed time: 10 millis"</span>
+</code></pre></div>
+<p>In controllers, you can add request info:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nf">warnElapsedTimeWithRequest</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nv">Thread</span><span class="o">.</span><span class="py">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="read-your-own-configuration-values">Read your own configuration values</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight plaintext"><code>development {
+  defaultLabel="foo"
+  timeout {
+    connect=1000
+    read=3000
+  }
+  memcached=["server1:11211", "server2:11211"]
+}
+</code></pre></div>
+<p>Read the server names like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">label</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">SkinnyConfig</span><span class="o">.</span><span class="py">stringConfigValue</span><span class="o">(</span><span class="s">"defaultLabel"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">connectTimeout</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">SkinnyConfig</span><span class="o">.</span><span class="py">intConfigValue</span><span class="o">(</span><span class="s">"timeout.connect"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">memcachedServers</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nv">SkinnyConfig</span><span class="o">.</span><span class="py">stringSeqConfigValue</span><span class="o">(</span><span class="s">"memcached"</span><span class="o">)</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="awaiting-several-futures-within-action-method">Awaiting several Futures within action method</h4>
+
+<hr/>
+
+<p>The following is a simple dashboard application which collects several futures within the <code>index</code> method.</p>
+
+<p>Since Skinny 1.2.0, you can easily access request and requestScope from Futures by using futureWithRequest block.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">package</span> <span class="nn">controller</span>
+
+<span class="k">import</span> <span class="nn">_root_.service._</span>
+<span class="k">import</span> <span class="nn">javax.servlet.http.HttpServletRequest</span>
+<span class="k">import</span> <span class="nn">org.joda.time._</span>
+<span class="k">import</span> <span class="nn">scala.concurrent._</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.duration._</span>
+
+<span class="c1">// using your own ExecutionContext will be preferred in most cases</span>
+<span class="k">import</span> <span class="nn">scala.concurrent.ExecutionContext.Implicits.global</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">DashboardOps</span><span class="o">(</span><span class="n">controller</span><span class="k">:</span> <span class="kt">DashboardController</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">setCurrentUser</span><span class="o">(</span><span class="k">implicit</span> <span class="n">req</span><span class="k">:</span> <span class="kt">HttpServletRequest</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="c1">// implicit request is not ambiguous here</span>
+    <span class="k">val</span> <span class="nv">userId</span> <span class="k">=</span> <span class="nv">controller</span><span class="o">.</span><span class="py">currentUserId</span><span class="o">.</span><span class="py">getOrElse</span><span class="o">(</span><span class="nv">controller</span><span class="o">.</span><span class="py">halt</span><span class="o">(</span><span class="mi">401</span><span class="o">))</span>
+    <span class="nv">controller</span><span class="o">.</span><span class="py">set</span><span class="o">(</span><span class="s">"currentUser"</span> <span class="o">-&gt;</span> <span class="nv">controller</span><span class="o">.</span><span class="py">adminUserService</span><span class="o">.</span><span class="py">getCurrentUser</span><span class="o">(</span><span class="n">userId</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">DashboardController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="o">{</span>
+
+  <span class="k">val</span> <span class="nv">adminUserService</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AdminUserService</span>
+  <span class="k">val</span> <span class="nv">accessService</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AccessLogService</span>
+  <span class="k">val</span> <span class="nv">alertService</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">AlertService</span>
+  <span class="k">val</span> <span class="nv">ops</span> <span class="k">=</span> <span class="nc">DashboardOps</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">index</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">scope</span><span class="k">:</span> <span class="kt">scala.collection.concurrent.Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Any</span><span class="o">]</span> <span class="k">=</span> <span class="nf">requestScope</span><span class="o">()</span>
+
+    <span class="nf">awaitFutures</span><span class="o">(</span><span class="mf">5.</span><span class="n">seconds</span><span class="o">)(</span>
+      <span class="c1">// simply define operation inside of this controller</span>
+      <span class="n">futureWithRequest</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">req</span> <span class="k">=&gt;</span>
+        <span class="c1">//set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))</span>
+        <span class="nf">set</span><span class="o">(</span><span class="s">"hourlyStats"</span><span class="o">,</span> <span class="nv">accessService</span><span class="o">.</span><span class="py">getHourlyStatsForGraph</span><span class="o">(</span><span class="k">new</span> <span class="nc">LocalDate</span><span class="o">))(</span><span class="n">req</span><span class="o">)</span>
+
+<span class="c1">// [error] example/src/main/scala/controller/DashboardController.scala:43: ambiguous implicit values:</span>
+<span class="c1">// [error]  both value req of type javax.servlet.http.HttpServletRequest</span>
+<span class="c1">// [error]  and method request in class DashboardController of type =&gt; javax.servlet.http.HttpServletRequest</span>
+<span class="c1">// [error]  match expected type javax.servlet.http.HttpServletRequest</span>
+<span class="c1">// [error]         set("hourlyStats", accessService.getHourlyStatsForGraph(new LocalDate))</span>
+<span class="c1">// [error]            ^</span>
+<span class="c1">// [error] one error found</span>
+      <span class="o">},</span>
+
+      <span class="c1">// separate operation to outside of this controller</span>
+      <span class="nf">futureWithRequest</span><span class="o">(</span><span class="n">req</span> <span class="k">=&gt;</span> <span class="nv">ops</span><span class="o">.</span><span class="py">setCurrentUser</span><span class="o">(</span><span class="n">req</span><span class="o">)),</span>
+
+      <span class="c1">// just use Future directly</span>
+      <span class="nc">Future</span> <span class="o">{</span>
+        <span class="c1">// When using Future directly, you must be aware of Scalatra's DynamicScope's thread local request.</span>
+        <span class="c1">// In this case, you cannot use request here. requestScope, session and so on </span>
+        <span class="c1">// should be captured outside of this Future block.</span>
+        <span class="nv">scope</span><span class="o">.</span><span class="py">update</span><span class="o">(</span><span class="s">"alerts"</span><span class="o">,</span> <span class="nv">alertService</span><span class="o">.</span><span class="py">findAll</span><span class="o">())</span>
+      <span class="o">}</span>
+    <span class="o">)</span>
+    <span class="nf">render</span><span class="o">(</span><span class="s">"/dashboard/index"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">private</span><span class="o">[</span><span class="kt">controller</span><span class="o">]</span> <span class="k">def</span> <span class="nf">currentUserId</span><span class="o">(</span><span class="k">implicit</span> <span class="n">req</span><span class="k">:</span> <span class="kt">HttpServletRequest</span><span class="o">)</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Long</span><span class="o">]</span> <span class="k">=</span> <span class="nf">session</span><span class="o">(</span><span class="n">req</span><span class="o">).</span><span class="py">getAs</span><span class="o">[</span><span class="kt">Long</span><span class="o">](</span><span class="s">"userId"</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

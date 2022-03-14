@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Worker Jobs - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h2 id="worker-jobs">Worker Jobs</h2>
+
+<hr/>
+
+<h3 id="how-to-use-skinnyworkerservice">How to use SkinnyWorkerService</h3>
+
+<hr/>
+
+<p>Skinny&rsquo;s WorkerService is a simple wrapper of Java built-in <code>ExecutorService</code> and prepared in Skinny apps by default. </p>
+
+<p>You can access it as <code>skinnyWorkerService</code> in <code>ScalatraBootstrap.scala</code> and just call scheduling methods.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny._</span>
+<span class="k">import</span> <span class="nn">skinny.worker._</span>
+<span class="k">import</span> <span class="nn">skinny.controller._</span>
+<span class="k">import</span> <span class="nn">_root_.controller._</span>
+
+<span class="k">class</span> <span class="nc">ScalatraBootstrap</span> <span class="k">extends</span> <span class="nc">SkinnyLifeCycle</span> <span class="o">{</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">initSkinnyApp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span> <span class="o">{</span> 
+
+    <span class="k">val</span> <span class="nv">worker</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">SkinnyWorker</span> <span class="o">{</span>
+      <span class="k">def</span> <span class="nf">execute</span> <span class="k">=</span> <span class="o">{</span>
+        <span class="nf">println</span><span class="o">(</span><span class="s">"Hello World!"</span><span class="o">)</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="c1">// will be invoked every 300 milliseconds</span>
+    <span class="nv">skinnyWorkerService</span><span class="o">.</span><span class="py">everyFixedMilliseconds</span><span class="o">(</span><span class="n">worker</span><span class="o">,</span> <span class="mi">300</span><span class="o">)</span>
+    <span class="c1">// will be invoked every 10 seconds</span>
+    <span class="nv">skinnyWorkerService</span><span class="o">.</span><span class="py">everyFixedSeconds</span><span class="o">(</span><span class="n">worker</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span>
+    <span class="c1">// will be invoked every 4 minutes</span>
+    <span class="nv">skinnyWorkerService</span><span class="o">.</span><span class="py">everyFixedMinutes</span><span class="o">(</span><span class="n">worker</span><span class="o">,</span> <span class="mi">4</span><span class="o">)</span>
+    <span class="c1">// will be invoked at 01:30, 02:30, ....</span>
+    <span class="nv">skinnyWorkerService</span><span class="o">.</span><span class="py">hourly</span><span class="o">(</span><span class="n">worker</span><span class="o">,</span> <span class="mi">30</span><span class="o">)</span>
+    <span class="c1">// will be invoked at 09:20 AM everyday</span>
+    <span class="nv">skinnyWorkerService</span><span class="o">.</span><span class="py">daily</span><span class="o">(</span><span class="n">worker</span><span class="o">,</span> <span class="mi">9</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
+
+    <span class="c1">// Routes</span>
+    <span class="o">...</span>
+    <span class="nv">Controllers</span><span class="o">.</span><span class="py">root</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+
+  <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p><code>SkinnyWorker</code>&lsquo;s rule is very simple. <code>SkinnyWorker</code> object is a <code>java.lang.Runnable</code> one.</p>
+
+<p>And developers just implement the abstract <code>def execute(): Unit</code> method.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.worker._</span>
+<span class="k">import</span> <span class="nn">model._</span>
+
+<span class="k">class</span> <span class="nc">SampleWorker</span> <span class="k">extends</span> <span class="nc">SkinnyWorker</span> <span class="o">{</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">execute</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="c1">// If an exception is thrown from this method, </span>
+    <span class="nv">ImportantOperation</span><span class="o">.</span><span class="py">run</span><span class="o">()</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">handle</span><span class="o">(</span><span class="n">t</span><span class="k">:</span> <span class="kt">Throwable</span><span class="o">)</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="c1">// handles exceptions from execute method</span>
+    <span class="nv">ErrorMailer</span><span class="o">.</span><span class="py">send</span><span class="o">(</span><span class="n">t</span><span class="o">)</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

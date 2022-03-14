@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Migration Guide - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>Skinny Micro:</h2>
+    <ul>
+      <li><a href="/documentation/micro.html">Skinny Micro</a></li>
+    </ul>
+    <h2>Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/validator.html">Validator</a></li>
+      <li><a href="/documentation/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/mail.html">Mail</a></li>
+      <li><a href="/documentation/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/i18n.html">i18n</a></li>
+      <li><a href="/documentation/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/testing.html">Testing</a></li>
+      <li><a href="/documentation/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/spray.html">Spray</a></li>
+      <li><a href="/documentation/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/testimonials.html">Testimonials</a></li>
+      <li><a href="/documentation/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>    </ul>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/documentation/1.x/">1.3.x series</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <h2 id="migration-guide">Migration Guide</h2>
+
+<hr/>
+
+<h3 id="2-3-migration-guide-for-2-2-x-users">2.3 Migration Guide for 2.2.x USers</h3>
+
+<hr/>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/2.3.0">https://github.com/skinny-framework/skinny-framework/releases/tag/2.3.0</a></p>
+
+<hr/>
+
+<h4 id="java-8-required">Java 8+ required</h4>
+
+<p>Since 2.3, we dropped Java 7 support. Use Java 8 or higher. If you need to run your skinny app on Java 7, stay in 2.2.x series.</p>
+
+<hr/>
+
+<h4 id="compatible-dependencies">Compatible dependencies</h4>
+
+<p>Key dependencies are upgraded. We&rsquo;re afraid that some of them may not be binary compatible with previous versions.</p>
+
+<ul>
+<li>skinny-micro 1.2</li>
+<li>ScalikeJDBC 2.5</li>
+<li>Scalate 1.8</li>
+<li>json4s 3.5</li>
+<li>Jetty 9.3</li>
+<li>ScalaTest 3.0</li>
+<li>typesafe config 1.3</li>
+</ul>
+
+<hr/>
+
+<h4 id="sbt-0-13-13">sbt 0.13.13</h4>
+
+<p>sbt 0.13.13 brought more deprecation warnings. Refer the settings in the latest blank-app project.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/2.3.0/skinny-blank-app/build.sbt">https://github.com/skinny-framework/skinny-framework/blob/2.3.0/skinny-blank-app/build.sbt</a></p>
+
+<h3 id="2-2-migration-guide-for-2-1-x-users">2.2 Migration Guide for 2.1.x USers</h3>
+
+<hr/>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/2.2.0">https://github.com/skinny-framework/skinny-framework/releases/tag/2.2.0</a></p>
+
+<hr/>
+
+<h4 id="json4s-3-4-compatible">json4s 3.4 compatible</h4>
+
+<p>If you&rsquo;re using Skinny&rsquo;s json4s module, Skinny 2.2 modules are binary compatible with json4s 3.4.</p>
+
+<hr/>
+
+<h4 id="sbt-0-13-12">sbt 0.13.12</h4>
+
+<p>Skinny 2.2.0&rsquo;s blank project use <code>build.sbt</code> instead of <code>project/Build.scala</code> because since 0.13.12, sbt marks the Build trait deprecated and will remove it since version 1.0.</p>
+
+<p><a href="https://github.com/sbt/sbt/pull/2530">https://github.com/sbt/sbt/pull/2530</a></p>
+
+<p>The migration from your existing <code>project/Build.scala</code> to <code>build.sbt</code> is not difficult. But if you&rsquo;re stuck with it, check the default settings in skinny-blank-app.</p>
+
+<h6 id="remove-the-build-object">Remove the build object</h6>
+
+<p>In <code>build.sbt</code>, you don&rsquo;t need a parent object which extends Build trait. Just remove it.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">object</span> <span class="nc">SkinnyAppBuild</span> <span class="k">extends</span> <span class="nc">Build</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre></div>
+<h6 id="migrate-project-definition-dsl">Migrate project definition DSL</h6>
+
+<p>In <code>build.sbt</code>, the DSL to define projects is different from <code>project/Build.scala</code>. Migrate <code>Project(...)</code></p>
+<div class="highlight"><pre class="highlight scala"><code>  <span class="k">lazy</span> <span class="k">val</span> <span class="nv">dev</span> <span class="k">=</span> <span class="nc">Project</span><span class="o">(</span><span class="n">id</span> <span class="k">=</span> <span class="s">"dev"</span><span class="o">,</span> <span class="n">base</span> <span class="k">=</span> <span class="nf">file</span><span class="o">(</span><span class="s">"."</span><span class="o">),</span>
+    <span class="n">settings</span> <span class="k">=</span> <span class="n">devBaseSettings</span> <span class="o">++</span> <span class="nc">Seq</span><span class="o">(</span>
+      <span class="n">name</span> <span class="o">:=</span> <span class="n">appName</span> <span class="o">+</span> <span class="s">"-dev"</span><span class="o">,</span>
+      <span class="n">target</span> <span class="o">:=</span> <span class="nv">baseDirectory</span><span class="o">.</span><span class="py">value</span> <span class="o">/</span> <span class="s">"target"</span> <span class="o">/</span> <span class="s">"dev"</span>
+    <span class="o">)</span>
+  <span class="o">)</span>
+</code></pre></div>
+<p>to <code>(project in file(dir)).settings(...)</code> like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">lazy</span> <span class="k">val</span> <span class="nv">dev</span> <span class="k">=</span> <span class="o">(</span><span class="n">project</span> <span class="n">in</span> <span class="nf">file</span><span class="o">(</span><span class="s">"."</span><span class="o">)).</span><span class="py">settings</span><span class="o">(</span><span class="n">devBaseSettings</span><span class="o">).</span><span class="py">settings</span><span class="o">(</span>
+  <span class="n">name</span> <span class="o">:=</span> <span class="n">appName</span> <span class="o">+</span> <span class="s">"-dev"</span><span class="o">,</span>
+  <span class="n">target</span> <span class="o">:=</span> <span class="nv">baseDirectory</span><span class="o">.</span><span class="py">value</span> <span class="o">/</span> <span class="s">"target"</span> <span class="o">/</span> <span class="s">"dev"</span>
+<span class="o">)</span>
+</code></pre></div>
+<h5 id="limitation">Limitation</h5>
+
+<p>Unfortunately, <code>build.sbt</code> doesn&rsquo;t allow defining multiple sub projects which share the same base directory. Due to the limitation, the precompileDev project is disabled by default since 2.2.0. If you prefer using precompileDev project, modify <code>build.sbt</code> after creating a skinny project.</p>
+
+<hr/>
+
+<h3 id="2-1-migration-guide-for-2-0-x-users">2.1 Migration Guide for 2.0.x Users</h3>
+
+<hr/>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/2.1.0">https://github.com/skinny-framework/skinny-framework/releases/tag/2.1.0</a></p>
+
+<hr/>
+
+<h4 id="scalikejdbc-2-4-compatible">ScalikeJDBC 2.4 Compatible</h4>
+
+<p>Although there is no API changes, Skinny ORM and related modules are compatible with ScalikeJDBC 2.4.0 or higher.</p>
+
+<p>You cannot use ScalikeJDBC 2.3.x or lower version with Skinny modules 2.1.0.</p>
+
+<hr/>
+
+<h3 id="2-0-migration-guide-for-1-3-x-users">2.0 Migration Guide for 1.3.x Users</h3>
+
+<hr/>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/2.0.0">https://github.com/skinny-framework/skinny-framework/releases/tag/2.0.0</a></p>
+
+<hr/>
+
+<h4 id="moving-from-scalatra-to-skinny-micro">Moving from Scalatra to Skinny Micro</h4>
+
+<p>The biggest change is moving from Scalatra to Skinny Micro. We recommend you checking the 2.0.0 blank project first.</p>
+
+<p>If you&rsquo;re in trouble for replacing Scalatra with Skinny Micro, please post questsions on Google Group or stackoverflow.com.</p>
+
+<ul>
+<li><a href="http://skinny-framework.org/documentation/micro.html">http://skinny-framework.org/documentation/micro.html</a></li>
+<li><a href="https://github.com/skinny-framework/skinny-micro">https://github.com/skinny-framework/skinny-micro</a></li>
+</ul>
+
+<p>You&rsquo;ll see deprecation warnings that point you which class to use when upgrading Skinny to 2.0.
+So We believe the migration should be very smooth. But in some cases, you might be in trouble.
+In particular, be careful about the following things:</p>
+
+<ul>
+<li>Replace <code>org.scalatra.servlet.ScalatraListener</code> with <code>skinny.micro.SkinnyListener</code> in src/main/webapp/WEB-INF/web.xml</li>
+<li>Rename src/main/scala/ScalatraBoostrap.scala to src/main/scala/Bootstrap.scala</li>
+<li>Replace all things that depend on <code>org.scalatra</code> package with new ones under <code>skinny.micro</code> (also for tests)</li>
+<li>Fix some compilation errors due to renaming or removing existing traits (not so many)</li>
+</ul>
+
+<hr/>
+
+<h4 id="use-json4s-3-3-x">Use json4s 3.3.x</h4>
+
+<p>Skinny Framework 2.0 is compatible with json4s 3.3.x. Be aware that 3.2.x series will be incompatible.</p>
+
+<hr/>
+
+<h3 id="1-3-migration-guide-for-1-2-x-users">1.3 Migration Guide for 1.2.x Users</h3>
+
+<hr/>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/1.3.0">https://github.com/skinny-framework/skinny-framework/releases/tag/1.3.0</a></p>
+
+<p>Deprecated joda-time methods in WrappedResultSet are removed. If you you&rsquo;re using <code>rs.dateTime(...)</code>, just rename it to <code>rs.jodaDateTime(...)</code>.</p>
+
+<hr/>
+
+<h3 id="1-2-migration-guide-for-1-1-x-users">1.2 Migration Guide for 1.1.x Users</h3>
+
+<hr/>
+
+<p>APIs are basically compatible. If you don&rsquo;t have some extensions that depend on <code>LocaleFeature</code>, <code>RequestScopeFeature</code> and <code>SkinnySessionFilter</code> methods, 
+your app will work fine without changing your code.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/1.2.0">https://github.com/skinny-framework/skinny-framework/releases/tag/1.2.0</a></p>
+
+<p>Though we believe migration is not difficult, please tell us here if you find something wrong.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/issues">https://github.com/skinny-framework/skinny-framework/issues</a></p>
+
+<hr/>
+
+<h3 id="1-1-migration-guide-for-1-0-x-users">1.1 Migration Guide for 1.0.x Users</h3>
+
+<hr/>
+
+<p>Skinny 1.1 APIs are basically compatible with Skinny 1.0 though the release includes basic dependencies&rsquo; major upgrades. 
+If your app depends on the dependencies directly (not via Skinny APIs), you may need to update your code.</p>
+
+<ul>
+<li>All the components run on Scala 2.11 or Scala 2.10 (Skinny 1.0: Scala 2.10)</li>
+<li>Web framework runs on Java 7 or higher (Skinny 1.0: Java 6 or higher) </li>
+<li>Web framework is compatible with Servlet API 3.1 (Skinny 1.0: Servlet 3.0)</li>
+<li>Web framework depends on Scalatra 2.3 (Skinny 1.0: Scalatra 2.2)</li>
+<li>ORM depends on ScalikeJDBC 2.0 (Skinny 1.0: ScalikeJDBC 1.8)</li>
+<li>Migration command depends on Flyway 3.0 (Skinny 1.0: Flyway 2.3)</li>
+<li>Test support depends on ScalaTest 2.2 (Skinny 1.0: ScalaTest 1.9)</li>
+</ul>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/1.1.0">https://github.com/skinny-framework/skinny-framework/releases/tag/1.1.0</a></p>
+
+<p>Though we believe migration is not difficult, please tell us here if you find something wrong.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/issues">https://github.com/skinny-framework/skinny-framework/issues</a></p>
+
+<hr/>
+
+<h4 id="org-scalatest-matchers-shouldmatchers-is-deprecated">&ldquo;org.scalatest.matchers.ShouldMatchers&rdquo; is deprecated</h4>
+
+<p>Use &ldquo;org.scalatest.Matchers&rdquo; instead. Sorry to say this.</p>
+
+<hr/>
+
+<h4 id="importing-scalikejdbc-sqlinterpolation-_-is-deprecated">Importing &ldquo;scalikejdbc.SQLInterpolation._&rdquo; is deprecated</h4>
+
+<p>Just import only &ldquo;scalikejdbc._&rdquo;.</p>
+
+<p>See also: <a href="https://github.com/skinny-framework/skinny-framework/commit/1e44f60e5c5d0f53ab0102697a00413ad7a696d0">https://github.com/skinny-framework/skinny-framework/commit/1e44f60e5c5d0f53ab0102697a00413ad7a696d0</a></p>
+
+<hr/>
+
+<h4 id="renamed-joda-time-apis-due-to-jsr-310">Renamed joda-time APIs due to JSR-310</h4>
+
+<p><code>WrappedResultSet#dateTime</code>, <code>#localDate</code>, <code>#localTime</code> and <code>#localDateTime</code> are deprecated and <code>#jodaDateTime</code> and #jodaXXX are added.</p>
+
+<p>See also the issue: <a href="https://github.com/scalikejdbc/scalikejdbc/issues/222">https://github.com/scalikejdbc/scalikejdbc/issues/222</a></p>
+
+<p>Other changes in ScalikeJDBC 2.0:</p>
+
+<p><a href="https://github.com/scalikejdbc/scalikejdbc/blob/master/notes/2.0.0.markdown">https://github.com/scalikejdbc/scalikejdbc/blob/master/notes/2.0.0.markdown</a></p>
+
+<hr/>
+
+<h4 id="skinny-packages-scalate-precompilation-error">skinny package&rsquo;s Scalate precompilation error</h4>
+
+<p>Since Scalate 1.7.0, Skinny&rsquo;s blank app project&rsquo;s settings fail to execute <code>package</code> command.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>default_ssp.scala:7: $_scalate_$default_ssp is already defined as object $_scalate_$default_ssp
+</code></pre></div>
+<p>Remove scalateSettings if your build settings loads it twice.</p>
+
+<p>See also: <a href="https://github.com/skinny-framework/skinny-framework/commit/4ad2b874116ad3b60b76b104b2bf528106aeda87">https://github.com/skinny-framework/skinny-framework/commit/4ad2b874116ad3b60b76b104b2bf528106aeda87</a></p>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

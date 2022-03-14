@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Migration Guide - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h2 id="migration-guide">Migration Guide</h2>
+
+<hr/>
+
+<h3 id="1-3-migration-guide-for-1-2-x-users">1.3 Migration Guide for 1.2.x Users</h3>
+
+<hr/>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/1.3.0">https://github.com/skinny-framework/skinny-framework/releases/tag/1.3.0</a></p>
+
+<p>Deprecated joda-time methods in WrappedResultSet are removed. If you you&rsquo;re using <code>rs.dateTime(...)</code>, just rename it to <code>rs.jodaDateTime(...)</code>.</p>
+
+<hr/>
+
+<h3 id="1-2-migration-guide-for-1-1-x-users">1.2 Migration Guide for 1.1.x Users</h3>
+
+<hr/>
+
+<p>APIs are basically compatible. If you don&rsquo;t have some extensions that depend on <code>LocaleFeature</code>, <code>RequestScopeFeature</code> and <code>SkinnySessionFilter</code> methods, 
+your app will work fine without changing your code.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/1.2.0">https://github.com/skinny-framework/skinny-framework/releases/tag/1.2.0</a></p>
+
+<p>Though we believe migration is not difficult, please tell us here if you find something wrong.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/issues">https://github.com/skinny-framework/skinny-framework/issues</a></p>
+
+<hr/>
+
+<h3 id="1-1-migration-guide-for-1-0-x-users">1.1 Migration Guide for 1.0.x Users</h3>
+
+<hr/>
+
+<p>Skinny 1.1 APIs are basically compatible with Skinny 1.0 though the release includes basic dependencies&rsquo; major upgrades. 
+If your app depends on the dependencies directly (not via Skinny APIs), you may need to update your code.</p>
+
+<ul>
+<li>All the components run on Scala 2.11 or Scala 2.10 (Skinny 1.0: Scala 2.10)</li>
+<li>Web framework runs on Java 7 or higher (Skinny 1.0: Java 6 or higher) </li>
+<li>Web framework is compatible with Servlet API 3.1 (Skinny 1.0: Servlet 3.0)</li>
+<li>Web framework depends on Scalatra 2.3 (Skinny 1.0: Scalatra 2.2)</li>
+<li>ORM depends on ScalikeJDBC 2.0 (Skinny 1.0: ScalikeJDBC 1.8)</li>
+<li>Migration command depends on Flyway 3.0 (Skinny 1.0: Flyway 2.3)</li>
+<li>Test support depends on ScalaTest 2.2 (Skinny 1.0: ScalaTest 1.9)</li>
+</ul>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/tag/1.1.0">https://github.com/skinny-framework/skinny-framework/releases/tag/1.1.0</a></p>
+
+<p>Though we believe migration is not difficult, please tell us here if you find something wrong.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/issues">https://github.com/skinny-framework/skinny-framework/issues</a></p>
+
+<hr/>
+
+<h4 id="update-skinny-project-structure-by-using-yeoman">Update skinny project structure by using Yeoman</h4>
+
+<p>Yo can use Yeoman to merge updates in skinny-blank-app project. Yeoman&rsquo;s merging process is similar to Rails generator. Very easy to use!</p>
+<div class="highlight"><pre class="highlight plaintext"><code>npm install -g yo
+npm install -g generator-skinny
+yo skinny
+</code></pre></div>
+<hr/>
+
+<h4 id="org-scalatest-matchers-shouldmatchers-is-deprecated">&ldquo;org.scalatest.matchers.ShouldMatchers&rdquo; is deprecated</h4>
+
+<p>Use &ldquo;org.scalatest.Matchers&rdquo; instead. Sorry to say this.</p>
+
+<hr/>
+
+<h4 id="importing-scalikejdbc-sqlinterpolation-_-is-deprecated">Importing &ldquo;scalikejdbc.SQLInterpolation._&rdquo; is deprecated</h4>
+
+<p>Just import only &ldquo;scalikejdbc._&rdquo;.</p>
+
+<p>See also: <a href="https://github.com/skinny-framework/skinny-framework/commit/1e44f60e5c5d0f53ab0102697a00413ad7a696d0">https://github.com/skinny-framework/skinny-framework/commit/1e44f60e5c5d0f53ab0102697a00413ad7a696d0</a></p>
+
+<hr/>
+
+<h4 id="renamed-joda-time-apis-due-to-jsr-310">Renamed joda-time APIs due to JSR-310</h4>
+
+<p><code>WrappedResultSet#dateTime</code>, <code>#localDate</code>, <code>#localTime</code> and <code>#localDateTime</code> are deprecated and <code>#jodaDateTime</code> and #jodaXXX are added.</p>
+
+<p>See also the issue: <a href="https://github.com/scalikejdbc/scalikejdbc/issues/222">https://github.com/scalikejdbc/scalikejdbc/issues/222</a></p>
+
+<p>Other changes in ScalikeJDBC 2.0:</p>
+
+<p><a href="https://github.com/scalikejdbc/scalikejdbc/blob/master/notes/2.0.0.markdown">https://github.com/scalikejdbc/scalikejdbc/blob/master/notes/2.0.0.markdown</a></p>
+
+<hr/>
+
+<h4 id="skinny-packages-scalate-precompilation-error">skinny package&rsquo;s Scalate precompilation error</h4>
+
+<p>Since Scalate 1.7.0, Skinny&rsquo;s blank app project&rsquo;s settings fail to execute <code>package</code> command.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>default_ssp.scala:7: $_scalate_$default_ssp is already defined as object $_scalate_$default_ssp
+</code></pre></div>
+<p>Remove scalateSettings if your build settings loads it twice.</p>
+
+<p>See also: <a href="https://github.com/skinny-framework/skinny-framework/commit/4ad2b874116ad3b60b76b104b2bf528106aeda87">https://github.com/skinny-framework/skinny-framework/commit/4ad2b874116ad3b60b76b104b2bf528106aeda87</a></p>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

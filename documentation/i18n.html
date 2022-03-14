@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>i18n - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>Skinny Micro:</h2>
+    <ul>
+      <li><a href="/documentation/micro.html">Skinny Micro</a></li>
+    </ul>
+    <h2>Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/validator.html">Validator</a></li>
+      <li><a href="/documentation/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/mail.html">Mail</a></li>
+      <li><a href="/documentation/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/i18n.html">i18n</a></li>
+      <li><a href="/documentation/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/testing.html">Testing</a></li>
+      <li><a href="/documentation/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/spray.html">Spray</a></li>
+      <li><a href="/documentation/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/testimonials.html">Testimonials</a></li>
+      <li><a href="/documentation/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>    </ul>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/documentation/1.x/">1.3.x series</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <h2 id="i18n">i18n</h2>
+
+<hr/>
+
+<h3 id="original-i18n-support">Original i18n Support</h3>
+
+<hr/>
+
+<p>Although Skinny Micro has i18n feature but this is our original implementation, Skinny Framework also has i18n feature.</p>
+
+<p>The reason to do so is that we need to seamlessly support validator&rsquo;s error messages and other things.</p>
+
+<hr/>
+
+<h3 id="default-locale">Default Locale</h3>
+
+<hr/>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">package</span> <span class="nn">controller</span>
+<span class="k">import</span> <span class="nn">skinny._</span>
+<span class="k">import</span> <span class="nn">skinny.filter._</span>
+<span class="k">trait</span> <span class="nc">ApplicationController</span> <span class="k">extends</span> <span class="nc">SkinnyController</span> <span class="k">with</span> <span class="nc">ErrorPageFilter</span> <span class="o">{</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">defaultLocale</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="k">new</span> <span class="nv">java</span><span class="o">.</span><span class="py">util</span><span class="o">.</span><span class="py">Locale</span><span class="o">(</span><span class="s">"ja"</span><span class="o">))</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="current-locale-value-in-sessions">Current Locale Value in Sessions</h3>
+
+<hr/>
+
+<p>You can store users&rsquo; locale in Servlet sessions or Skinny sessions.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">object</span> <span class="nc">SettingsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">updateLocale</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">locale</span> <span class="k">=</span> <span class="nv">params</span><span class="o">.</span><span class="py">getAs</span><span class="o">[</span><span class="kt">String</span><span class="o">](</span><span class="s">"locale"</span><span class="o">).</span><span class="py">orNull</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span>
+    <span class="nf">setCurrentLocale</span><span class="o">(</span><span class="n">locale</span><span class="o">)</span> <span class="c1">// can get via currentLocale: Option[Locale]</span>
+    <span class="nf">redirect</span><span class="o">(</span><span class="s">"somewhere"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>See the example project here.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/tree/master/example">https://github.com/skinny-framework/skinny-framework/tree/master/example</a></p>
+
+<hr/>
+
+<h3 id="messages-_-locale-conf">messages(_{locale}).conf</h3>
+
+<hr/>
+
+<p>By default, defaultLocale is None. In this case, <code>src/main/resources/messages.conf</code> will be used.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>error {
+  required="{0} is required"
+  length="{0} length must be {1}"
+  .....
+}
+
+year="Year"
+month="Month"
+day="Day"
+hour="Hour"
+minute="Minute"
+second="Second"
+
+backToList="Back to list"
+submit="Submit"
+cancel="Cancel"
+detail="Detail"
+new="New"
+edit="Edit"
+delete="Delete"
+</code></pre></div>
+<p>When locale is set, <code>src/main/resources/messages_{locale}.conf</code> instead of <code>messages.conf</code>.</p>
+
+<p>The following example is <code>messages_ja.conf</code> for Japanese.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>error {
+  required="{0} を入力してください"
+  length="{0} は {1} 文字で入力してください"
+  .....
+}
+
+year="年"
+month="月"
+day="日"
+hour="時"
+minute="分"
+second="秒"
+
+backToList="一覧へ戻る"
+submit="送信"
+cancel="キャンセル"
+detail="詳細"
+new="追加"
+edit="変更"
+delete="削除"
+</code></pre></div>
+<hr/>
+
+<h3 id="i18n-in-view-templates">i18n in View Templates</h3>
+
+<hr/>
+
+<p>Simply use <code>skinny.I18n</code> instance. Current <code>skinny.I18n</code> instance is always available as <code>i18n</code> in view templates.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>&lt;%@val i18n: skinny.I18n %&gt;
+${i18n.get("submit")}
+${i18n.get("project.name")}
+</code></pre></div>
+<p>The above example expects the following <code>src/main/resources/messages_{locale}.conf</code>.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>submit="Submit"
+project {
+  name="Project Name"
+}
+</code></pre></div>
+<hr/>
+
+<h3 id="integration-with-skinny-validator">Integration with Skinny Validator</h3>
+
+<hr/>
+
+<p>Integration with Skinny Validator is much simple.</p>
+
+<p>The error message which is defined with <code>error</code> prefix and validator&rsquo;s <code>name</code> will be used.</p>
+
+<p>For instance, this validator&rsquo;s name is <code>notNull</code>,</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.validator._</span>
+<span class="k">object</span> <span class="nc">notNull</span> <span class="k">extends</span> <span class="nc">ValidationRule</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">name</span> <span class="k">=</span> <span class="s">"notNull"</span>
+  <span class="k">def</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">Any</span><span class="o">)</span> <span class="k">=</span> <span class="n">v</span> <span class="o">!=</span> <span class="kc">null</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>So validation error message should be defined in <code>messages.conf</code> like this:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>error {
+  notNull="{0} must not be null"
+}
+</code></pre></div>
+<p>That&rsquo;s all!</p>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

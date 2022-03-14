@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Validator - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>Skinny Micro:</h2>
+    <ul>
+      <li><a href="/documentation/micro.html">Skinny Micro</a></li>
+    </ul>
+    <h2>Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/validator.html">Validator</a></li>
+      <li><a href="/documentation/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/mail.html">Mail</a></li>
+      <li><a href="/documentation/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/i18n.html">i18n</a></li>
+      <li><a href="/documentation/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/testing.html">Testing</a></li>
+      <li><a href="/documentation/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/spray.html">Spray</a></li>
+      <li><a href="/documentation/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/testimonials.html">Testimonials</a></li>
+      <li><a href="/documentation/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>    </ul>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/documentation/1.x/">1.3.x series</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <h2 id="validator">Validator</h2>
+
+<hr/>
+
+<h3 id="readable-and-customizable-dsl">Readable and Customizable DSL</h3>
+
+<hr/>
+
+<p>skinny-validator is portable, so you can use skinny-validator with Play2, Scalatra and any other web app frameworks. Furthermore, you can use it in not only web apps but also any other applications (batch operation, cli and so on).</p>
+
+<p>You can see simple usage of skinny-validator here:</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/validator/src/test/scala/UsageSpec.scala">validator/src/test/scala/UsageSpec.scala</a></p>
+
+<hr/>
+
+<h3 id="creating-new-validation-rule">Creating New Validation Rule</h3>
+
+<hr/>
+
+<p>The way to create new validation rule is pretty simple:</p>
+
+<ul>
+<li>extend <code>skinny.validator.ValidationRule</code> trait</li>
+<li>implement <code>def name: String</code> and <code>def isValid(Any): Boolean</code></li>
+</ul>
+
+<p>That&rsquo;s all.</p>
+
+<p>The following is an example from the built-in validations.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.validator._</span>
+
+<span class="k">object</span> <span class="nc">required</span> <span class="k">extends</span> <span class="nf">required</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+
+<span class="k">case</span> <span class="k">class</span> <span class="nc">required</span><span class="o">(</span><span class="n">trim</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ValidationRule</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">name</span> <span class="k">=</span> <span class="s">"required"</span>
+  <span class="k">def</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">Any</span><span class="o">)</span> <span class="k">=</span> <span class="o">!</span><span class="nf">isEmpty</span><span class="o">(</span><span class="n">v</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">{</span>
+    <span class="nf">if</span> <span class="o">(</span><span class="n">trim</span><span class="o">)</span> <span class="nv">v</span><span class="o">.</span><span class="py">toString</span><span class="o">.</span><span class="py">trim</span><span class="o">.</span><span class="py">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="k">else</span> <span class="nv">v</span><span class="o">.</span><span class="py">toString</span><span class="o">.</span><span class="py">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Then you can use it like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">validator</span> <span class="k">=</span> <span class="nc">Validator</span><span class="o">(</span>
+  <span class="nf">param</span><span class="o">(</span><span class="s">"name"</span> <span class="o">-&gt;</span> <span class="kc">null</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span>
+<span class="o">)</span>
+<span class="nv">validator</span><span class="o">.</span><span class="py">hasErrors</span> <span class="c1">// true</span>
+
+<span class="k">val</span> <span class="nv">errorsForName</span><span class="k">:</span> <span class="kt">Seq</span><span class="o">[</span><span class="kt">Error</span><span class="o">]</span> <span class="k">=</span> <span class="nv">validator</span><span class="o">.</span><span class="py">errors</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">error</span><span class="k">:</span> <span class="kt">Error</span> <span class="o">=</span> <span class="nv">errorsForName</span><span class="o">.</span><span class="py">head</span>
+<span class="nv">error</span><span class="o">.</span><span class="py">name</span> <span class="c1">// -&gt; "required"</span>
+<span class="nv">error</span><span class="o">.</span><span class="py">messageParams</span> <span class="c1">// -&gt; List("name")</span>
+</code></pre></div>
+<p>A validation rule which accepts value when using such as <code>minLength(6)</code> is like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">minLength</span><span class="o">(</span><span class="n">min</span><span class="k">:</span> <span class="kt">Int</span><span class="o">)</span> <span class="k">extends</span> <span class="nc">ValidationRule</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">name</span> <span class="k">=</span> <span class="s">"minLength"</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">messageParams</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nv">min</span><span class="o">.</span><span class="py">toString</span><span class="o">)</span>
+
+  <span class="k">def</span> <span class="nf">isValid</span><span class="o">(</span><span class="n">v</span><span class="k">:</span> <span class="kt">Any</span><span class="o">)</span> <span class="k">=</span> <span class="nf">isEmpty</span><span class="o">(</span><span class="n">v</span><span class="o">)</span> <span class="o">||</span> <span class="o">{</span>
+    <span class="nf">toHasSize</span><span class="o">(</span><span class="n">v</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">size</span> <span class="o">&gt;=</span> <span class="n">min</span><span class="o">).</span><span class="py">getOrElse</span><span class="o">(</span><span class="nv">v</span><span class="o">.</span><span class="py">toString</span><span class="o">.</span><span class="py">length</span> <span class="o">&gt;=</span> <span class="n">min</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">val</span> <span class="nv">validator</span> <span class="k">=</span> <span class="nc">Validator</span><span class="o">(</span>
+  <span class="nf">param</span><span class="o">(</span><span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"xxxx"</span><span class="o">)</span> <span class="n">is</span> <span class="nf">checkAll</span><span class="o">(</span><span class="n">required</span><span class="o">,</span> <span class="nf">minLength</span><span class="o">(</span><span class="mi">6</span><span class="o">)),</span>
+  <span class="nf">param</span><span class="o">(</span><span class="s">"password"</span> <span class="o">-&gt;</span> <span class="s">"xxxx"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">minLength</span><span class="o">(</span><span class="mi">6</span><span class="o">)</span>
+<span class="o">)</span>
+</code></pre></div>
+<p>Basic usage involves combining validation rules with <code>&amp;</code>. If a failure is found, by default the rest of the validation rules will be skipped. <code>checkAll</code> executes all the validations even if some of them already failed.</p>
+
+<hr/>
+
+<h3 id="built-in-validation-rules">Built-in Validation Rules</h3>
+
+<hr/>
+
+<p>The built-in validators are good enough to cover most common cases.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala">validator/src/main/scala/skinny/validator/BuiltinValidationRules.scala</a></p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/tree/master/validator/src/test/scala/skinny/validator">validator/src/test/scala/skinny/validator</a></p>
+
+<hr/>
+
+<h3 id="validator-mapvalidator">Validator &amp; MapValidator</h3>
+
+<hr/>
+
+<p>skinny-validator provides <code>Validator</code> and <code>MapValidator</code>. You already see <code>Validator</code> in above code. This one accepts parameters when defining validation rules.</p>
+
+<p><code>MapValidator</code> is another one which accepts <code>Map[String, Any]</code> object as parameters. Usually <code>MapValidator</code> is more useful in web applications.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">params</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"Alice"</span><span class="o">,</span> <span class="s">"age"</span> <span class="o">-&gt;</span> <span class="mi">20</span><span class="o">)</span>
+
+<span class="k">val</span> <span class="nv">validator</span> <span class="k">=</span> <span class="nc">MapValidator</span><span class="o">(</span><span class="n">params</span><span class="o">)(</span>
+  <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span><span class="o">,</span>
+  <span class="nf">paramKey</span><span class="o">(</span><span class="s">"age"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="n">numeric</span>
+<span class="o">)</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="error-messages">Error Messages</h3>
+
+<hr/>
+
+<p>skinny-validator&rsquo;s <code>Error</code> looks like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">error</span> <span class="k">=</span> <span class="nv">validator</span><span class="o">.</span><span class="py">errors</span><span class="o">.</span><span class="py">head</span>
+<span class="nv">error</span><span class="o">.</span><span class="py">name</span> <span class="c1">// -&gt; required</span>
+<span class="nv">error</span><span class="o">.</span><span class="py">messageParams</span> <span class="c1">// -&gt; List("name")</span>
+</code></pre></div>
+<p><code>skinny.validator.Messages</code> loads error messages from *.conf or *.properties.</p>
+
+<p>This is <code>src/main/resources/messages.conf</code> example:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>error {
+  required="{0} is required"
+  minLength="{0} length must be greater than or equal to {1}"
+}
+</code></pre></div>
+<p>Now <code>Messages</code> can load error messages for validation errors named &ldquo;required&rdquo; or &ldquo;minLength&rdquo;. The name comes from <code>ValidationRule#name</code>.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">messages</span> <span class="k">=</span> <span class="nv">Messages</span><span class="o">.</span><span class="py">loadFromConfig</span><span class="o">()</span>
+<span class="c1">// val messages = Messages.loadFromConfig("messages2") // loads messages2.conf</span>
+<span class="c1">// val messages = Messages.loadFromProperties() // loads messages.properties</span>
+<span class="c1">// val messages_ja = Messages.loadFromConfig(locale = Option(locale)) // loads messages_ja.conf</span>
+
+<span class="nv">messages</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"required"</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"name"</span><span class="o">))</span> 
+<span class="c1">// -&gt; Some("name is required")</span>
+
+<span class="nv">messages</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"minLength"</span><span class="o">,</span> <span class="nc">Seq</span><span class="o">(</span><span class="s">"password"</span><span class="o">,</span> <span class="mi">6</span><span class="o">))</span> 
+<span class="c1">// -&gt; Some("password length must be greater than or equal to 6")</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="how-it-works-in-skinny-apps">How It Works in Skinny apps</h3>
+
+<hr/>
+
+<p>You can easily understand how skinny-validator works in Skinny apps.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala">framework/src/main/scala/skinny/controller/feature/ValidationFeature.scala</a></p>
+
+<p>The following is an example with Skinny Framework:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// withDate joins birthdayYear, birthdayMonth and birthdayDay into single birthday</span>
+<span class="k">def</span> <span class="nf">createParams</span> <span class="k">=</span> <span class="nc">Params</span><span class="o">(</span><span class="n">params</span><span class="o">).</span><span class="py">withDate</span><span class="o">(</span><span class="s">"birthday"</span><span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">createForm</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">createParams</span><span class="o">,</span>
+  <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="nf">checkAll</span><span class="o">(</span><span class="nf">minLength</span><span class="o">(</span><span class="mi">5</span><span class="o">),</span> <span class="nf">maxLength</span><span class="o">(</span><span class="mi">20</span><span class="o">)),</span>
+  <span class="nf">paramKey</span><span class="o">(</span><span class="s">"birthday"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="n">dateFormat</span><span class="o">,</span>
+  <span class="nf">paramKey</span><span class="o">(</span><span class="s">"point"</span><span class="o">)</span> <span class="n">is</span> <span class="n">numeric</span>
+<span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">createStrongParameters</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">String</span><span class="o">,</span>
+  <span class="s">"birthday"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">LocalDate</span><span class="o">,</span>
+  <span class="s">"point"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">Int</span>
+<span class="o">)</span>
+
+<span class="k">def</span> <span class="nf">create</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nf">if</span> <span class="o">(</span><span class="nv">createForm</span><span class="o">.</span><span class="py">validate</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">id</span> <span class="k">=</span> <span class="nv">Member</span><span class="o">.</span><span class="py">createNewModel</span><span class="o">(</span><span class="nv">createParams</span><span class="o">.</span><span class="py">permit</span><span class="o">(</span><span class="n">createStrongParameters</span><span class="o">))</span>
+    <span class="nf">redirect</span><span class="o">(</span><span class="n">s</span><span class="s">"/members/${id}"</span><span class="o">)</span>
+  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+    <span class="c1">// error messages is set as "errorMessages" and "keyAndErrorMessages"</span>
+    <span class="nf">render</span><span class="o">(</span><span class="s">"/members/new"</span><span class="o">)</span>
+  <span class="o">}</span>
+  <span class="c1">// or using #fold</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>See also:</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/common/src/main/scala/skinny/ParamType.scala">common/src/main/scala/skinny/ParamType.scala</a></p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/blob/master/common/src/main/scala/skinny/StrongParameters.scala">common/src/main/scala/skinny/StrongParameters.scala</a></p>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

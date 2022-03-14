@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Skinny Micro</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>Skinny Micro:</h2>
+    <ul>
+      <li><a href="/documentation/micro.html">Skinny Micro</a></li>
+    </ul>
+    <h2>Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/validator.html">Validator</a></li>
+      <li><a href="/documentation/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/mail.html">Mail</a></li>
+      <li><a href="/documentation/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/i18n.html">i18n</a></li>
+      <li><a href="/documentation/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/testing.html">Testing</a></li>
+      <li><a href="/documentation/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/spray.html">Spray</a></li>
+      <li><a href="/documentation/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/testimonials.html">Testimonials</a></li>
+      <li><a href="/documentation/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>    </ul>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/documentation/1.x/">1.3.x series</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <h2 id="skinny-micro">Skinny Micro</h2>
+
+<hr/>
+
+<p>Skinny Micro is at once a micro Web framework to build Servlet applications in Scala and the core part of Skinny Framework 2.</p>
+
+<p>Skinny Micro started as a fork of <a href="http://scalatra.org/">Scalatra</a>. After that, many improvements have been made to be safer and more efficient when working with Scala Future values upon it.</p>
+
+<p>Basically, Skinny Micro&rsquo;s DSLs are source compatible with Scalatra 2.3&rsquo;s ones. But names of base traits and packages are mostly renamed and the structure of internal modules are re-designed.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-micro">https://github.com/skinny-framework/skinny-micro</a></p>
+
+<hr/>
+
+<h3 id="getting-started">Getting Started</h3>
+
+<hr/>
+
+<p>Taking a look at <a href="https://github.com/skinny-framework/skinny-micro-heroku-example">skinny-micro-heroku-example</a> first would be helpful to understand what you need to do. <a href="https://github.com/skinny-framework/skinny-micro/tree/master/samples">samples</a> and <a href="https://github.com/skinny-framework/skinny-micro/tree/master/scalas-samples">scalas-samples</a> in this repository are also worth looking at.</p>
+
+<p>When you start new sbt project, add the following dependencies:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">lazy</span> <span class="k">val</span> <span class="nv">skinnyMicroVersion</span> <span class="k">=</span> <span class="s">"2.3.0"</span>
+
+<span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="c1">// micro Web framework</span>
+  <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-micro"</span>             <span class="o">%</span> <span class="n">skinnyMicroVersion</span><span class="o">,</span>
+  <span class="c1">// jackson integration</span>
+  <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-micro-jackson"</span>     <span class="o">%</span> <span class="n">skinnyMicroVersion</span><span class="o">,</span>
+  <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-micro-jackson-xml"</span> <span class="o">%</span> <span class="n">skinnyMicroVersion</span><span class="o">,</span>
+  <span class="c1">// json4s integration</span>
+  <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-micro-json4s"</span>      <span class="o">%</span> <span class="n">skinnyMicroVersion</span><span class="o">,</span>
+  <span class="c1">// Scalate integration</span>
+  <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-micro-scalate"</span>     <span class="o">%</span> <span class="n">skinnyMicroVersion</span><span class="o">,</span>
+  <span class="c1">// Standalone Web server (Jetty 9.3 / Servlet 3.1)</span>
+  <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-micro-server"</span>      <span class="o">%</span> <span class="n">skinnyMicroVersion</span>
+<span class="o">)</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="scala-api-docs">Scala API docs</h3>
+
+<hr/>
+
+<ul>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.12/2.3.0/skinny-micro-common_2.12-2.3.0-javadoc.jar/!/index.html">Scala API docs for &ldquo;org.skinny-framework&rdquo; %% &ldquo;skinny-micro-common&rdquo;</a></li>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.package">Scala API docs for &ldquo;org.skinny-framework&rdquo; %% &ldquo;skinny-micro&rdquo;</a></li>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-jackson_2.12/2.3.0/skinny-micro-jackson_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.package">Scala API docs for &ldquo;org.skinny-framework&rdquo; %% &ldquo;skinny-micro-jackson&rdquo;</a></li>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-json4s_2.12/2.3.0/skinny-micro-json4s_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.package">Scala API docs for &ldquo;org.skinny-framework&rdquo; %% &ldquo;skinny-micro-json4s&rdquo;</a></li>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-scalate_2.12/2.3.0/skinny-micro-scalate_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.package">Scala API docs for &ldquo;org.skinny-framework&rdquo; %% &ldquo;skinny-micro-scalate&rdquo;</a></li>
+<li><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-server_2.12/2.3.0/skinny-micro-server_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.package">Scala API docs for &ldquo;org.skinny-framework&rdquo; %% &ldquo;skinny-micro-server&rdquo;</a></li>
+</ul>
+
+<hr/>
+
+<h3 id="minimum-examples">Minimum Examples</h3>
+
+<hr/>
+
+<p>We&rsquo;d love to show you some simple but working examples briefly.</p>
+
+<p>Please also see more examples under <a href="https://github.com/skinny-framework/skinny-micro/tree/master/samples">samples</a> and <a href="https://github.com/skinny-framework/skinny-micro/tree/master/scalas-samples">scalas-samples</a>.</p>
+
+<hr/>
+
+<h3 id="simple-application">Simple Application</h3>
+
+<hr/>
+
+<p>The following is a minimum Servlet example. <code>skinny.micro.SkinnyListener</code> initializes Skinny Micro&rsquo;s environment.</p>
+
+<p>As same as Scalatra, <code>_root_.Bootstrap</code> class (instead of <code>_root_.Bootstrap</code> for Scalatra) is detected by default. If you&rsquo;d like to change the name of the <code>Bootstrap</code> class, it&rsquo;s also possible by specifying with Servlet&rsquo;s init parameter.</p>
+
+<p>Also take a look at <a href="https://github.com/skinny-framework/sbt-servlet-plugin">sbt-servlet-plugin</a>. The plugin will help you much when building Servlet applications in Scala.</p>
+
+<p>See <a href="https://github.com/skinny-framework/skinny-micro/tree/master/samples">samples</a> for more examples.</p>
+
+<h4 id="src-main-scala-app-scala">src/main/scala/app.scala</h4>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">javax.servlet._</span>
+<span class="k">import</span> <span class="nn">skinny.micro._</span>
+
+<span class="k">object</span> <span class="nc">Hello</span> <span class="k">extends</span> <span class="nc">WebApp</span> <span class="o">{</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/say-hello"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">s</span><span class="s">"Hello, ${params.getOrElse("</span><span class="n">name</span><span class="s">", "</span><span class="nc">Anonymous</span><span class="s">")}!\n"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">class</span> <span class="nc">Bootstrap</span> <span class="k">extends</span> <span class="nc">LifeCycle</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">init</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">Hello</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<h4 id="src-main-webapp-web-inf-web-xml">src/main/webapp/WEB-INF/web.xml</h4>
+<div class="highlight"><pre class="highlight xml"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;web-app</span> <span class="na">xmlns=</span><span class="s">"http://java.sun.com/xml/ns/javaee"</span>
+         <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="na">xsi:schemaLocation=</span><span class="s">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3.1.xsd"</span>
+         <span class="na">version=</span><span class="s">"3.1"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;listener&gt;</span>
+        <span class="nt">&lt;listener-class&gt;</span>skinny.micro.SkinnyListener<span class="nt">&lt;/listener-class&gt;</span>
+    <span class="nt">&lt;/listener&gt;</span>
+<span class="nt">&lt;/web-app&gt;</span>
+</code></pre></div>
+<h3 id="async-native-application">Async Native Application</h3>
+
+<p>Skinny Micro newly privides original base traits that named as <code>AsyncWebApp (AsyncSkinnyMicorFilter)</code> and <code>AsyncSingleWebApp (AsyncSkinnyMicroServlet)</code>.</p>
+
+<p>They are natively suitable for building Future-wired async operations. You will no longer unwantedly feel stressed when working with Future-wired operations.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Message</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">text</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+
+<span class="k">object</span> <span class="nc">Messages</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">search</span><span class="o">(</span><span class="n">keyword</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">])(</span><span class="k">implicit</span> <span class="n">ctx</span><span class="k">:</span> <span class="kt">ExecutionContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">Future</span><span class="o">[</span><span class="kt">Seq</span><span class="o">[</span><span class="kt">Message</span><span class="o">]]</span>
+<span class="o">}</span>
+
+<span class="k">object</span> <span class="nc">AsyncMessagesApp</span> <span class="k">extends</span> <span class="nc">AsyncWebApp</span> <span class="k">with</span> <span class="nc">JSONSupport</span> <span class="o">{</span>
+
+  <span class="nf">post</span><span class="o">(</span><span class="s">"/messages/search"</span><span class="o">)</span> <span class="o">{</span> <span class="k">implicit</span> <span class="n">ctx</span> <span class="k">=&gt;</span>
+    <span class="c1">// You don't need to explicitly wrap results with AsyncResult</span>
+    <span class="c1">// Of course, doing so is also fine</span>
+    <span class="nv">Messages</span><span class="o">.</span><span class="py">search</span><span class="o">(</span><span class="nv">params</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"keyword"</span><span class="o">))</span>
+      <span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="n">ms</span> <span class="k">=&gt;</span> <span class="nc">Ok</span><span class="o">(</span><span class="nf">toJSONString</span><span class="o">(</span><span class="n">ms</span><span class="o">)))</span> <span class="c1">// returns Future[ActionResult]</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>More working examples are available under <a href="https://github.com/skinny-framework/skinny-micro/tree/master/samples">samples</a> and <a href="https://github.com/skinny-framework/skinny-micro/tree/master/scalas-samples">scalas-samples</a>.</p>
+
+<hr/>
+
+<h3 id="details">Details</h3>
+
+<hr/>
+
+<p>Skinny Micro started as a Scalatra fork. So we basically continue Scalatra&rsquo;s guides for compatible APIs.</p>
+
+<hr/>
+
+<h4 id="routes">Routes</h4>
+
+<hr/>
+
+<p>In Skinny Micro, as same as Scalatra, a route is an HTTP method (GET, PUT, POST, or DELETE) paired with a URL matching pattern. If you set up your application using RESTful conventions, your controller might look something like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.micro._</span>
+
+<span class="k">class</span> <span class="nc">Articles</span> <span class="k">extends</span> <span class="nc">WebApp</span> <span class="o">{</span>
+
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/articles/:id"</span><span class="o">)</span> <span class="o">{</span>  <span class="c1">//  &lt;= this is a route matcher</span>
+    <span class="c1">// this is an action</span>
+    <span class="c1">// this action would show the article which has the specified :id</span>
+  <span class="o">}</span>
+
+  <span class="nf">post</span><span class="o">(</span><span class="s">"/articles"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// submit/create an article</span>
+  <span class="o">}</span>
+
+  <span class="nf">put</span><span class="o">(</span><span class="s">"/articles/:id"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// update the article which has the specified :id</span>
+  <span class="o">}</span>
+
+  <span class="nf">delete</span><span class="o">(</span><span class="s">"/articles/:id"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// delete the article with the specified :id</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Those four example routes, and the actions inside the route blocks, could be the basis of a simple blogging system. The examples just stub out the actions - in a real application, you&rsquo;d replace the // comments with code to save and retrieve models, and show HTML views.</p>
+
+<p>The first matching route is invoked. Routes are matched from the bottom up, i.e. from the bottom of the Scala class defining your servlet to the top.  </p>
+
+<p><strong>Watch out!</strong> This is the opposite of Sinatra. Route definitions are executed as part of a Scala constructor; by matching from the bottom up, routes can be overridden in child classes.</p>
+
+<hr/>
+
+<h4 id="conditions">Conditions</h4>
+
+<p>Routes may include conditions. A condition is any expression that returns Boolean. Conditions are evaluated by-name each time the route matcher runs.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/foo"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Matches "GET /foo"</span>
+<span class="o">}</span>
+
+<span class="nf">get</span><span class="o">(</span><span class="s">"/foo"</span><span class="o">,</span> <span class="nv">request</span><span class="o">.</span><span class="py">getRemoteHost</span> <span class="o">==</span> <span class="s">"127.0.0.1"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Overrides "GET /foo" for local users</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Multiple conditions can be chained together. A route must match all conditions:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/foo"</span><span class="o">,</span> <span class="nv">request</span><span class="o">.</span><span class="py">getRemoteHost</span> <span class="o">==</span> <span class="s">"127.0.0.1"</span><span class="o">,</span> <span class="nv">request</span><span class="o">.</span><span class="py">getRemoteUser</span> <span class="o">==</span> <span class="s">"admin"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Only matches if you're the admin, and you're localhost</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>No path pattern is necessary. A route may consist of solely a condition:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="n">isMaintenanceMode</span><span class="o">)</span> <span class="o">{</span>
+  <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="nc">Go</span> <span class="n">away</span><span class="o">!&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="query-form-path-parameters">Query/Form/Path Parameters</h4>
+
+<hr/>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.SkinnyMicroParams">Scala API docs for &ldquo;skinny.micro.SkinnyMicroParams&rdquo;</a></p>
+
+<p><code>params</code> is the basic accessor for request parameters. Both of GET query string params and POST form params end up in the <code>params</code> bag - you shouldn&rsquo;t need to read anything off the <code>request.body</code>.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">name</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">params</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">id</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nv">params</span><span class="o">.</span><span class="py">getAs</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"id"</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">id</span><span class="k">:</span> <span class="kt">Long</span> <span class="o">=</span> <span class="nv">params</span><span class="o">.</span><span class="py">getAsOrElse</span><span class="o">[</span><span class="kt">Long</span><span class="o">](</span><span class="s">"id"</span><span class="o">,</span> <span class="o">-</span><span class="mi">1L</span><span class="o">)</span>
+</code></pre></div>
+<p><code>multiParams</code> returns multiple values for the same key if exists.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">ids</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Seq</span><span class="o">[</span><span class="kt">Int</span><span class="o">]]</span> <span class="k">=</span> <span class="nv">multiParams</span><span class="o">.</span><span class="py">getAs</span><span class="o">[</span><span class="kt">Int</span><span class="o">](</span><span class="s">"ids"</span><span class="o">)</span>
+</code></pre></div>
+<p>If you need to distinguish query string parameters and form parameters, use the following APIs instead.</p>
+
+<ul>
+<li>queryParams: Params</li>
+<li>queryMultiParams: MultiParams</li>
+<li>formParams: Params</li>
+<li>formMultiParams: MultiParams</li>
+</ul>
+
+<hr/>
+
+<p>Route patterns may also include wildcard parameters, accessible through the &ldquo;splat&rdquo; key. </p>
+
+<p><code>multiParams(&quot;splat&quot;)</code> returns wildcard (&ldquo;*&rdquo;) path params. </p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/say/*/to/*"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Matches "GET /say/hello/to/world"</span>
+  <span class="nf">multiParams</span><span class="o">(</span><span class="s">"splat"</span><span class="o">)</span> <span class="c1">// == Seq("hello", "world")</span>
+<span class="o">}</span>
+
+<span class="nf">get</span><span class="o">(</span><span class="s">"/download/*.*"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Matches "GET /download/path/to/file.xml"</span>
+  <span class="nf">multiParams</span><span class="o">(</span><span class="s">"splat"</span><span class="o">)</span> <span class="c1">// == Seq("path/to/file", "xml")</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<p>The route matcher may also be a regular expression. Capture groups are accessible through the &ldquo;captures&rdquo; key. </p>
+
+<p><code>multiParams(&quot;captures&quot;)</code> returns captured</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"""^\/f(.*)/b(.*)"""</span><span class="o">.</span><span class="py">r</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// Matches "GET /foo/bar"</span>
+  <span class="nf">multiParams</span><span class="o">(</span><span class="s">"captures"</span><span class="o">)</span> <span class="c1">// == Seq("oo", "ar")</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h5 id="rails-like-pattern-matching">Rails-like pattern matching</h5>
+
+<p>By default, route patterns parsing is based on Sinatra. Rails has a similar, but not identical, syntax, based on Rack::Mount&rsquo;s Strexp. The path pattern parser is resolved implicitly, and may be overridden if you prefer an alternate syntax:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.micro._</span>
+
+<span class="k">class</span> <span class="nc">RailsLikeRouting</span> <span class="k">extends</span> <span class="nc">WebApp</span> <span class="o">{</span>
+  <span class="k">implicit</span> <span class="k">override</span> <span class="k">def</span> <span class="nf">string2RouteMatcher</span><span class="o">(</span><span class="n">path</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span> <span class="k">=</span> <span class="nc">RailsPathPatternParser</span><span class="o">(</span><span class="n">path</span><span class="o">)</span>
+
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/:file(.:ext)"</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// matched Rails-style }</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="accessing-and-setting-cookies">Accessing and setting Cookies</h4>
+
+<hr/>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.request.RichRequest">Scala API docs for &ldquo;skinny.micro.request.RichRequest&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">cookies</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">request</span><span class="o">.</span><span class="py">cookies</span>
+<span class="k">val</span> <span class="nv">multiCookies</span><span class="k">:</span> <span class="kt">Map</span><span class="o">[</span><span class="kt">String</span>, <span class="kt">Seq</span><span class="o">[</span><span class="kt">String</span><span class="o">]]</span> <span class="k">=</span> <span class="nv">request</span><span class="o">.</span><span class="py">multiCookies</span>
+</code></pre></div>
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.cookie.package">Scala API docs for &ldquo;skinny.micro.cookie&rdquo;</a></p>
+
+<p>Useful Cookie operation DSLs are available. See <a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.cookie.SweetCookies">Scala API docs for &ldquo;skinny.micro.cookie.SweetCookies&rdquo;</a> for details.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">def</span> <span class="nf">hello</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="n">cookies</span> <span class="o">+=</span> <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"value"</span>
+  <span class="n">cookies</span> <span class="o">-=</span> <span class="s">"name"</span>
+<span class="o">}</span>
+
+<span class="k">def</span> <span class="nf">helloWithOptions</span> <span class="k">=</span> <span class="o">{</span>
+  <span class="nv">cookies</span><span class="o">.</span><span class="py">set</span><span class="o">(</span><span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"value"</span><span class="o">)</span>
+  <span class="nv">cookies</span><span class="o">.</span><span class="py">set</span><span class="o">(</span><span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"value"</span><span class="o">).</span><span class="py">withOptions</span><span class="o">(</span><span class="nc">CookieOptions</span><span class="o">(</span><span class="n">secure</span> <span class="k">=</span> <span class="kc">true</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="request-response-headers">Request / Response Headers</h4>
+
+<hr/>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.request.RichRequest">Scala API docs for &ldquo;skinny.micro.request.RichRequest&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// access request headers</span>
+<span class="k">val</span> <span class="nv">v</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nv">request</span><span class="o">.</span><span class="py">header</span><span class="o">(</span><span class="n">name</span><span class="o">)</span>
+</code></pre></div>
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.response.RichResponse">Scala API docs for &ldquo;skinny.micro.response.RichResponse&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// access response headers</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">headers</span> <span class="o">+=</span> <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"value"</span>
+<span class="nv">response</span><span class="o">.</span><span class="py">headers</span> <span class="o">-=</span> <span class="s">"name"</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="servlet-session">Servlet Session</h4>
+
+<hr/>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.request.RichHttpServletSession">Scala API docs for &ldquo;skinny.micro.request.RichHttpServletSession&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">v</span><span class="k">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="nf">session</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span>
+<span class="n">session</span> <span class="o">+=</span> <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="s">"value"</span>
+<span class="n">session</span> <span class="o">-=</span> <span class="s">"name"</span>
+</code></pre></div>
+<p>Skinny Micro&rsquo;s Flash and CSRF protection features are using servlet sessions by default.
+Even if you don&rsquo;t use sessions in your application code, be careful to avoid using them or implement your own implementation that don&rsquo;t use Servlet sessions.</p>
+
+<p>As you know, Servlet sessions are stateful. If you need to share the same session among several Servlet containers, consider using Skinny Framework&rsquo;s SkinnySession or your own session management (e.g. storing session into memcached/redis servers instead).</p>
+
+<hr/>
+
+<h4 id="response-handling">Response handling</h4>
+
+<hr/>
+
+<p>Action methods in Skinny Micro apps should finally return <code>ActionResult</code> value which represents the request&rsquo;s response. </p>
+
+<p>If you just return <code>String</code> value or <code>Array[Byte]</code> value, it would be the response body. It&rsquo;s also allowed style. You can always use setter to modify the Servlet response&rsquo;s mutable state.</p>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.response.ActionResult">Scala API docs for &ldquo;skinny.micro.response.ActionResult&rdquo;</a></p>
+
+<p>Meanwhile, <code>halt</code>ing immediately returns <code>ActionResult</code> by throwing <code>HaltException</code> within a filter or route.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">halt</span><span class="o">(</span><span class="mi">404</span><span class="o">)</span> <span class="c1">// throws HaltException</span>
+
+<span class="nf">halt</span><span class="o">(</span>
+  <span class="n">status</span> <span class="k">=</span> <span class="mi">400</span><span class="o">,</span>
+  <span class="n">charset</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"utf-8"</span><span class="o">),</span>
+  <span class="n">contentType</span> <span class="k">=</span> <span class="nc">Some</span><span class="o">(</span><span class="s">"application/json"</span><span class="o">),</span>
+  <span class="n">cookies</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span><span class="nc">Cookie</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="s">"bar"</span><span class="o">)),</span>
+  <span class="n">headers</span> <span class="k">=</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"foo"</span> <span class="o">-&gt;</span> <span class="s">"bar"</span><span class="o">)</span>
+<span class="o">)</span>
+</code></pre></div>
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.base.RedirectionDsl">Scala API docs for &ldquo;skinny.micro.base.RedirectionDsl&rdquo;</a></p>
+
+<p>If you prefer specifying status code for redirection, use more explicit DSLs.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// default redirection</span>
+<span class="nf">redirect</span><span class="o">(</span><span class="s">"/top"</span><span class="o">)</span> <span class="c1">// 302</span>
+
+<span class="c1">// explicit redirection DSLs</span>
+<span class="nf">redirect301</span><span class="o">(</span><span class="s">"/new_url"</span><span class="o">)</span> <span class="c1">// 301</span>
+<span class="nf">redirect302</span><span class="o">(</span><span class="s">"/somewhere"</span><span class="o">)</span> <span class="c1">// 302</span>
+<span class="nf">redirect303</span><span class="o">(</span><span class="s">"/complete"</span><span class="o">)</span> <span class="c1">// 303</span>
+</code></pre></div>
+<p>A route can punt processing to the next matching route using pass(). Remember, unlike Sinatra, routes are matched from the bottom up.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/guess/*"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="s">"You missed!"</span>
+<span class="o">}</span>
+
+<span class="nf">get</span><span class="o">(</span><span class="s">"/guess/:who"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nf">params</span><span class="o">(</span><span class="s">"who"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="s">"Frank"</span> <span class="k">=&gt;</span> <span class="s">"You got me!"</span>
+    <span class="k">case</span> <span class="k">_</span> <span class="k">=&gt;</span> <span class="nf">pass</span><span class="o">()</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>The route block is immediately exited and control continues with the next matching route. If no matching route is found, the <code>notFound</code> handler is invoked.
+The <code>notFound</code> handler allows you to execute code when there is no matching route for the current request&rsquo;s URL.</p>
+
+<p>The default behavior is:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="n">notFound</span> <span class="o">{</span>
+  <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="nc">Not</span> <span class="n">found</span><span class="o">.</span> <span class="nc">Bummer</span><span class="o">.&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>What happens next differs slightly based on whether you&rsquo;ve set your application up using SkinnyMicroFilter or SkinnyMicroServlet. Async base traits follow the same rules.</p>
+
+<ul>
+<li>SingleApp (SkinnyMicroServlet): sends a 404 response</li>
+<li>WebApp (SkinnyMicroFilter): passes the request to the servlet filter chain, which may then throw a 404 or decide to do something different with it.</li>
+</ul>
+
+<hr/>
+
+<h4 id="flash">Flash</h4>
+
+<hr/>
+
+<p>Notice: Flash uses servlet sessions by default. Be aware of sticky session mode.</p>
+
+<p>Skinny Micro doesn&rsquo;t activate FlashMapSupport by default. If you need to use Flash support, mixin the following trait. 
+Meanwhile, Skinny Framework enables FlashMapSupport by default because it&rsquo;s a full stack framework.</p>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.contrib.FlashMapSupport">Scala API docs for &ldquo;skinny.micro.contrib.FlashMapSupport&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">Controller</span> <span class="k">extends</span> <span class="nc">WebApp</span> <span class="k">with</span> <span class="nc">FlashMapSupport</span> <span class="o">{</span>
+  <span class="nf">post</span><span class="o">(</span><span class="s">"/article/create"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// create session</span>
+    <span class="nf">flash</span><span class="o">(</span><span class="s">"notice"</span><span class="o">)</span> <span class="k">=</span> <span class="s">"article created succesfully"</span>
+    <span class="nf">redirect</span><span class="o">(</span><span class="s">"/home"</span><span class="o">)</span>
+  <span class="o">}</span>
+  <span class="nf">get</span><span class="o">(</span><span class="s">"/home"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// this will access the value set in previous action</span>
+    <span class="nf">stuff_with</span><span class="o">(</span><span class="nf">flash</span><span class="o">(</span><span class="s">"notice"</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.contrib.flash.FlashMap">Scala API docs for &ldquo;skinny.micro.contrib.flash.FlashMap&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">flash</span><span class="o">(</span><span class="n">name</span><span class="o">)</span> <span class="k">=</span> <span class="n">value</span>
+<span class="n">flash</span> <span class="o">+=</span> <span class="o">(</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">)</span>
+<span class="nv">flash</span><span class="o">.</span><span class="py">now</span> <span class="o">+=</span> <span class="o">(</span><span class="n">name</span> <span class="o">-&gt;</span> <span class="n">value</span><span class="o">)</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="request-body">Request Body</h4>
+
+<hr/>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.request.RichRequest">Scala API docs for &ldquo;skinny.micro.request.RichRequest&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">body</span><span class="k">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="nv">request</span><span class="o">.</span><span class="py">body</span>
+<span class="k">val</span> <span class="nv">stream</span><span class="k">:</span> <span class="kt">InputStream</span> <span class="o">=</span> <span class="nv">request</span><span class="o">.</span><span class="py">inputStream</span> <span class="c1">// raw HTTP POST data</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="file-upload">File Upload</h4>
+
+<hr/>
+
+<div class="alert alert-warning small">
+<b>WARNING:</b> Extend not Filter base traits but Servlet base traits. You cannot use FileUploadFeature with WebApp (SkinnyMicroFilter) and SkinnyController.
+</div>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.contrib.FileUploadSupport">Scala API docs for &ldquo;skinny.micro.contrib.FileUploadSupport&rdquo;</a></p>
+
+<p>FileUploadSupport can be mixed into a skinny.micro.SkinnyMicroServlet to provide easy access to data submitted as part of a multipart HTTP request. Commonly this is used for retrieving uploaded files.</p>
+
+<p>When the configuration has been done, you can access any files using fileParams(&ldquo;myFile&rdquo;) where myFile is the name of the parameter used to upload the file being retrieved. If you are expecting multiple files with the same name, you can use fileMultiParams(&ldquo;files[]&rdquo;) to access them all.</p>
+
+<p>To handle any errors that are caused by multipart handling, you need to configure an error handler to your handler class:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.micro._</span>
+<span class="k">import</span> <span class="nn">skinny.micro.contrib.FileUploadFeature</span>
+
+<span class="c1">// SkinnyMicroServlet or SingleWebApp !!!</span>
+<span class="k">class</span> <span class="nc">FilesController</span> <span class="k">extends</span> <span class="nc">SkinnyMicroServlet</span> <span class="k">with</span> <span class="nc">FileUploadFeature</span> <span class="o">{</span>
+
+  <span class="k">def</span> <span class="nf">upload</span> <span class="k">=</span> <span class="nv">fileParams</span><span class="o">.</span><span class="py">get</span><span class="o">(</span><span class="s">"file"</span><span class="o">)</span> <span class="k">match</span> <span class="o">{</span>
+    <span class="k">case</span> <span class="nc">Some</span><span class="o">(</span><span class="n">file</span><span class="o">)</span> <span class="k">=&gt;</span>
+      <span class="nc">Ok</span><span class="o">(</span><span class="nv">file</span><span class="o">.</span><span class="py">get</span><span class="o">(),</span> <span class="nc">Map</span><span class="o">(</span>
+        <span class="s">"Content-Type"</span>        <span class="o">-&gt;</span> <span class="o">(</span><span class="nv">file</span><span class="o">.</span><span class="py">contentType</span><span class="o">.</span><span class="py">getOrElse</span><span class="o">(</span><span class="s">"application/octet-stream"</span><span class="o">)),</span>
+        <span class="s">"Content-Disposition"</span> <span class="o">-&gt;</span> <span class="o">(</span><span class="s">"attachment; filename=\""</span> <span class="o">+</span> <span class="nv">file</span><span class="o">.</span><span class="py">name</span> <span class="o">+</span> <span class="s">"\""</span><span class="o">)</span>
+      <span class="o">))</span>
+    <span class="k">case</span> <span class="nc">None</span> <span class="k">=&gt;</span>
+      <span class="nc">BadRequest</span><span class="o">(</span><span class="nf">displayPage</span><span class="o">(</span>
+        <span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>
+          <span class="nc">Hey</span><span class="o">!</span> <span class="nc">You</span> <span class="n">forgot</span> <span class="n">to</span> <span class="n">select</span> <span class="n">a</span> <span class="n">file</span><span class="o">.</span>
+        <span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="csrf-protection">CSRF Protection</h4>
+
+<hr/>
+
+<p>Notice: CSRF protection implementation uses servlet sessions by default. Be aware of sticky session mode.</p>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro_2.12/2.3.0/skinny-micro_2.12-2.3.0-javadoc.jar/!/index.html#skinny.micro.contrib.CSRFTokenSupport">Scala API docs for &ldquo;skinny.micro.contrib.CSRFTokenSupport&rdquo;</a></p>
+
+<p><code>csrfKey</code> and <code>csrfToken</code> are available when activating <code>CSRFTokenSupport</code>.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">SampleApp</span> <span class="k">extends</span> <span class="nc">WebApp</span> <span class="k">with</span> <span class="nc">CSRFTokenSupport</span> <span class="o">{</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="filters">Filters</h4>
+
+<hr/>
+
+<p>Skinny Micro offers a way for you too hook into the request chain of your application via <code>before</code> and <code>after</code> filters, which both accept a block to yield. Filters optionally take a URL pattern to match to the request.</p>
+
+<h4 id="before-filter">before filter</h4>
+
+<p>The <code>before</code> method will let you pass a block to be evaluated <strong>before</strong> each and every route gets processed.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">before</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nv">MyDb</span><span class="o">.</span><span class="py">connect</span>
+  <span class="n">contentType</span><span class="o">=</span><span class="s">"text/html"</span>
+<span class="o">}</span>
+
+<span class="nf">get</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="k">val</span> <span class="nv">list</span> <span class="k">=</span> <span class="nv">MyDb</span><span class="o">.</span><span class="py">findAll</span><span class="o">()</span>
+  <span class="nv">templateEngine</span><span class="o">.</span><span class="py">layout</span><span class="o">(</span><span class="s">"index.ssp"</span><span class="o">,</span> <span class="n">list</span><span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>In this example, we&rsquo;ve set up a <code>before</code> filter to connect using a contrived MyDb module, and set the contentType for all requests to text/html.</p>
+
+<h4 id="after-filter">after filter</h4>
+
+<p>The <code>after</code> method lets you pass a block to be evaluated <strong>after</strong> each and every route gets processed.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">after</span><span class="o">()</span> <span class="o">{</span>
+  <span class="nv">MyDb</span><span class="o">.</span><span class="py">disconnect</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>As you can see from this example, we&rsquo;re asking the MyDB module to disconnect after the request has been processed.</p>
+
+<h4 id="pattern-matching">Pattern matching</h4>
+
+<p>Filters optionally take a pattern to be matched against the requested URI during processing. Here&rsquo;s a quick example you could use to run a contrived authenticate! method before accessing any &ldquo;admin&rdquo; type requests.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">before</span><span class="o">(</span><span class="s">"/admin/*"</span><span class="o">)</span> <span class="o">{</span> <span class="n">basicAuth</span> <span class="o">}</span>
+<span class="nf">after</span><span class="o">(</span><span class="s">"/admin/*"</span><span class="o">)</span> <span class="o">{</span> <span class="nv">user</span><span class="o">.</span><span class="py">logout</span> <span class="o">}</span>
+</code></pre></div>
+<p>Route actions, errors and filters run in the following order:</p>
+
+<ul>
+<li>Invoke before filters</li>
+<li>Run routes and actions</li>
+<li>If Exception thrown during the before filters or route actions exists, invoke errorHandler function with it</li>
+<li>Invoke after filters</li>
+<li>Render the response</li>
+</ul>
+
+<hr/>
+
+<h4 id="check-execution-time">Check execution time</h4>
+
+<hr/>
+
+<p><a href="https://oss.sonatype.org/service/local/repositories/releases/archive/org/skinny-framework/skinny-micro-common_2.12/2.3.0/skinny-micro-common_2.12-2.3.0-javadoc.jar/!/index.html#skinny.logging.TimeLogging">Scala API docs for &ldquo;skinny.logging.TimeLogging&rdquo;</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">result</span> <span class="k">=</span> <span class="nf">warnElapsedTime</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+  <span class="nv">Thread</span><span class="o">.</span><span class="py">sleep</span><span class="o">(</span><span class="mi">10</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="c1">// will output "[SLOW EXECUTION DETECTED] Elapsed time: 10 millis"</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="reverse-routing">Reverse Routing</h4>
+
+<hr/>
+
+<p>Page relative url:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/"</span><span class="o">){</span>
+  <span class="c1">// This will redirect to http://&lt;host&gt;/page-relative</span>
+  <span class="nf">redirect</span><span class="o">(</span><span class="nf">url</span><span class="o">(</span><span class="s">"page-relative"</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Context relative url:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/"</span><span class="o">){</span>
+  <span class="c1">// This will redirect to http://&lt;host&gt;/&lt;context&gt;/context-relative</span>
+  <span class="nf">redirect</span><span class="o">(</span><span class="nf">url</span><span class="o">(</span><span class="s">"/context-relative"</span><span class="o">))</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Mapped params:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">get</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="c1">// This will redirect to http://&lt;host&gt;/&lt;context&gt;/en-to-es?one=uno&amp;two=dos</span>
+  <span class="nf">redirect</span><span class="o">(</span> <span class="nf">url</span><span class="o">(</span><span class="s">"/en-to-es"</span><span class="o">,</span> <span class="nc">Map</span><span class="o">(</span><span class="s">"one"</span> <span class="o">-&gt;</span> <span class="s">"uno"</span><span class="o">,</span> <span class="s">"two"</span> <span class="o">-&gt;</span> <span class="s">"dos"</span><span class="o">))</span> <span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Reverse routes:</p>
+
+<p>It is possible to save your routes as variables so that they have convenient handles:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">MyApp</span> <span class="k">extends</span> <span class="nc">WebApp</span> <span class="o">{</span>
+  <span class="c1">// When you create a route, you can save it as a variable</span>
+  <span class="k">val</span> <span class="nv">viewUser</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/user/:id"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// your user action would go here</span>
+  <span class="o">}</span>
+
+  <span class="nf">post</span><span class="o">(</span><span class="s">"/user/new"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// url method provided by UrlGeneratorSupport.  Pass it the route</span>
+    <span class="c1">// and the params.</span>
+    <span class="nf">redirect</span><span class="o">(</span><span class="nf">url</span><span class="o">(</span><span class="n">viewUser</span><span class="o">,</span> <span class="s">"id"</span> <span class="o">-&gt;</span> <span class="nv">newUser</span><span class="o">.</span><span class="py">id</span><span class="o">))</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>There&rsquo;s also a ScalateUrlGeneratorSupport. It reflectively finds all members of your app of type Route (e.g., viewUser above) and makes them available in your templates. You should then be able to do something like this right in your templates:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="nf">url</span><span class="o">(</span><span class="n">viewUser</span><span class="o">,</span> <span class="s">"id"</span> <span class="o">-&gt;</span> <span class="mi">1</span><span class="o">)</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="license">License</h3>
+
+<hr/>
+
+<pre>
+(The BSD 2-Clause License)
+
+Copyright (c) Alan Dipert
+Copyright (c) skinny-framework.org
+</pre>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Getting Started - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h2 id="getting-started">Getting Started</h2>
+
+<hr/>
+
+<h3 id="downloading-skinny-blank-app-with-deps-zip">Downloading skinny-blank-app(-with-deps).zip</h3>
+
+<hr/>
+
+<p>We highly recommend using skinny-blank-app for your first Skinny app.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases">github.com/skinny-framework/skinny-framework/releases</a></p>
+
+<p>Download latest <code>skinny-blank-app(-with-deps).zip</code> and unzip it, then just run ./skinny command on your terminal. That&rsquo;s all!</p>
+
+<p>If you&rsquo;re a Windows user, don&rsquo;t worry. Use skinny.bat on cmd.exe instead.</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny run
+</code></pre></div>
+<p>When you need to specify Skinny&rsquo;s env, set <code>SKINNY_ENV</code> env variable. <code>staging.*</code> configuration will be used instead of default <code>development.*</code> in <code>src/main/resources/application.conf</code>.</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="nb">export </span><span class="nv">SKINNY_ENV</span><span class="o">=</span>staging <span class="c"># default: development</span>
+./skinny run
+</code></pre></div>
+<hr/>
+
+<h3 id="homebrew">Homebrew</h3>
+
+<hr/>
+
+<p>If you&rsquo;re a MacOS X user, try our Homebrew formula out.</p>
+
+<p><a href="https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb">https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb</a></p>
+<div class="highlight"><pre class="highlight shell"><code>brew update
+brew <span class="nb">install </span>skinny
+
+<span class="c"># If failed, try `npm install -g yo`</span>
+skinny new skinny-blank-app
+<span class="nb">cd </span>skinny-blank-app
+skinny run
+</code></pre></div>
+<p>If you suffered the following error, try <code>brew uninstall node &amp;&amp; brew install node --with-npm</code> (in some cases, also need to <code>rm -rf /usr/local/lib/node_modules</code>). </p>
+
+<pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
+
+<p>If all else fails, try using global Yeoman generator.</p>
+<div class="highlight"><pre class="highlight shell"><code>brew <span class="nb">install </span>node <span class="nt">--with-npm</span>
+npm <span class="nb">install</span> <span class="nt">-g</span> yo
+npm <span class="nb">install</span> <span class="nt">-g</span> generator-skinny
+yo skinny
+</code></pre></div>
+<hr/>
+
+<h3 id="using-generator">Using generator</h3>
+
+<hr/>
+
+<p>Let&rsquo;s create our first Skinny app by using the scaffold generator.</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="c"># If you're a zsh user, try "noglob ./skinny g scaffold ..."</span>
+./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]
+./skinny db:migrate
+./skinny run
+</code></pre></div>
+<p>FYI: It&rsquo;s also possible to specify the column data type for each field. However you will need to add the length validation code to MembersController yourself.</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny g scaffold members member <span class="s2">"name:String:varchar(128)"</span>
+</code></pre></div>
+<p>And then, access <code>http://localhost:8080/members</code>.</p>
+
+<p>See in detail here: <a href="/documentation/scaffolding.html">Scaffolding</a></p>
+
+<p>You can also run the generated tests.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>./skinny db:migrate test
+./skinny test
+</code></pre></div>
+<p>If you just need a controller, run the generator like this:</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny g controller <span class="nb">help</span>
+</code></pre></div>
+<p>And then, access <code>http://localhost:8080/help</code>.</p>
+
+<p>Finally, let&rsquo;s create a war file to deploy.</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny package
+</code></pre></div>
+<hr/>
+
+<h3 id="what-should-i-do-first">What should I do first?</h3>
+
+<hr/>
+
+<p>Skinny app development is very simple. When you create new pages, all the things you should do is below:</p>
+
+<hr/>
+
+<h4 id="create-new-skinnycontroller-under-controller-package">Create new <code>SkinnyController</code> under <code>controller</code> package</h4>
+
+<p>You can create a controller by hand or by using generator.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>% ./skinny g controller help
+
+ *** Skinny Generator Task ***
+
+  "src/main/scala/controller/ApplicationController.scala" skipped.
+  "src/main/scala/controller/HelpController.scala" created.
+  "src/main/scala/controller/Controllers.scala" modified.
+  "src/test/scala/controller/HelpControllerSpec.scala" created.
+
+</code></pre></div>
+<hr/>
+
+<h4 id="add-routing-definition-to-controller-controllers">Add routing definition to <code>controller.Controllers</code></h4>
+
+<p>When you use generator, this will be done by generator. </p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">package</span> <span class="nn">controller</span>
+<span class="k">import</span> <span class="nn">skinny._</span>
+<span class="k">object</span> <span class="nc">Controllers</span> <span class="o">{</span>
+
+  <span class="k">object</span> <span class="nc">root</span> <span class="k">extends</span> <span class="nc">RootController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">indexUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/"</span><span class="o">)(</span><span class="n">index</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="ss">'index</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">def</span> <span class="nf">mount</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">root</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="add-view-templates-for-render-methods">Add view templates for <code>render</code> methods</h4>
+
+<p>Add Scalate (ssp, scaml, jade, mustache) or FreeMarker, Thymeleaf, Velocity templates under <code>src/main/webapp/WEB-INF/views</code>.</p>
+
+<p>The above <code>HelpController</code> expects <code>src/main/webapp/WEB-INF/views/help/index.html.ssp</code>.</p>
+
+<p>When you forgot creating view templates, Skinny Framework will create template file for you when accessing the URL for the first time.</p>
+
+<hr/>
+
+<h3 id="simple-example">Simple Example</h3>
+
+<hr/>
+
+<p>You can see a simple example application here.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework-example">https://github.com/skinny-framework/skinny-framework-example</a></p>
+
+<hr/>
+
+<h3 id="yeoman-generator">Yeoman generator</h3>
+
+<hr/>
+
+<p><img src="/images/yeoman.png" alt="Yeoman" /></p>
+
+<p>If you&rsquo;re familiar with <a href="http://yeoman.io">Yeoman</a>, a generator for <a href="https://github.com/skinny-framework/skinny-framework">Skinny framework</a> is available.</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="c"># brew install node</span>
+npm <span class="nb">install</span> <span class="nt">-g</span> yo
+npm <span class="nb">install</span> <span class="nt">-g</span> generator-skinny
+<span class="nb">mkdir </span>skinny-app
+<span class="nb">cd </span>skinny-app
+yo skinny
+./skinny run
+</code></pre></div>
+<hr/>
+
+<h3 id="project-structure">Project Structure</h3>
+
+<hr/>
+
+<p>The following tree shows the directories and files in skinny-blank-app project. Using this directory layout is recommended.</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="nb">.</span>
+├── README.md
+├── bin
+│   └── sbt-launch.jar <span class="c"># global sbt script in PATH is given priority over this</span>
+├── build.sbt
+├── project
+│   ├── Build.scala
+│   ├── build.properties
+│   └── plugins.sbt
+├── sbt      <span class="c"># Skinny uses this sbt command</span>
+├── sbt.bat  <span class="c"># Skinny uses this sbt command</span>
+├── skinny     <span class="c"># skinny command for Mac OS X, Linux</span>
+├── skinny.bat <span class="c"># skinny command for Windows</span>
+├── src
+│   ├── main
+│   │   ├── resources
+│   │   │   ├── application.conf
+│   │   │   ├── logback.xml
+│   │   │   └── messages.conf
+│   │   ├── scala
+│   │   │   ├── ScalatraBootstrap.scala <span class="c"># Scalatra convention</span>
+│   │   │   ├── controller
+│   │   │   │   ├── ApplicationController.scala
+│   │   │   │   ├── Controllers.scala
+│   │   │   │   └── RootController.scala
+│   │   │   ├── lib
+│   │   │   ├── model
+│   │   │   │   └── package.scala
+│   │   │   └── templates
+│   │   │       └── ScalatePackage.scala <span class="c"># Scalate convention</span>
+│   │   └── webapp
+│   │       └── WEB-INF
+│   │           ├── assets
+│   │           │   ├── build.sbt
+│   │           │   ├── coffee <span class="c"># Put coffee scripts here</span>
+│   │           │   ├── jsx    <span class="c"># Put React JSX templates here</span>
+│   │           │   ├── less   <span class="c"># Put LESS files here</span>
+│   │           │   ├── scala  <span class="c"># Put Scala.js code here</span>
+│   │           │   └── scss   <span class="c"># Put sass/scss files here</span>
+│   │           ├── layouts
+│   │           │   └── default.ssp <span class="c"># layout template</span>
+│   │           ├── views
+│   │           │   ├── error
+│   │           │   │   ├── 403.html.jade
+│   │           │   │   ├── 403.html.mustache
+│   │           │   │   ├── 403.html.scaml
+│   │           │   │   ├── 403.html.ssp
+│   │           │   │   ├── 404.html.jade
+│   │           │   │   ├── 404.html.mustache
+│   │           │   │   ├── 404.html.scaml
+│   │           │   │   ├── 404.html.ssp
+│   │           │   │   ├── 406.html.jade
+│   │           │   │   ├── 406.html.mustache
+│   │           │   │   ├── 406.html.scaml
+│   │           │   │   ├── 406.html.ssp
+│   │           │   │   ├── 500.html.jade
+│   │           │   │   ├── 500.html.mustache
+│   │           │   │   ├── 500.html.scaml
+│   │           │   │   ├── 500.html.ssp
+│   │           │   │   ├── 503.html.jade
+│   │           │   │   ├── 503.html.mustache
+│   │           │   │   ├── 503.html.scaml
+│   │           │   │   └── 503.html.ssp
+│   │           │   └── root
+│   │           │       └── index.html.ssp <span class="c"># default top page</span>
+│   │           └── web.xml <span class="c"># because this is on the Servlet</span>
+│   └── <span class="nb">test</span>
+│       ├── resources
+│       │   ├── factories.conf <span class="c"># for FactoryGirl</span>
+│       │   └── logback.xml
+│       └── scala
+│           ├── controller
+│           │   └── RootControllerSpec.scala <span class="c"># testing with MockController</span>
+│           └── integrationtest
+│               └── RootController_IntegrationTestSpec.scala <span class="c"># testing with embedded Jetty</span>
+└── task
+    └── src
+        └── main
+            └── scala
+                └── TaskRunner.scala <span class="c"># when you add new tasks, modify this code</span>
+</code></pre></div>
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

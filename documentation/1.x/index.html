@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h1 id="skinny-framework">Skinny Framework</h1>
+
+<hr/>
+
+<iframe src="http://ghbtns.com/github-btn.html?user=skinny-framework&repo=skinny-framework&type=watch&count=true&size=large" height="30" width="140" frameborder="0" scrolling="0" style="width:140px; height: 30px;" allowTransparency="true"></iframe>
+
+<iframe src="http://ghbtns.com/github-btn.html?user=skinny-framework&repo=skinny-framework&type=fork&count=true&size=large" height="30" width="140" frameborder="0" scrolling="0" style="width:140px; height: 30px;" allowTransparency="true"></iframe>
+
+<hr/>
+
+<p><img alt="Logo" src="/images/logo.png" /></p>
+
+<hr/>
+
+<h2 id="whats-skinny">What&rsquo;s Skinny?</h2>
+
+<hr/>
+
+<p>Skinny is a full-stack web app framework built on <a href="http://scalatra.org">Scalatra</a>.</p>
+
+<p>To put it simply, Skinny framework&rsquo;s concept is <strong>Scala on Rails</strong>. Skinny is highly inspired by <a href="http://rubyonrails.org/">Ruby on Rails</a> and it is optimized for sustainable productivity for Servlet-based web app development.</p>
+
+<p>What&rsquo;s more, Skinny&rsquo;s components are basically independent from Skinny app environment. If you prefer using only Skinny ORM, Validator module or else, it&rsquo;s also possible. We hope Skinny components help developers that use other frameworks too.</p>
+
+<p>Why Skinny named as Skinny? What does the name <code>Skinny</code> actually mean? We have three reasons as follows.</p>
+
+<p><code>Application should be skinny</code></p>
+
+<p>All the parts of a web application - controllers, models, views, routings and other settings - should be skinny. If you use Skinny framework, you can do without a lot of non-essential boilerplate code. For instance, when you create a simple registration form, all you need to do is define the parameters and validation rules and create view templates in an efficient way (ssp, scaml, jade, FreeMarker or something else) in most cases.</p>
+
+<p><code>Framework itself should be skinny</code></p>
+
+<p>Even if you need to investigate Skinny&rsquo;s internals, don&rsquo;t worry. Skinny keeps itself skinny, too. We believe that if the framework is well-designed, the resulting implementation will be skinny. </p>
+
+<p><code>&#39;su-ki-ni&#39; in Japanese means &#39;as you like it&#39;</code></p>
+
+<p>A sound-alike word <strong>&ldquo;好きに (su-ki-ni)&rdquo;</strong> in Japanese means <strong>&ldquo;as you like it&rdquo;</strong>. This is only half kidding but it also represents Skinny&rsquo;s concept. Skinny framework should provide flexible APIs to empower developers as much as possible and shouldn&rsquo;t get in the way.</p>
+
+<hr/>
+
+<h2 id="try-it-right-now">Try It Right Now</h2>
+
+<hr/>
+
+<p>Download <code>skinny-blank-app(-with-deps).zip</code> and unzip it, then just run ./skinny (or skinny.bat) command on your terminal. That&rsquo;s all!</p>
+
+<p>If you&rsquo;re a Scala beginner, <code>skinny-blank-app-with-deps.zip</code> is highly recommended. This is a bootstrap package which includes all library dependencies. </p>
+
+<p>Don&rsquo;t waste your passion by waiting for the download to complete!</p>
+
+<p><small>
+If you&rsquo;re already familiar with Scala and your <code>sbt.ivy.home</code> directory has lots of assets, use <code>skinny-blank-app.zip</code> instead.
+</small></p>
+
+<hr/>
+
+<h4 id="1-skinny-blank-app-with-deps-zip-90mb">1) skinny-blank-app-with-deps.zip (90MB)</h4>
+
+<p>For beginners, this one is highly recommended because you don&rsquo;t need to wait download dependencies.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/download/1.3.20/skinny-blank-app-with-deps.zip"><img src="/images/blank-app-with-deps-download.png" alt="Download" /></a></p>
+
+<h4 id="2-skinny-blank-app-zip-1mb">2) skinny-blank-app.zip (1MB)</h4>
+
+<p>If you&rsquo;re a heavy Scala user, this one will be suitable for you.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework/releases/download/1.3.20/skinny-blank-app.zip"><img src="/images/blank-app-download.png" alt="Download" /></a></p>
+
+<h4 id="3-homebrew">3) Homebrew</h4>
+
+<p>If you&rsquo;re a MacOS X user, take a look at our Homebrew formula.</p>
+
+<hr/>
+
+<h3 id="homebrew">Homebrew</h3>
+
+<hr/>
+
+<p>If you&rsquo;re a MacOS X user, try our Homebrew formula out.</p>
+
+<p><a href="https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb">https://github.com/Homebrew/homebrew/blob/master/Library/Formula/skinny.rb</a></p>
+<div class="highlight"><pre class="highlight shell"><code>brew update
+brew <span class="nb">install </span>skinny
+
+<span class="c"># If failed, try `npm install -g yo`</span>
+skinny new skinny-blank-app
+<span class="nb">cd </span>skinny-blank-app
+skinny run
+</code></pre></div>
+<p>If you suffered the following error, try <code>brew uninstall node &amp;&amp; brew install node --with-npm</code> (in some cases, also need to <code>rm -rf /usr/local/lib/node_modules</code>).</p>
+
+<pre>npm is required. If you have installed node with `--without-npm` option, reinstall with `--with-npm`.</pre>
+
+<hr/>
+
+<p>After unzipping blank-app.zip, Let&rsquo;s create our first Skinny app by using the scaffold generator.</p>
+<div class="highlight"><pre class="highlight shell"><code><span class="c"># If you're a zsh user, try "noglob ./skinny g scaffold ..."</span>
+./skinny g scaffold members member name:String activated:Boolean luckyNumber:Option[Long] birthday:Option[LocalDate]
+./skinny db:migrate
+
+<span class="c"># When you use IDE's debugger, use "./skinny debug" instead. (default JDWP port is 5005)</span>
+./skinny run
+</code></pre></div>
+<p>If you prefer Scalate templates precompilation, specify <code>-precompile</code> option too.</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny run <span class="nt">-precompile</span>
+</code></pre></div>
+<p>And then, access <code>http://localhost:8080/members</code>.</p>
+
+<p>You can also run the generated tests.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>./skinny db:migrate test
+./skinny test
+</code></pre></div>
+<p>Now let&rsquo;s create a war file for deployment to a Servlet container.</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny package
+</code></pre></div>
+<p>It&rsquo;s also possible to build a standalone runnable jar file (with embedded Jetty server).</p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny package:standalone
+</code></pre></div>
+<hr/>
+
+<h3 id="try-by-using-yeoman-generator">Try by using Yeoman generator</h3>
+
+<hr/>
+
+<p><img src="/images/yeoman.png" alt="Yeoman" /></p>
+
+<p>If you&rsquo;re familiar with <a href="http://yeoman.io">Yeoman</a>, a generator for <a href="https://github.com/skinny-framework/skinny-framework">Skinny framework</a> is available.</p>
+
+<p><a href="https://npmjs.org/package/generator-skinny"><img src="https://nodei.co/npm/generator-skinny.png?downloads=true" alt="NPM" /></a></p>
+<div class="highlight"><pre class="highlight shell"><code><span class="c"># brew install node</span>
+npm <span class="nb">install</span> <span class="nt">-g</span> yo
+npm <span class="nb">install</span> <span class="nt">-g</span> generator-skinny
+<span class="nb">mkdir </span>skinny-app
+<span class="nb">cd </span>skinny-app
+yo skinny
+./skinny run
+</code></pre></div>
+<hr/>
+
+<h3 id="integrating-with-existing-scalatra-apps">Integrating with existing Scalatra apps</h3>
+
+<hr/>
+
+<p>Actually, an application built with Skinny is also a normal Scalatra application. 
+After preparing a Scalatra app, just add the following dependency to your <code>project/Build.scala</code>. </p>
+
+<p>These components depends on Scalatra.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>libraryDependencies ++= Seq(
+  "org.skinny-framework" %% "skinny-assets"             % "1.3.20",
+  "org.skinny-framework" %% "skinny-framework"          % "1.3.20",
+  "org.skinny-framework" %% "skinny-oauth2-controller"  % "1.3.20",
+  "org.skinny-framework" %% "skinny-twitter-controller" % "1.3.20",
+  "org.skinny-framework" %% "skinny-scaldi"             % "1.3.20",
+  "org.skinny-framework" %% "skinny-test"               % "1.3.20" % "test"
+)
+</code></pre></div>
+<p>If you need only Skinny-ORM, Skinny-Validator and so on, you can use only what you need. 
+Even if you&rsquo;re using Play2 (or any other framework), these components are available for you as well.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>libraryDependencies ++= Seq(
+  "org.skinny-framework" %  "skinny-logback"      % "1.0.6",
+  "org.skinny-framework" %% "skinny-orm"          % "1.3.20",
+  "org.skinny-framework" %% "skinny-oauth"        % "1.3.20",
+  "org.skinny-framework" %% "skinny-task"         % "1.3.20",
+  "org.skinny-framework" %% "skinny-mailer"       % "1.3.20",
+  "org.skinny-framework" %% "skinny-standalone"   % "1.3.20",
+  "org.skinny-framework" %% "skinny-validator"    % "1.3.20",
+  "org.skinny-framework" %% "skinny-http-client"  % "1.3.20",
+  "org.skinny-framework" %% "skinny-factory-girl" % "1.3.20" % "test"
+)
+</code></pre></div>
+<hr/>
+
+<h2 id="skinnys-components-overview">Skinny&rsquo;s Components Overview</h2>
+
+<hr/>
+
+<h3 id="routing-controller-validator">Routing &amp; Controller &amp; Validator</h3>
+
+<hr/>
+
+<p>Skinny&rsquo;s routing mechanism and controller layer on MVC architecture can be thought of as a <strong>rich Scalatra</strong>. Skinny&rsquo;s extension provides you much simpler/rich syntax. Of course, if you need to use Scalatra&rsquo;s API directly, Skinny never bothers you.</p>
+
+<p><img src="/images/scalatra.png" alt="Scalatra" /></p>
+
+<p><code>SkinnyController</code> is a trait which extends <code>ScalatraFilter</code> and includes various useful components out-of-the-box. </p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// src/main/scala/controller/MembersController.scala</span>
+<span class="k">class</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">SkinnyController</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">index</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nf">set</span><span class="o">(</span><span class="s">"members"</span> <span class="o">-&gt;</span> <span class="nv">Member</span><span class="o">.</span><span class="py">findAll</span><span class="o">())</span> <span class="c1">// can call this in views</span>
+    <span class="nf">render</span><span class="o">(</span><span class="s">"/members/index"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// src/main/scala/controller/Controllers.scala</span>
+<span class="k">object</span> <span class="nc">Controllers</span> <span class="o">{</span>
+  <span class="k">object</span> <span class="nc">members</span> <span class="k">extends</span> <span class="nc">MembersController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">indexUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/members/?"</span><span class="o">)(</span><span class="n">index</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="ss">'index</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+<span class="c1">// src/main/scala/ScalatraBootstrap.scala</span>
+<span class="k">class</span> <span class="nc">ScalatraBootstrap</span> <span class="k">extends</span> <span class="nc">SkinnyLifeCycle</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">initSkinnyApp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">Controllers</span><span class="o">.</span><span class="py">members</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><code>SkinnyResource</code>, which is similar to Rails ActiveResource, is also available. It&rsquo;s a pretty DRY way to define RESTful resources.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">object</span> <span class="nc">CompaniesController</span> <span class="k">extends</span> <span class="nc">SkinnyResource</span> <span class="o">{</span>
+  <span class="nf">protectFromForgery</span><span class="o">()</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">model</span> <span class="k">=</span> <span class="nc">Company</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourcesName</span> <span class="k">=</span> <span class="s">"companies"</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourceName</span> <span class="k">=</span> <span class="s">"company"</span>
+
+  <span class="o">...</span>
+<span class="o">}</span>
+</code></pre></div>
+<p><code>Company</code> object should implement <code>skinny.SkinnyModel</code> APIs and you should prepare some view templates under <code>src/main/webapp/WEB-INF/views/members/</code>.</p>
+
+<p>See in detail: <a href="documentation/controller-and-routes.html">Controller &amp; Routes</a></p>
+
+<hr/>
+
+<h3 id="skinny-orm">Skinny ORM</h3>
+
+<hr/>
+
+<p>Skinny provides you Skinny-ORM as the default O/R mapper, which is built with <a href="https://github.com/scalikejdbc/scalikejdbc">ScalikeJDBC</a>.</p>
+
+<p><img src="/images/scalikejdbc.png" alt="Logo" /></p>
+
+<p>Skinny-ORM does a lot of work under the hood, so you don&rsquo;t need to write much code. Your first model class and companion are here.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Member</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">createdAt</span><span class="k">:</span> <span class="kt">DateTime</span><span class="o">)</span>
+
+<span class="k">object</span> <span class="nc">Member</span> <span class="k">extends</span> <span class="nc">SkinnyCRUDMapper</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">defaultAlias</span> <span class="k">=</span> <span class="nf">createAlias</span><span class="o">(</span><span class="s">"m"</span><span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">extract</span><span class="o">(</span><span class="n">rs</span><span class="k">:</span> <span class="kt">WrappedResultSet</span><span class="o">,</span> <span class="n">n</span><span class="k">:</span> <span class="kt">ResultName</span><span class="o">[</span><span class="kt">Member</span><span class="o">])</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Member</span><span class="o">(</span>
+    <span class="n">id</span> <span class="k">=</span> <span class="nv">rs</span><span class="o">.</span><span class="py">long</span><span class="o">(</span><span class="nv">n</span><span class="o">.</span><span class="py">id</span><span class="o">),</span>
+    <span class="n">name</span> <span class="k">=</span> <span class="nv">rs</span><span class="o">.</span><span class="py">string</span><span class="o">(</span><span class="nv">n</span><span class="o">.</span><span class="py">name</span><span class="o">),</span>
+    <span class="n">createdAt</span> <span class="k">=</span> <span class="nv">rs</span><span class="o">.</span><span class="py">dateTime</span><span class="o">(</span><span class="nv">n</span><span class="o">.</span><span class="py">createdAt</span><span class="o">)</span>
+  <span class="o">)</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>That&rsquo;s all! Now you can use the following APIs.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// find by primary key</span>
+<span class="k">val</span> <span class="nv">member</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Member</span><span class="o">.</span><span class="py">findById</span><span class="o">(</span><span class="mi">123</span><span class="o">)</span>
+<span class="k">val</span> <span class="nv">member</span><span class="k">:</span> <span class="kt">Option</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Member</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="ss">'id</span> <span class="o">-&gt;</span> <span class="mi">123</span><span class="o">).</span><span class="py">apply</span><span class="o">().</span><span class="py">headOption</span>
+<span class="k">val</span> <span class="nv">members</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Member</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="ss">'id</span> <span class="o">-&gt;</span> <span class="nc">Seq</span><span class="o">(</span><span class="mi">123</span><span class="o">,</span> <span class="mi">234</span><span class="o">,</span> <span class="mi">345</span><span class="o">)).</span><span class="py">apply</span><span class="o">()</span>
+
+<span class="c1">// find many</span>
+<span class="k">val</span> <span class="nv">members</span><span class="k">:</span> <span class="kt">List</span><span class="o">[</span><span class="kt">Member</span><span class="o">]</span> <span class="k">=</span> <span class="nv">Member</span><span class="o">.</span><span class="py">findAll</span><span class="o">()</span>
+<span class="k">val</span> <span class="nv">groupMembers</span> <span class="k">=</span> <span class="nv">Member</span><span class="o">.</span><span class="py">where</span><span class="o">(</span><span class="ss">'groupName</span> <span class="o">-&gt;</span> <span class="s">"Scala Users"</span><span class="o">,</span> <span class="ss">'deleted</span> <span class="o">-&gt;</span> <span class="kc">false</span><span class="o">).</span><span class="py">apply</span><span class="o">()</span>
+
+<span class="c1">// create with unsafe parameters</span>
+<span class="nv">Member</span><span class="o">.</span><span class="py">createWithAttributes</span><span class="o">(</span>
+  <span class="ss">'id</span> <span class="o">-&gt;</span> <span class="mi">123</span><span class="o">,</span>
+  <span class="ss">'name</span> <span class="o">-&gt;</span> <span class="s">"Chris"</span><span class="o">,</span>
+  <span class="ss">'createdAt</span> <span class="o">-&gt;</span> <span class="nv">DateTime</span><span class="o">.</span><span class="py">now</span>
+<span class="o">)</span>
+<span class="c1">// update with unsafe parameters</span>
+<span class="nv">Member</span><span class="o">.</span><span class="py">updateById</span><span class="o">(</span><span class="mi">123</span><span class="o">).</span><span class="py">withAttributes</span><span class="o">(</span><span class="ss">'name</span> <span class="o">-&gt;</span> <span class="s">"Alice"</span><span class="o">)</span>
+<span class="c1">// delete</span>
+<span class="nv">Member</span><span class="o">.</span><span class="py">deleteById</span><span class="o">(</span><span class="mi">234</span><span class="o">)</span>
+</code></pre></div>
+<p>Skinny ORM is an independent library from Skinny environment. You can use it with Play.</p>
+
+<p><img src="/images/play.png" alt="Logo" /></p>
+
+<p>Check our example app: <a href="https://github.com/skinny-framework/skinny-orm-in-play">https://github.com/skinny-framework/skinny-orm-in-play</a></p>
+
+<p>See others in detail: <a href="documentation/orm.html">O/R Mapper</a></p>
+
+<hr/>
+
+<h3 id="db-migration-with-flyway">DB Migration with Flyway</h3>
+
+<hr/>
+
+<p>DB migration is provided by <a href="http://flywaydb.org/">Flyway</a>. Usage is pretty simple.</p>
+
+<p><img src="/images/flyway.png" alt="Flyway Logo" /></p>
+<div class="highlight"><pre class="highlight shell"><code>./skinny db:migrate <span class="o">[</span><span class="nb">env</span><span class="o">]</span>
+</code></pre></div>
+<p>This command expects <code>src/main/resources/db/migration/V***__***.sql</code> files. </p>
+
+<p>See in detail: <a href="documentation/db-migration.html">DB Migration</a></p>
+
+<hr/>
+
+<h3 id="view-templates">View Templates</h3>
+
+<hr/>
+
+<p>Skinny framework basically follows Scalatra&rsquo;s <a href="http://scalate.github.io/scalate/">Scalate</a> Support, but Skinny has an additional convention.</p>
+
+<p><img src="/images/scalate.png" alt="Scalate Logo" /></p>
+
+<p>Template paths should be of the form <code>{path}.{format}.{extension}</code>. Expected {format} are <code>html</code>, <code>json</code>, <code>js</code> and <code>xml</code>.</p>
+
+<p>For instance, assuming your controller code looks like this:</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">MembersController</span> <span class="k">extends</span> <span class="nc">SkinnyController</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">index</span> <span class="k">=</span> <span class="o">{</span>
+    <span class="nf">set</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="nv">Member</span><span class="o">.</span><span class="py">findAll</span><span class="o">())</span>
+    <span class="nf">render</span><span class="o">(</span><span class="s">"/members/index"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>The render method expects that <code>src/main/webapp/WEB-INF/views/members/index.html.ssp</code> exists.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>&lt;%=@val members: Seq[model.Member] %&gt;
+&lt;hr/&gt;
+#for (member &lt;- members)
+  ${member.name}
+#end
+</code></pre></div>
+<p>Scalate supports many template engines. For example, if you want to write your template using Jade, save it as <code>src/main/webapp/WEB-INF/views/members/index.html.jade</code> instead.</p>
+
+<p>See in detail: <a href="documentation/view-templates.html">View Templates</a></p>
+
+<hr/>
+
+<h3 id="skinny-mailer">Skinny Mailer</h3>
+
+<hr/>
+
+<p>SkinnyMailer makes sending emails pretty easy.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">val</span> <span class="nv">config</span> <span class="k">=</span> <span class="nv">SkinnyMailerConfigdefault</span><span class="o">.</span><span class="py">copy</span><span class="o">(</span>
+  <span class="n">debug</span> <span class="k">=</span> <span class="kc">true</span>
+<span class="o">)</span>
+<span class="k">val</span> <span class="nv">mailer</span> <span class="k">=</span> <span class="nc">SkinnyMailer</span><span class="o">(</span><span class="n">config</span><span class="o">)</span>
+
+<span class="n">mailer</span>
+  <span class="o">.</span><span class="py">from</span><span class="o">(</span><span class="s">"info@skinny-framework.org"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">to</span><span class="o">(</span><span class="s">"you@example.com"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">cc</span><span class="o">(</span><span class="s">"support@skinny-framework.org"</span><span class="o">,</span> <span class="s">"xxx@example.com"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">subject</span><span class="o">(</span><span class="s">"Skinny Framework 1.0.0 is out!"</span><span class="o">)</span>
+  <span class="o">.</span><span class="py">body</span> <span class="o">{</span>
+    <span class="s">"""Hi all,
+    |
+    |We're very proud to announce that Skinny Framework version 1.0.0 is released.
+    |
+    |.....
+    |
+    |Best,
+    |Skinny Framework Team
+    |"""</span><span class="o">.</span><span class="py">stripMargin</span>
+  <span class="o">}.</span><span class="py">deliver</span><span class="o">()</span>
+</code></pre></div>
+<p>See in detail: <a href="documentation/mail.html">Mail</a></p>
+
+<hr/>
+
+<h3 id="assets-support-coffeescript-less-sass-reactjs-scala-js">Assets Support (CoffeeScript, LESS, Sass, ReactJS, Scala.js)</h3>
+
+<hr/>
+
+<p><img src="/images/coffeescript.png" alt="CoffeeScript Logo" />
+<img src="/images/less.png" alt="LESS Logo" />
+<img src="/images/sass.png" alt="Sass Logo" />
+<img src="/images/react.png" alt="React Logo" />
+<img src="/images/scalajs.png" alt="Scala.js" /></p>
+
+<p>First, add <code>skinny-assets</code> to libraryDependencies.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>libraryDependencies ++= Seq(
+  "org.skinny-framework" %% "skinny-framework" % "1.3.20",
+  "org.skinny-framework" %% "skinny-assets"    % "1.3.20",
+  "org.skinny-framework" %% "skinny-test"      % "1.3.20" % "test"
+)
+</code></pre></div>
+<p>And then, add <code>AssetsController</code> to routes. Now you can easily use CoffeeScript, LESS and Sass.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="c1">// src/main/scala/ScalatraBootstrap.scala</span>
+<span class="k">class</span> <span class="nc">ScalatraBootstrap</span> <span class="k">extends</span> <span class="nc">SkinnyLifeCycle</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">initSkinnyApp</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span> <span class="o">{</span>
+    <span class="nv">AssetsController</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>AssetsController supports Last-Modified header and returns status 304 correctly if the requested file isn&rsquo;t changed. </p>
+
+<p>However, precompiling the assets is highly recommended in production (<code>./skinny package</code> does that).</p>
+
+<p>See in detail: <a href="documentation/assets.html">Assets Support</a></p>
+
+<hr/>
+
+<h3 id="angular-js-friendly-server-side">Angular.js Friendly Server Side</h3>
+
+<hr/>
+
+<p><img src="/images/angularjs.png" alt="Angular Logo" /></p>
+
+<p>By using <code>AngularXHRServerFeature</code> trait, your controllers will be Angular.js friendly JSON API provider.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">ArticlesController</span> <span class="k">extends</span> <span class="nc">SkinnyApiResource</span> <span class="k">with</span> <span class="nc">AngularXHRServerFeature</span> <span class="o">{</span>
+  <span class="c1">// Enable Angular's XSRF protection</span>
+  <span class="nf">protectFromForgery</span><span class="o">()</span>
+
+  <span class="c1">// JSON request body will be merged into Scalatra params automatically</span>
+  <span class="c1">// ...</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<p>And your ngResource is like this:</p>
+<div class="highlight"><pre class="highlight javascript"><code><span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="dl">'</span><span class="s1">Article</span><span class="dl">'</span><span class="p">,</span> <span class="p">[</span><span class="dl">'</span><span class="s1">$resource</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/articles/:id.json</span><span class="dl">'</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{});</span>
+<span class="p">}]);</span>
+</code></pre></div>
+<p>See in detail: <a href="documentation/angular.html">Angular Support</a></p>
+
+<hr/>
+
+<h3 id="testing-support">Testing Support</h3>
+
+<hr/>
+
+<p>You can use Scalatra&rsquo;s great test support. Some extra optional features are provided by the skinny-test library.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">ControllerSpec</span> <span class="k">extends</span> <span class="nc">ScalatraFlatSpec</span> <span class="k">with</span> <span class="nc">SkinnyTestSupport</span> <span class="o">{</span>
+  <span class="nf">addFilter</span><span class="o">(</span><span class="nc">MembersController</span><span class="o">,</span> <span class="s">"/*"</span><span class="o">)</span>
+
+  <span class="n">it</span> <span class="n">should</span> <span class="s">"show index page"</span> <span class="n">in</span> <span class="o">{</span>
+    <span class="nf">withSession</span><span class="o">(</span><span class="s">"userId"</span> <span class="o">-&gt;</span> <span class="s">"Alice"</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nf">get</span><span class="o">(</span><span class="s">"/members"</span><span class="o">)</span> <span class="o">{</span> <span class="n">status</span> <span class="n">should</span> <span class="nf">equal</span><span class="o">(</span><span class="mi">200</span><span class="o">)</span> <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>See in detail: <a href="documentation/testing.html">Testing</a></p>
+
+<hr/>
+
+<h3 id="factorygirl">FactoryGirl</h3>
+
+<hr/>
+
+<p>Though Skinny&rsquo;s FactoryGirl is not a complete port of <a href="https://github.com/thoughtbot/factory_girl">thoughtbot/factory_girl</a>, this module will be quite useful when testing your apps.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Company</span><span class="o">(</span><span class="n">id</span><span class="k">:</span> <span class="kt">Long</span><span class="o">,</span> <span class="n">name</span><span class="k">:</span> <span class="kt">String</span><span class="o">)</span>
+<span class="k">object</span> <span class="nc">Company</span> <span class="k">extends</span> <span class="nc">SkinnyCRUDMapper</span><span class="o">[</span><span class="kt">Company</span><span class="o">]</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">extract</span> <span class="o">...</span>
+<span class="o">}</span>
+
+<span class="k">val</span> <span class="nv">company1</span> <span class="k">=</span> <span class="nc">FactoryGirl</span><span class="o">(</span><span class="nc">Company</span><span class="o">).</span><span class="py">create</span><span class="o">()</span>
+</code></pre></div>
+<p>Configuration is not in yaml files but a typesafe-config conf file. In this example, <code>src/test/resources/factories.conf</code> looks like this:</p>
+<div class="highlight"><pre class="highlight plaintext"><code>company {
+  name="Typesafe"
+}
+</code></pre></div>
+<p>See in detail: <a href="documentation/factory-girl.html">FactoryGirl</a></p>
+
+<hr/>
+
+<h2 id="examples">Examples</h2>
+
+<hr/>
+
+<h4 id="basic-example">Basic Example</h4>
+
+<p>How to write controllers, models and routes. Test suites (87% coverage). Coveralls settings.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-framework-example">https://github.com/skinny-framework/skinny-framework-example</a></p>
+
+<h4 id="scaldi-example">Scaldi Example</h4>
+
+<p>How to integrate Scaldi with Skinny Framework. Stubbing AWS SDK.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-scaldi-example">https://github.com/skinny-framework/skinny-scaldi-example</a></p>
+
+<h4 id="skinny-orm-in-play-apps">Skinny ORM in Play apps</h4>
+
+<p>How to use Skinny ORM in Play applications. Typesafe Activator Template. Reverse model generator.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-orm-in-play">https://github.com/skinny-framework/skinny-orm-in-play</a></p>
+
+<h4 id="skinny-task-runner-example">Skinny Task Runner Example</h4>
+
+<p>How to use only skinny-task without Web application project settings.</p>
+
+<p><a href="https://github.com/skinny-framework/skinny-task-example">https://github.com/skinny-framework/skinny-task-example</a></p>
+
+<hr/>
+
+<h3 id="skinny-framework-team-and-you">Skinny Framework Team and You</h3>
+
+<hr/>
+
+<p>Skinny Framework team is passionately working on this project.</p>
+
+<p><a href="https://github.com/orgs/skinny-framework/people">https://github.com/orgs/skinny-framework/people</a></p>
+
+<p>If you&rsquo;re interested in Skinny development, pull requests are always welcome.</p>
+
+<p><a href="/contribution.html">How to contribute</a></p>
+
+<hr/>
+
+<h3 id="build-status">Build Status</h3>
+
+<hr/>
+
+<p><a href="https://travis-ci.org/skinny-framework/skinny-framework"><img src="https://travis-ci.org/skinny-framework/skinny-framework.png" alt="Build Status"></a></p>
+
+<hr/>
+
+<h3 id="under-the-mit-license">Under The MIT License</h3>
+
+<hr/>
+
+<p>(The MIT License)</p>
+
+<p>Copyright &copy; skinny-framework.org</p>
+
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

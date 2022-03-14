@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>OAuth for Login - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>1.3.x Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/1.x/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/1.x/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/1.x/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/1.x/validator.html">Validator</a></li>
+      <li><a href="/documentation/1.x/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/1.x/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/1.x/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/1.x/mail.html">Mail</a></li>
+      <li><a href="/documentation/1.x/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/1.x/i18n.html">i18n</a></li>
+      <li><a href="/documentation/1.x/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/1.x/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/1.x/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/1.x/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/1.x/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/1.x/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/1.x/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/1.x/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/1.x/testing.html">Testing</a></li>
+      <li><a href="/documentation/1.x/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/1.x/spray.html">Spray</a></li>
+      <li><a href="/documentation/1.x/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/1.x/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/">Back to the latest</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <div class="alert alert-warning">WARNING: This page is a guide for 1.x series. See <a href="/">here</a> instead to learn about the latest</div>
+    <h2 id="oauth-for-login">OAuth for Login</h2>
+
+<hr/>
+
+<p>OAuth 2.0 is widely used for &ldquo;login&rdquo; feature. Skinny Framework provides some modules for that.</p>
+
+<p>Skinny&rsquo;s OAuth 2.0 modules uses Apache Oltu internally.</p>
+
+<p><a href="https://oltu.apache.org/">https://oltu.apache.org/</a></p>
+
+<hr/>
+
+<h3 id="oauth-2-0-facebook-github-google-and-so-on">OAuth 2.0 (Facebook, GitHub, Google and so on)</h3>
+
+<hr/>
+
+<p><code>skinny-oauth2-controller</code> contains Facebook, GitHub and Google login features.</p>
+
+<p>Add the following dependency in your <code>project/Build.scala</code>.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-oauth2-controller"</span> <span class="o">%</span> <span class="s">"1.3.20"</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="facebook">Facebook</h4>
+
+<p>Facebook login API is mostly compatible with OAuth 2.0. See the official documentation here:</p>
+
+<p><a href="https://developers.facebook.com/docs/facebook-login/">https://developers.facebook.com/docs/facebook-login/</a></p>
+
+<p><img src="/images/facebook.png" alt="Facebook" /></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">package</span> <span class="nn">controller</span>
+
+<span class="k">import</span> <span class="nn">skinny.controller.feature.FacebookLoginFeature</span>
+<span class="k">import</span> <span class="nn">skinny.oauth2.client.facebook.FacebookUser</span>
+
+<span class="k">class</span> <span class="nc">FBAuthController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">FacebookLoginFeature</span> <span class="o">{</span>
+  <span class="c1">// these env variables are expected by default</span>
+  <span class="c1">// SKINNY_OAUTH2_CLIENT_ID_FACEBOOK</span>
+  <span class="c1">// SKINNY_OAUTH2_CLIENT_SECRET_FACEBOOK</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">redirectURI</span> <span class="k">=</span> <span class="s">"http://localhost:8080/auth/facebook/callback"</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">fbUser</span><span class="k">:</span> <span class="kt">FacebookUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">user</span> <span class="k">=</span> <span class="nv">User</span><span class="o">.</span><span class="py">findById</span><span class="o">(</span><span class="nv">fbUser</span><span class="o">.</span><span class="py">id</span><span class="o">).</span><span class="py">getOrElse</span> <span class="o">{</span> 
+      <span class="nv">User</span><span class="o">.</span><span class="py">create</span><span class="o">(</span><span class="n">fbUser</span><span class="o">)</span>
+    <span class="o">}</span>
+    <span class="nv">session</span><span class="o">.</span><span class="py">setAttribute</span><span class="o">(</span><span class="s">"currentUser"</span><span class="o">,</span> <span class="n">user</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">handleWhenLoginFailed</span><span class="o">()</span><span class="k">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nf">flash</span><span class="o">(</span><span class="s">"warn"</span><span class="o">)</span> <span class="k">=</span> <span class="s">"Login failed. Please try again."</span>
+    <span class="nf">redirect302</span><span class="o">(</span><span class="s">"/auth"</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">handleWhenLoginSucceeded</span><span class="o">()</span><span class="k">:</span> <span class="kt">Any</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nf">flash</span><span class="o">(</span><span class="s">"info"</span><span class="o">)</span> <span class="k">=</span> <span class="s">"You have successfully registered and logged in."</span>
+    <span class="nf">redirect302</span><span class="o">(</span><span class="s">"/"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="k">object</span> <span class="nc">Controllers</span> <span class="o">{</span>
+  <span class="k">object</span> <span class="nc">fbAuth</span> <span class="k">extends</span> <span class="nc">FBAuthController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">facebookLoginUrl</span> <span class="k">=</span> <span class="nf">post</span><span class="o">(</span><span class="s">"/auth/facebook"</span><span class="o">)(</span><span class="n">loginRedirect</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="ss">'facebookLogin</span><span class="o">)</span>
+    <span class="k">val</span> <span class="nv">facebookLoginCallbackUrl</span> <span class="k">=</span> <span class="nf">get</span><span class="o">(</span><span class="s">"/auth/facebook/callback"</span><span class="o">)(</span><span class="n">callback</span><span class="o">).</span><span class="py">as</span><span class="o">(</span><span class="ss">'facebookLogin</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>If you&rsquo;d like to integrate this login feature with SkinnySession, append the following traits.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.controller.feature.SkinnySessionOAuth2LoginFeature</span>
+
+<span class="k">class</span> <span class="nc">FBAuthController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">FacebookLoginFeature</span> 
+  <span class="c1">// skinny.filter.SkinnySessionFilter is also required in ApplicationController</span>
+  <span class="k">with</span> <span class="nc">SkinnySessionOAuth2LoginFeature</span><span class="o">[</span><span class="kt">FacebookUser</span><span class="o">]</span> <span class="o">{</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="github">GitHub</h4>
+
+<p>Almost same :) Your developer applications provide OAuth 2.0 authorization. Register new application here.</p>
+
+<p><a href="https://github.com/settings/applications">https://github.com/settings/applications</a></p>
+
+<p><img src="/images/github.png" alt="GitHub" /></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.controller.feature.GitHubLoginFeature</span>
+<span class="k">import</span> <span class="nn">skinny.oauth2.client.github.GitHubUser</span>
+
+<span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">GitHubLoginFeature</span> <span class="o">{</span>
+  <span class="c1">// these env variables are expected by default</span>
+  <span class="c1">// SKINNY_OAUTH2_CLIENT_ID_GITHUB</span>
+  <span class="c1">// SKINNY_OAUTH2_CLIENT_SECRET_GITHUB</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">ghUser</span><span class="k">:</span> <span class="kt">GitHubUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="google">Google</h4>
+
+<p>Google API supports OAuth 2.0 authorization. Create your API project and gerenate credentials here.</p>
+
+<p><img src="/images/google.png" alt="Google" /></p>
+
+<p><a href="https://console.developers.google.com/">https://console.developers.google.com/</a></p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.controller.feature.GoogleLoginFeature</span>
+<span class="k">import</span> <span class="nn">skinny.oauth2.client.google.GoogleUser</span>
+
+<span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">GoogleLoginFeature</span> <span class="o">{</span>
+
+  <span class="c1">// these env variables are expected by default</span>
+  <span class="c1">// SKINNY_OAUTH2_CLIENT_ID_GOOGLE</span>
+  <span class="c1">// SKINNY_OAUTH2_CLIENT_SECRET_GOOGLE</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">gUser</span><span class="k">:</span> <span class="kt">GoogleUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="dropbox">Dropbox</h4>
+
+<p><a href="https://www.dropbox.com/developers/core/docs#oa2-authorize">https://www.dropbox.com/developers/core/docs#oa2-authorize</a></p>
+
+<p><img src="/images/dropbox.png" alt="Dropbox" /></p>
+
+<p>As same as above examples, these env variables are expected by default.</p>
+
+<ul>
+<li>SKINNY_OAUTH2_CLIENT_ID_DROPBOX</li>
+<li>SKINNY_OAUTH2_CLIENT_SECRET_DROPBOX</li>
+</ul>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">DropboxLoginFeature</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">dropboxUser</span><span class="k">:</span> <span class="kt">DropboxUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="typetalk-from-nulab">Typetalk from <a href="https://nulab-inc.com">Nulab</a></h4>
+
+<ul>
+<li><a href="http://www.typetalk.in/">http://www.typetalk.in/</a></li>
+<li><a href="http://developer.nulab-inc.com/docs/typetalk">http://developer.nulab-inc.com/docs/typetalk</a></li>
+</ul>
+
+<p><img src="/images/typetalk.png" alt="Typetalk" /></p>
+
+<p>As same as above examples, these env variables are expected by default.</p>
+
+<ul>
+<li>SKINNY_OAUTH2_CLIENT_ID_TYPETALK</li>
+<li>SKINNY_OAUTH2_CLIENT_SECRET_TYPETALK</li>
+</ul>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">TypetalkLoginFeature</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">typetalkUser</span><span class="k">:</span> <span class="kt">TypetalkUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="backlog-from-nulab">Backlog from <a href="https://nulab-inc.com">Nulab</a></h4>
+
+<ul>
+<li><a href="http://backlogtool.com/">http://backlogtool.com/</a></li>
+<li><a href="http://developer.nulab-inc.com/docs/backlog/auth">http://developer.nulab-inc.com/docs/backlog/auth</a></li>
+</ul>
+
+<p><img src="/images/backlog.png" alt="Backlog" /></p>
+
+<p>As same as above examples, these env variables are expected by default.</p>
+
+<ul>
+<li>SKINNY_OAUTH2_CLIENT_ID_BACKLOG</li>
+<li>SKINNY_OAUTH2_CLIENT_SECRET_BACKLOG</li>
+</ul>
+
+<p>Specify your own space id as <code>spaceID</code> in the controller.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">BacklogLoginFeature</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">spaceID</span> <span class="k">=</span> <span class="s">"subdomain name"</span>
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">backlogUser</span><span class="k">:</span> <span class="kt">BacklogUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<p>Although it&rsquo;s a little bit confusing, OAuth2 support for Japanese customers are separated. Add &ldquo;JP&rdquo; suffix for all the configuarations.</p>
+
+<ul>
+<li><a href="http://www.backlog.jp/">http://www.backlog.jp/</a></li>
+</ul>
+
+<p>These env variables are expected by default.</p>
+
+<ul>
+<li>SKINNY_OAUTH2_CLIENT_ID_BACKLOGJP</li>
+<li>SKINNY_OAUTH2_CLIENT_SECRET_BACKLOGJP</li>
+</ul>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">BacklogJPLoginFeature</span> <span class="o">{</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">spaceID</span> <span class="k">=</span> <span class="s">"subdomain name"</span>
+  <span class="c1">// BacklogUser model is the same</span>
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">backlogUser</span><span class="k">:</span> <span class="kt">BacklogUser</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h3 id="twitter-oauth-1-0a-for-login">Twitter OAuth 1.0a for Login</h3>
+
+<hr/>
+
+<p><a href="https://dev.twitter.com/docs/auth/oauth">https://dev.twitter.com/docs/auth/oauth</a></p>
+
+<p><img src="/images/twitter.png" alt="Twitter" /></p>
+
+<p>Your applications are here. Since you cannot register localhost app, edit <code>/etc/hosts</code> for debugging.</p>
+
+<p><a href="https://apps.twitter.com/">https://apps.twitter.com/</a></p>
+
+<p><code>skinny-twitter-controller</code> provides you Twitter login (OAuth 1.0a authorization) and prepared <code>twitter4j.Twitter</code> in controllers.</p>
+
+<p><a href="http://twitter4j.org/en/index.html">http://twitter4j.org/en/index.html</a></p>
+
+<hr/>
+
+<p>Add the following dependency in your <code>project/Build.scala</code>.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="n">libraryDependencies</span> <span class="o">+=</span> <span class="s">"org.skinny-framework"</span> <span class="o">%%</span> <span class="s">"skinny-twitter-controller"</span> <span class="o">%</span> <span class="n">skinnyVersion</span>
+</code></pre></div>
+<hr/>
+
+<p>And just use <code>TwitterLoginFeature</code> trait. </p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">import</span> <span class="nn">skinny.controller.feature.TwitterLoginFeature</span>
+
+<span class="k">class</span> <span class="nc">SessionsController</span> <span class="k">extends</span> <span class="nc">ApplicationController</span> <span class="k">with</span> <span class="nc">TwitterLoginFeature</span> <span class="o">{</span>
+  <span class="c1">// these env variables are expected by default</span>
+  <span class="c1">// SKINNY_OAUTH1_CONSUMER_KEY_TWITTER</span>
+  <span class="c1">// SKINNY_OAUTH1_CONSUMER_SECRET_TWITTER</span>
+
+  <span class="c1">// Twitter API doesn't allow localhost app, edit /etc/hosts</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">isLocalDebug</span> <span class="k">=</span> <span class="kc">true</span>
+
+  <span class="k">override</span> <span class="k">protected</span> <span class="k">def</span> <span class="nf">saveAuthorizedUser</span><span class="o">(</span><span class="n">twUser</span><span class="k">:</span> <span class="kt">twitter4j.User</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span> <span class="o">..</span> <span class="o">}</span>
+</code></pre></div>
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Use title if it's in the page YAML frontmatter -->
+<title>Angular.js Support - Skinny Framework</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css' />
+<script type="text/javascript" src="/javascripts/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+<link href="/stylesheets/all.css" rel="stylesheet" />
+<script src="/javascripts/all.js"></script>
+</head>
+<body>
+  <div id="wrap">
+  <div id="header">
+    <div id="headerlinks">
+    <a href="/documentation/getting-started.html">Getting Started</a>
+    <a href="https://github.com/skinny-framework/skinny-framework">Source Code on GitHub</a>
+    <a href="https://groups.google.com/forum/#!forum/skinny-framework">Users ML <small>(Google Group)</small></a>
+    </div>
+    <h1><a href="/"><b>Skinny Framework</b> <span class="small">- Rapid Development in Scala -</span></a></h1>
+  </div>
+
+  <div id="sidebar">
+    <div style="height:40px"><gcse:searchbox-only></gcse:searchbox-only></div>
+    <h2>Skinny Micro:</h2>
+    <ul>
+      <li><a href="/documentation/micro.html">Skinny Micro</a></li>
+    </ul>
+    <h2>Contents:</h2>
+    <div class="box">
+    <ul>
+      <li><a href="/documentation/getting-started.html">Getting Started</a></li>
+      <li><a href="/documentation/scaffolding.html">Scaffolding</a></li>
+      <li><a href="/documentation/controller-and-routes.html">Controller & Routes</a></li>
+      <li><a href="/documentation/validator.html">Validator</a></li>
+      <li><a href="/documentation/view-templates.html">View Templates</a></li>
+      <li><a href="/documentation/oauth.html">OAuth for Login</a></li>
+      <li><a href="/documentation/assets.html">Assets Support</a></li>
+      <li><a href="/documentation/mail.html">Mail</a></li>
+      <li><a href="/documentation/worker_jobs.html">Worker Jobs</a></li>
+      <li><a href="/documentation/i18n.html">i18n</a></li>
+      <li><a href="/documentation/orm.html">O/R Mapper</a></li>
+      <li><a href="/documentation/factory-girl.html">FactoryGirl</a></li>
+      <li><a href="/documentation/db-migration.html">DB Migration</a></li>
+      <li><a href="/documentation/json.html">Working with JSON</a></li>
+      <li><a href="/documentation/angular.html">Angular.js Server Side</a></li>
+      <li><a href="/documentation/http-client.html">HTTP Client</a></li>
+      <li><a href="/documentation/dependency-injection.html">Dependency Injection</a></li>
+      <li><a href="/documentation/tasks.html">Tasks</a></li>
+      <li><a href="/documentation/testing.html">Testing</a></li>
+      <li><a href="/documentation/packaging.html">Packaging</a></li>
+      <li><a href="/documentation/spray.html">Spray</a></li>
+      <li><a href="/documentation/migration-guide.html">Migration Guide</a></li>
+      <li><a href="/documentation/testimonials.html">Testimonials</a></li>
+      <li><a href="/documentation/community.html">Community</a></li>
+      <li><a href="/contribution.html">Contribution</a></li>    </ul>
+    </div>
+    <h2>Older Versions:</h2>
+    <ul>
+      <li><a href="/documentation/1.x/">1.3.x series</a></li>
+    </ul>
+  </div>
+
+  <div id="content">
+    <h2 id="angular-js">Angular.js</h2>
+
+<hr/>
+
+<h3 id="angular-friendly-server-side">Angular Friendly Server Side</h3>
+
+<hr/>
+
+<p><img src="/images/angularjs.png" alt="Angular Logo" /></p>
+
+<p>Skinny Framework provides Angular.js server side API feature.</p>
+
+<p>We also follow Angular&rsquo;s pragmatic practices such as ngResource APIs, XSRF and JSON vulnerability protection.</p>
+
+<hr/>
+
+<h3 id="example">Example</h3>
+
+<hr/>
+
+<h4 id="src-main-scala-controller-api-programmerscontroller-scala">src/main/scala/controller/api/ProgrammersController.scala</h4>
+
+<hr/>
+
+<p>This is an Angular flavored JSON API controller. </p>
+
+<p><code>AngularXHRServerFeature</code> trait provides you all the basic features which is required to be Angular compatible JSON APIs.</p>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">package</span> <span class="nn">controller.api</span>
+
+<span class="k">import</span> <span class="nn">org.json4s._</span>
+<span class="k">import</span> <span class="nn">skinny._</span>
+<span class="k">import</span> <span class="nn">skinny.controller.SkinnyApiResource</span>
+<span class="k">import</span> <span class="nn">skinny.controller.feature.AngularXHRServerFeature</span>
+<span class="k">import</span> <span class="nn">skinny.validator._</span>
+<span class="k">import</span> <span class="nn">model._</span>
+
+<span class="k">class</span> <span class="nc">ProgrammersController</span> <span class="k">extends</span> <span class="nc">SkinnyApiResource</span> <span class="k">with</span> <span class="nc">AngularXHRServerFeature</span> <span class="o">{</span>
+  <span class="c1">// ----</span>
+  <span class="c1">// XSRF protection</span>
+  <span class="c1">// https://docs.angularjs.org/api/ng/service/$http#cross-site-request-forgery-xsrf-protection</span>
+  <span class="nf">protectFromForgery</span><span class="o">()</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">model</span> <span class="k">=</span> <span class="nc">Programmer</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourcesName</span> <span class="k">=</span> <span class="s">"programmers"</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourceName</span> <span class="k">=</span> <span class="s">"programmer"</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">resourcesBasePath</span> <span class="k">=</span> <span class="n">s</span><span class="s">"/api/${resourcesName}"</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">createParams</span> <span class="k">=</span> <span class="nc">Params</span><span class="o">(</span><span class="n">params</span> <span class="o">+</span>
+    <span class="o">(</span><span class="s">"hashedPassword"</span> <span class="o">-&gt;</span> <span class="nv">params</span><span class="o">.</span><span class="py">getAs</span><span class="o">[</span><span class="kt">PlainPassword</span><span class="o">](</span><span class="s">"plainTextPassword"</span><span class="o">).</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">hash</span><span class="o">(</span><span class="s">"dummy salt"</span><span class="o">)))</span>
+  <span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">createForm</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">createParams</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">maxLength</span><span class="o">(</span><span class="mi">64</span><span class="o">),</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"favoriteNumber"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="n">numeric</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"plainTextPassword"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">minLength</span><span class="o">(</span><span class="mi">8</span><span class="o">)</span>
+  <span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">createFormStrongParameters</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">String</span><span class="o">,</span>
+    <span class="s">"favoriteNumber"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">Long</span><span class="o">,</span>
+    <span class="s">"hashedPassword"</span> <span class="o">-&gt;</span> <span class="nv">ProgrammerParamType</span><span class="o">.</span><span class="py">HashedPassword</span>
+  <span class="o">)</span>
+
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">updateParams</span> <span class="k">=</span> <span class="nc">Params</span><span class="o">(</span><span class="n">params</span><span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">updateForm</span> <span class="k">=</span> <span class="nf">validation</span><span class="o">(</span><span class="n">updateParams</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"id"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span><span class="o">,</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"name"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="nf">maxLength</span><span class="o">(</span><span class="mi">64</span><span class="o">),</span>
+    <span class="nf">paramKey</span><span class="o">(</span><span class="s">"favoriteNumber"</span><span class="o">)</span> <span class="n">is</span> <span class="n">required</span> <span class="o">&amp;</span> <span class="n">numeric</span>
+  <span class="o">)</span>
+  <span class="k">override</span> <span class="k">def</span> <span class="nf">updateFormStrongParameters</span> <span class="k">=</span> <span class="nc">Seq</span><span class="o">(</span>
+    <span class="s">"name"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">String</span><span class="o">,</span>
+    <span class="s">"favoriteNumber"</span> <span class="o">-&gt;</span> <span class="nv">ParamType</span><span class="o">.</span><span class="py">Long</span><span class="o">)</span>
+
+  <span class="k">private</span> <span class="k">object</span> <span class="nc">ProgrammerParamType</span> <span class="o">{</span>
+    <span class="k">val</span> <span class="nv">HashedPassword</span> <span class="k">=</span> <span class="nc">ParamType</span> <span class="o">{</span> <span class="k">case</span> <span class="n">v</span><span class="k">:</span> <span class="kt">HashedPassword</span> <span class="o">=&gt;</span> <span class="nv">v</span><span class="o">.</span><span class="py">value</span> <span class="o">}</span>
+  <span class="o">}</span>
+
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-scala-controller-controllers-scala">src/main/scala/controller/Controllers.scala</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight scala"><code><span class="k">object</span> <span class="nc">Controllers</span> <span class="o">{</span>
+  <span class="k">def</span> <span class="nf">mount</span><span class="o">(</span><span class="n">ctx</span><span class="k">:</span> <span class="kt">ServletContext</span><span class="o">)</span><span class="k">:</span> <span class="kt">Unit</span> <span class="o">=</span> <span class="o">{</span>
+    <span class="nv">apiProgrammers</span><span class="o">.</span><span class="py">mount</span><span class="o">(</span><span class="n">ctx</span><span class="o">)</span>
+  <span class="o">}</span>
+
+  <span class="k">object</span> <span class="nc">apiProgrammers</span> <span class="k">extends</span> <span class="nv">controller</span><span class="o">.</span><span class="py">api</span><span class="o">.</span><span class="py">ProgrammersController</span> <span class="k">with</span> <span class="nc">Routes</span> <span class="o">{</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-webapp-web-inf-views-programmers-index-html-ssp">src/main/webapp/WEB-INF/views/programmers/index.html.ssp</h4>
+
+<hr/>
+
+<p>This is the first content to be accessed. </p>
+
+<p>This Scalate template will returns a simple HTML which includes Angular and application JS files.</p>
+
+<p>For simplicity, this example contains controllers, directives and so on in the index HTML file. </p>
+
+<p>Of course, it&rsquo;s not a best practice. Separating JS files is preferred.</p>
+<div class="highlight"><pre class="highlight html"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">"myApp"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;hr/&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">ng-view</span><span class="nt">&gt;</span>Loading....<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-resource.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"//ajax.googleapis.com/ajax/libs/angularjs/1.2.19/angular-route.min.js"</span><span class="nt">&gt;&lt;/script&gt;</span>
+
+<span class="nt">&lt;script&gt;</span>
+<span class="dl">'</span><span class="s1">use strict</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="c1">// -----------</span>
+<span class="c1">// Angular app for this resource CRUD</span>
+
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="dl">'</span><span class="s1">myApp</span><span class="dl">'</span><span class="p">,</span> <span class="p">[</span><span class="dl">'</span><span class="s1">ngRoute</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">ngResource</span><span class="dl">'</span><span class="p">]);</span>
+
+<span class="c1">// routes</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">$routeProvider</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$routeProvider</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">,</span>         <span class="p">{</span><span class="na">templateUrl</span><span class="p">:</span> <span class="dl">'</span><span class="s1">partials/list.html</span><span class="dl">'</span><span class="p">,</span> <span class="na">controller</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ListController</span><span class="dl">'</span><span class="p">});</span>
+  <span class="nx">$routeProvider</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="dl">'</span><span class="s1">/new</span><span class="dl">'</span><span class="p">,</span>      <span class="p">{</span><span class="na">templateUrl</span><span class="p">:</span> <span class="dl">'</span><span class="s1">partials/new.html</span><span class="dl">'</span><span class="p">,</span>  <span class="na">controller</span><span class="p">:</span> <span class="dl">'</span><span class="s1">NewController</span><span class="dl">'</span><span class="p">});</span>
+  <span class="nx">$routeProvider</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="dl">'</span><span class="s1">/:id</span><span class="dl">'</span><span class="p">,</span>      <span class="p">{</span><span class="na">templateUrl</span><span class="p">:</span> <span class="dl">'</span><span class="s1">partials/show.html</span><span class="dl">'</span><span class="p">,</span> <span class="na">controller</span><span class="p">:</span> <span class="dl">'</span><span class="s1">ShowController</span><span class="dl">'</span><span class="p">});</span>
+  <span class="nx">$routeProvider</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="dl">'</span><span class="s1">/:id/edit</span><span class="dl">'</span><span class="p">,</span> <span class="p">{</span><span class="na">templateUrl</span><span class="p">:</span> <span class="dl">'</span><span class="s1">partials/edit.html</span><span class="dl">'</span><span class="p">,</span> <span class="na">controller</span><span class="p">:</span> <span class="dl">'</span><span class="s1">EditController</span><span class="dl">'</span><span class="p">});</span>
+  <span class="nx">$routeProvider</span><span class="p">.</span><span class="nx">otherwise</span><span class="p">({</span><span class="na">redirectTo</span><span class="p">:</span> <span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">});</span>
+<span class="p">});</span>
+
+<span class="c1">// form params instead of JSON request body</span>
+<span class="c1">// Skinny's Angular support basically works with both of them</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">config</span><span class="p">([</span><span class="dl">'</span><span class="s1">$httpProvider</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$httpProvider</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">transformRequest</span> <span class="o">=</span>  <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">data</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="dl">''</span><span class="p">,</span> <span class="nx">delim</span> <span class="o">=</span> <span class="dl">''</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">key</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">$</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span> <span class="k">continue</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">val</span> <span class="o">=</span> <span class="nx">data</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+        <span class="nx">val</span> <span class="o">=</span> <span class="p">(</span><span class="nx">val</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">val</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">?</span> <span class="dl">''</span> <span class="p">:</span> <span class="nx">val</span><span class="p">;</span>
+        <span class="nx">params</span> <span class="o">+=</span> <span class="nx">delim</span> <span class="o">+</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">=</span><span class="dl">'</span> <span class="o">+</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="nx">val</span><span class="p">);</span>
+        <span class="nx">delim</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span><span class="p">;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">params</span><span class="p">;</span>
+  <span class="p">};</span>
+  <span class="nx">$httpProvider</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">headers</span><span class="p">.</span><span class="nx">post</span> <span class="o">=</span> <span class="p">{</span><span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/x-www-form-urlencoded</span><span class="dl">'</span><span class="p">};</span>
+<span class="p">}]);</span>
+
+<span class="c1">// -----------</span>
+<span class="c1">// resource</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="dl">'</span><span class="s1">Resource</span><span class="dl">'</span><span class="p">,</span> <span class="p">[</span><span class="dl">'</span><span class="s1">$resource</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">$resource</span><span class="p">(</span><span class="dl">'</span><span class="s1">/api/programmers/:id.json</span><span class="dl">'</span><span class="p">,</span> <span class="p">{},</span> <span class="p">{});</span>
+<span class="p">}]);</span>
+
+<span class="c1">// -----------</span>
+<span class="c1">// controllers</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="dl">'</span><span class="s1">ListController</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">Resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">load</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">items</span> <span class="o">=</span> <span class="nx">Resource</span><span class="p">.</span><span class="nx">query</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">items</span> <span class="o">=</span> <span class="nx">items</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">$on</span><span class="p">(</span><span class="dl">'</span><span class="s1">refreshList</span><span class="dl">'</span><span class="p">,</span> <span class="nx">$scope</span><span class="p">.</span><span class="nx">load</span><span class="p">);</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="dl">'</span><span class="s1">NewController</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="dl">'</span><span class="s1">ShowController</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$routeParams</span><span class="p">,</span> <span class="nx">Resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">load</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">Resource</span><span class="p">.</span><span class="kd">get</span><span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="nx">$routeParams</span><span class="p">.</span><span class="nx">id</span><span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">item</span> <span class="o">=</span> <span class="nx">item</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">controller</span><span class="p">(</span><span class="dl">'</span><span class="s1">EditController</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$routeParams</span><span class="p">,</span> <span class="nx">Resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">$scope</span><span class="p">.</span><span class="nx">load</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">Resource</span><span class="p">.</span><span class="kd">get</span><span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="nx">$routeParams</span><span class="p">.</span><span class="nx">id</span><span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">item</span> <span class="o">=</span> <span class="nx">item</span><span class="p">;</span>
+    <span class="p">});</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+
+<span class="c1">// -----------</span>
+<span class="c1">// directives</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="dl">'</span><span class="s1">saveItem</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">restrict</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">controller</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">,</span> <span class="nx">$location</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">Resource</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span>
+          <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="c1">// success</span>
+            <span class="nx">$location</span><span class="p">.</span><span class="nx">path</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">);</span>
+          <span class="p">},</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// failure</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">// validation errors</span>
+              <span class="nx">$scope</span><span class="p">.</span><span class="nx">formErrors</span> <span class="o">=</span> <span class="p">{};</span>
+              <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">name</span> <span class="k">in</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">$scope</span><span class="p">.</span><span class="nx">formErrors</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">name</span><span class="p">];</span>
+              <span class="p">}</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+              <span class="nb">window</span><span class="p">.</span><span class="nx">alert</span><span class="p">(</span><span class="dl">'</span><span class="s1">Failed to access server - </span><span class="dl">'</span> <span class="o">+</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">response</span><span class="p">));</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">);</span>
+      <span class="p">};</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">cancel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$location</span><span class="p">.</span><span class="nx">path</span><span class="p">(</span><span class="dl">'</span><span class="s1">/</span><span class="dl">'</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="dl">'</span><span class="s1">deleteItem</span><span class="dl">'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">Resource</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">restrict</span><span class="p">:</span> <span class="dl">'</span><span class="s1">A</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">controller</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$scope</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">$scope</span><span class="p">.</span><span class="nx">submit</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="dl">'</span><span class="s1">Are you sure?</span><span class="dl">'</span><span class="p">))</span> <span class="p">{</span>
+          <span class="nx">Resource</span><span class="p">.</span><span class="k">delete</span><span class="p">({</span><span class="na">id</span><span class="p">:</span> <span class="nx">id</span><span class="p">},</span>
+            <span class="kd">function</span> <span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">headers</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">// success</span>
+              <span class="nx">$scope</span><span class="p">.</span><span class="nx">$emit</span><span class="p">(</span><span class="dl">'</span><span class="s1">refreshList</span><span class="dl">'</span><span class="p">);</span>
+            <span class="p">},</span>
+            <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">)</span> <span class="p">{</span>
+              <span class="c1">// failure</span>
+            <span class="p">}</span>
+          <span class="p">);</span>
+        <span class="p">}</span>
+      <span class="p">};</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-webapp-programmers-partials-list-html">src/main/webapp/programmers/partials/list.html</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight html"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">"myApp"</span> <span class="na">ng-controller=</span><span class="s">"ListController"</span> <span class="na">ng-init=</span><span class="s">"load()"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>List<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">"table table-bordered"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>FavoriteNumber<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;</span>HashedPassword<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;th&gt;&lt;/th&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr</span> <span class="na">ng-repeat=</span><span class="s">"item in items"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;td&gt;</span>{{item.name}}<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>{{item.favoriteNumber}}<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>{{item.hashedPassword.value}}<span class="nt">&lt;/td&gt;</span>
+            <span class="nt">&lt;td&gt;</span>
+                <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#/{{item.id}}"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span><span class="nt">&gt;</span>Detail<span class="nt">&lt;/a&gt;</span>
+                <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#/{{item.id}}/edit"</span> <span class="na">class=</span><span class="s">"btn btn-info"</span><span class="nt">&gt;</span>Edit<span class="nt">&lt;/a&gt;</span>
+                <span class="nt">&lt;button</span> <span class="na">delete-item</span> <span class="na">ng-click=</span><span class="s">"submit(item.id)"</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span><span class="nt">&gt;</span>Delete<span class="nt">&lt;/button&gt;</span>
+            <span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+
+    <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"#/new"</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span><span class="nt">&gt;</span>New<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-webapp-programmers-partials-_form-html">src/main/webapp/programmers/partials/_form.html</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight html"><code><span class="nt">&lt;form&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"form-group"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">"control-label"</span><span class="nt">&gt;</span>
+        Name
+    <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"controls row"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-xs-12"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">ng-class=</span><span class="s">"formErrors['name'].length &gt; 0 ? 'has-error' : ''"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">class=</span><span class="s">"form-control"</span> <span class="na">ng-model=</span><span class="s">"item.name"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;span</span> <span class="na">ng-show=</span><span class="s">"formErrors['name']"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"help-block"</span> <span class="na">ng-repeat=</span><span class="s">"error in formErrors['name']"</span><span class="nt">&gt;</span>{{error}}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"form-group"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">"control-label"</span><span class="nt">&gt;</span>
+        Plain Text Password
+    <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"controls row"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-xs-12"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">ng-class=</span><span class="s">"formErrors['plainTextPassword'].length &gt; 0 ? 'has-error' : ''"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"plainTextPassword"</span> <span class="na">class=</span><span class="s">"form-control"</span> <span class="na">ng-model=</span><span class="s">"item.plainTextPassword"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;span</span> <span class="na">ng-show=</span><span class="s">"formErrors['plainTextPassword']"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"help-block"</span> <span class="na">ng-repeat=</span><span class="s">"error in formErrors['plainTextPassword']"</span><span class="nt">&gt;</span>{{error}}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"form-group"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;label</span> <span class="na">class=</span><span class="s">"control-label"</span><span class="nt">&gt;</span>
+        Favorite Number
+    <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"controls row"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"col-xs-12"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">ng-class=</span><span class="s">"formErrors['favoriteNumber'].length &gt; 0 ? 'has-error' : ''"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"favoriteNumber"</span> <span class="na">class=</span><span class="s">"form-control"</span> <span class="na">ng-model=</span><span class="s">"item.favoriteNumber"</span> <span class="nt">/&gt;</span>
+                <span class="nt">&lt;span</span> <span class="na">ng-show=</span><span class="s">"formErrors['favoriteNumber']"</span><span class="nt">&gt;</span>
+                    <span class="nt">&lt;p</span> <span class="na">class=</span><span class="s">"help-block"</span> <span class="na">ng-repeat=</span><span class="s">"error in formErrors['favoriteNumber']"</span><span class="nt">&gt;</span>{{error}}<span class="nt">&lt;/p&gt;</span>
+                <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"form-actions"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-primary"</span> <span class="na">save-item</span> <span class="na">ng-click=</span><span class="s">"submit(item)"</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-default"</span> <span class="na">save-item</span> <span class="na">ng-click=</span><span class="s">"cancel()"</span><span class="nt">&gt;</span>Cancel<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-webapp-programmers-partials-new-html">src/main/webapp/programmers/partials/new.html</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight html"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">"myApp"</span> <span class="na">ng-controller=</span><span class="s">"NewController"</span> <span class="na">ng-init=</span><span class="s">"load()"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>New<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ng-include=</span><span class="s">"'partials/_form.html'"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-webapp-programmers-partials-edit-html">src/main/webapp/programmers/partials/edit.html</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight html"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">"myApp"</span> <span class="na">ng-controller=</span><span class="s">"EditController"</span> <span class="na">ng-init=</span><span class="s">"load()"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Edit<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ng-include=</span><span class="s">"'partials/_form.html'"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+<hr/>
+
+<h4 id="src-main-webapp-programmers-partials-show-html">src/main/webapp/programmers/partials/show.html</h4>
+
+<hr/>
+<div class="highlight"><pre class="highlight html"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">"myApp"</span> <span class="na">ng-controller=</span><span class="s">"ShowController"</span> <span class="na">ng-init=</span><span class="s">"load()"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;h3&gt;</span>Detail<span class="nt">&lt;/h3&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+    <span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">"table table-bordered"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;thead&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Id<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>{{item.id}}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>{{item.name}}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;tr&gt;</span>
+            <span class="nt">&lt;th&gt;</span>Favorite Number<span class="nt">&lt;/th&gt;</span>
+            <span class="nt">&lt;td&gt;</span>{{item.favoriteNumber}}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;/tr&gt;</span>
+        <span class="nt">&lt;/tbody&gt;</span>
+    <span class="nt">&lt;/table&gt;</span>
+    <span class="nt">&lt;hr/&gt;</span>
+
+    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"form-actions"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#/{{item.id}}/edit"</span> <span class="na">class=</span><span class="s">"btn btn-info"</span><span class="nt">&gt;</span>Edit<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;button</span> <span class="na">delete-item</span> <span class="na">ng-click=</span><span class="s">"submit(item.id)"</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span><span class="nt">&gt;</span>Delete<span class="nt">&lt;/button&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#/"</span> <span class="na">class=</span><span class="s">"btn btn-default"</span><span class="nt">&gt;</span>Back to list<span class="nt">&lt;/a&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+    <div class="alert alert-warning">
+      If you find a typo or mistake in this page, please report or fix it. <a href="/contribution.html">How?</a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <a href="https://twitter.com/skinnyframework" class="twitter-follow-button" data-show-count="false">Follow @skinnyframework</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://skinny-framework.org/" data-text="Skinny Framework" data-via="skinnyframework">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+  </div>
+  <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script>
+  (function() {
+    var cx = '000372347144050476309:rvl3pcqb6bq';
+    var gcse = document.createElement('script');
+    gcse.type = 'text/javascript';
+    gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//cse.google.com/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(gcse, s);
+  })();
+  </script>
+</div>
