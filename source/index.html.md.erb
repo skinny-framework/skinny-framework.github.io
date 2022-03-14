@@ -201,15 +201,6 @@ Member.updateById(123).withAttributes("name" -> "Alice")
 Member.deleteById(234)
 ```
 
-Skinny ORM is an independent library from Skinny environment. You can use it with Play.
-
-![Logo](images/play.png)
-
-Check our example app: https://github.com/skinny-framework/skinny-orm-in-play
-
-See others in detail: [O/R Mapper](documentation/orm.html)
-
-
 <hr/>
 ### DB Migration with Flyway
 <hr/>
@@ -332,36 +323,6 @@ However, precompiling the assets is highly recommended in production (`./skinny 
 See in detail: [Assets Support](documentation/assets.html)
 
 <hr/>
-### Angular.js Friendly Server Side
-<hr/>
-
-![Angular Logo](images/angularjs.png)
-
-By using `AngularXHRServerFeature` trait, your controllers will be Angular.js friendly JSON API provider.
-
-```scala
-class ArticlesController extends SkinnyApiResource with AngularXHRServerFeature {
-  // Enable Angular's XSRF protection
-  protectFromForgery()
-
-  // JSON request body will be merged into Scalatra params automatically
-  // ...
-
-}
-```
-
-And your ngResource is like this:
-
-
-```javascript
-app.factory('Article', ['$resource', function($resource) {
-  return $resource('/api/articles/:id.json', {}, {});
-}]);
-```
-
-See in detail: [Angular Support](documentation/angular.html)
-
-<hr/>
 ### Testing Support
 <hr/>
 
@@ -446,11 +407,6 @@ If you're interested in Skinny development, pull requests are always welcome.
 
 <a href="/contribution.html">How to contribute</a>
 
-<hr/>
-## Build Status
-<hr/>
-
-<a href="https://travis-ci.org/skinny-framework/skinny-framework"><img src="https://travis-ci.org/skinny-framework/skinny-framework.png" alt="Build Status"></a>
 
 <hr/>
 ## Under The MIT License
